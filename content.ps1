@@ -7,9 +7,9 @@
 $Site = [ordered]@{
   Name    = 'Paperloom'
   Tagline = 'Printable invitation and card templates'
-  # TODO: domain lene ke baad yahan asal domain daalein
-  Url     = 'https://paperloom.pages.dev'
-  Email   = 'hello@paperloom.pages.dev'
+  # Apna domain lene ke baad sirf ye do lines badalni hain (build dobara chala dein).
+  Url     = 'https://topseolegend-spec.github.io/paperloom'
+  Email   = 'topseo.legend@gmail.com'
 }
 
 $Fonts = 'https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Cinzel:wght@400;600&family=Josefin+Sans:wght@300;400&display=swap'

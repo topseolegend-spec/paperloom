@@ -11,6 +11,8 @@ $Out  = Join-Path $Root 'docs'
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
+# GitHub Pages project site "/paperloom" par serve hoti hai; apne domain par ye khali ho jayega.
+$BasePath = ([System.Uri]$Site.Url).AbsolutePath.TrimEnd('/')
 $Urls  = New-Object System.Collections.ArrayList
 
 function Write-File($path, $text) {
@@ -824,7 +826,7 @@ function Build-404 {
 <title>Page not found - $($Site.Name)</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="$Fonts">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="$BasePath/assets/css/style.css">
 </head>
 <body>
 <main id="main">
@@ -834,7 +836,7 @@ function Build-404 {
       <h1>That page is not here</h1>
       <p class="lede" style="margin:14px auto 26px;">The link may be out of date. The template
         library is still where you left it.</p>
-      <a class="btn btn-primary" href="/$($Category.slug)/">Browse templates</a>
+      <a class="btn btn-primary" href="$BasePath/$($Category.slug)/">Browse templates</a>
     </div>
   </section>
 </main>
