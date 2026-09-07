@@ -1,0 +1,9 @@
+# Keyword research - private, public repo mein nahi jani chahiye
+keywords.csv
+*.keywords.csv
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/

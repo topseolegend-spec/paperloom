@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Card designs — every template is drawn in CSS + inline SVG.
+   No stock photography, no third-party artwork: nothing here needs a licence.
+   Sizes use container query units so one design renders correctly at any width.
+   ========================================================================== */
+
+.card-preview{
+  container-type:inline-size;
+  position:relative;
+  aspect-ratio:5/7;               /* real 5x7in invitation proportions */
+  background:var(--c-bg,#fff);
+  color:var(--c-ink,#22221f);
+  border-radius:3px;
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+  transition:box-shadow .22s ease, transform .22s ease;
+}
+
+.card-body{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:11cqw 9cqw;
+  gap:2.4cqw;
+}
+
+/* --- shared text roles ------------------------------------------------- */
+.c-pre, .c-mid, .c-post{
+  font-family:'Karla', sans-serif;
+  font-size:3.1cqw; line-height:1.5;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--c-soft,var(--c-ink));
+  margin:0;
+}
+.c-mid{letter-spacing:.1em; text-transform:none; font-size:3.3cqw;}
+.c-name{
+  font-family:'Cormorant Garamond', serif;
+  font-size:11cqw; line-height:1.05; font-weight:500;
+  margin:1cqw 0; color:var(--c-ink);
+}
+.c-date{
+  font-family:'Karla', sans-serif;
+  font-size:3.4cqw; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--c-accent); margin:0;
+}
+.c-venue{
+  font-family:'Karla', sans-serif;
+  font-size:3cqw; line-height:1.5; color:var(--c-soft,var(--c-ink)); margin:0;
+  letter-spacing:.04em;
+}
+.c-rule{width:16cqw; height:1px; background:var(--c-accent); opacity:.7; margin:1.5cqw 0;}
+
+/* alternate type voices, mixed across the library so designs read differently */
+.f-script .c-name{font-family:'Great Vibes', cursive; font-size:13cqw; line-height:1.15;}
+.f-cinzel .c-name{font-family:'Cinzel', serif; font-size:7.6cqw; letter-spacing:.06em;}
+.f-josefin .c-name{font-family:'Josefin Sans', sans-serif; font-size:8cqw; font-weight:300; letter-spacing:.1em; text-transform:uppercase;}
+.f-marcellus .c-name{font-family:'Marcellus', serif; font-size:8.6cqw; letter-spacing:.03em;}
+
+/* --- ornament layer ---------------------------------------------------- */
+.card-art{position:absolute; inset:0; pointer-events:none;}
+.card-art svg{width:100%; height:100%; display:block;}
+
+/* --- design: classic double frame -------------------------------------- */
+.d-frame .card-body{padding:14cqw 11cqw;}
+.d-frame::before{
+  content:""; position:absolute; inset:5cqw;
+  border:1px solid var(--c-accent); opacity:.55;
+}
+.d-frame::after{
+  content:""; position:absolute; inset:6.6cqw;
+  border:1px solid var(--c-accent); opacity:.3;
+}
+
+/* --- design: top colour band ------------------------------------------- */
+.d-band::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:16cqw;
+  background:var(--c-accent);
+}
+.d-band .card-body{padding-top:24cqw;}
+
+/* --- design: side rule -------------------------------------------------- */
+.d-rule::before{
+  content:""; position:absolute; top:8cqw; bottom:8cqw; left:7cqw; width:2px;
+  background:var(--c-accent); opacity:.8;
+}
+.d-rule .card-body{align-items:flex-start; text-align:left; padding-left:16cqw; padding-right:9cqw;}
+.d-rule .c-rule{margin-left:0;}
+
+/* --- design: full bleed ink -------------------------------------------- */
+.d-solid{--c-soft:rgba(255,255,255,.72);}
+.d-solid .card-body{padding:13cqw 10cqw;}
+
+/* --- design: scalloped edge -------------------------------------------- */
+.d-scallop::before{
+  content:""; position:absolute; inset:4cqw;
+  border:1.5px dashed var(--c-accent); opacity:.5; border-radius:4cqw;
+}
+
+/* --- design: corner brackets ------------------------------------------- */
+.d-brackets .corner{position:absolute; width:13cqw; height:13cqw; border:1.5px solid var(--c-accent); opacity:.75;}
+.d-brackets .tl{top:5cqw; left:5cqw; border-right:0; border-bottom:0;}
+.d-brackets .br{bottom:5cqw; right:5cqw; border-left:0; border-top:0;}
+
+/* --- design: arch ------------------------------------------------------ */
+.d-arch .card-body{padding-top:16cqw;}
+
+/* --- print ------------------------------------------------------------- */
+@media print{
+  .card-preview{box-shadow:none; border:1px solid #ddd;}
+}
