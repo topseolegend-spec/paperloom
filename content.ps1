@@ -2,6 +2,9 @@
 #  Paperloom - site content
 #  Naya occasion ya category add karni ho to sirf yehi file edit karein,
 #  phir build.ps1 dobara chalayein.
+#
+#  ZAROORI: is file mein Urdu/Arabic text seedha na likhein - PowerShell 5.1
+#  ise ANSI parhta hai aur text kharab ho jata hai. HTML entities use karein.
 # =============================================================================
 
 $Site = [ordered]@{
@@ -12,30 +15,71 @@ $Site = [ordered]@{
   Email   = 'topseo.legend@gmail.com'
 }
 
+# Har page par load hote hain - sirf wo faces jo templates khud use karte hain.
 $Fonts = 'https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Cinzel:wght@400;600&family=Josefin+Sans:wght@300;400&display=swap'
 
-# Urdu / Arabic faces - sirf editor wale (template detail) pages par load hote hain
-$FontsRtl = 'https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600&family=Amiri:wght@400;700&display=swap'
+# Sirf editor wale (template detail) pages par - browser wahi face download karta
+# hai jo asal mein use ho, is liye list lambi hone se page bhari nahi hota.
+$FontsExtra = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Bodoni+Moda:wght@400;600&family=Cinzel+Decorative:wght@400;700&family=Italiana&family=Libre+Baskerville&family=Parisienne&family=Sacramento&family=Tenor+Sans&family=Noto+Nastaliq+Urdu:wght@400;600&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap'
 
-# Editor ke colour presets: background, ink, accent
+# --- editor: colour presets --------------------------------------------------
+#  foil = metallic gradient, gold/champagne walay palettes par achha lagta hai.
+
 $Palettes = @(
-  @{ name='Ivory &amp; gold';  bg='#fbf8f1'; ink='#1f3328'; accent='#a8823f' },
-  @{ name='Blush';             bg='#fdf6f4'; ink='#4a2c2a'; accent='#c08497' },
-  @{ name='Emerald';           bg='#f7f4ec'; ink='#14392c'; accent='#1f5c45' },
-  @{ name='Midnight';          bg='#1b2a41'; ink='#f3efe6'; accent='#c9a227' },
-  @{ name='Charcoal';          bg='#16161a'; ink='#f2eee4'; accent='#c9a227' },
-  @{ name='Slate';             bg='#f6f7f8'; ink='#232c33'; accent='#4c6377' }
+  @{ name='Ivory &amp; gold';   bg='#fbf8f1'; ink='#1f3328'; accent='#a8823f'; foil=$true  },
+  @{ name='Blush rose';         bg='#fdf6f4'; ink='#4a2c2a'; accent='#c08497'; foil=$false },
+  @{ name='Emerald';            bg='#f4f7f2'; ink='#14392c'; accent='#1f5c45'; foil=$false },
+  @{ name='Sage';               bg='#f2f5ef'; ink='#2c3a2c'; accent='#6e8b62'; foil=$false },
+  @{ name='Dusty lilac';        bg='#f7f4fb'; ink='#3f3550'; accent='#9b87c4'; foil=$false },
+  @{ name='Powder blue';        bg='#f2f7fb'; ink='#27394d'; accent='#6f9fc4'; foil=$false },
+  @{ name='Champagne';          bg='#fdfaf3'; ink='#3a3226'; accent='#c9a870'; foil=$true  },
+  @{ name='Burgundy';           bg='#faf6f4'; ink='#3b1f27'; accent='#7b2c3b'; foil=$false },
+  @{ name='Plum';               bg='#faf4f7'; ink='#3d1f36'; accent='#8e4470'; foil=$false },
+  @{ name='Clay';               bg='#fbf5f0'; ink='#45372f'; accent='#b06a4a'; foil=$false },
+  @{ name='Slate blue';         bg='#f6f7f8'; ink='#232c33'; accent='#4c6377'; foil=$false },
+  @{ name='Midnight gold';      bg='#1b2a41'; ink='#f3efe6'; accent='#c9a227'; foil=$true  },
+  @{ name='Charcoal gold';      bg='#16161a'; ink='#f2eee4'; accent='#c9a227'; foil=$true  },
+  @{ name='Forest night';       bg='#16241d'; ink='#eef2ea'; accent='#b9975b'; foil=$true  },
+  @{ name='Deep teal';          bg='#14343a'; ink='#eff3f1'; accent='#c9a227'; foil=$true  },
+  @{ name='Wine';               bg='#2b1620'; ink='#f5ebe9'; accent='#c98a94'; foil=$false }
 )
 
-# Editor ka typeface switcher
+# --- editor: typeface switcher -----------------------------------------------
+
 $FontChoices = @(
-  @{ cls='f-cormorant'; label='Classic serif' },
-  @{ cls='f-script';    label='Script' },
-  @{ cls='f-cinzel';    label='Roman caps' },
-  @{ cls='f-marcellus'; label='Elegant' },
-  @{ cls='f-josefin';   label='Modern sans' },
-  @{ cls='f-urdu';      label='&#1575;&#1585;&#1583;&#1608; Nastaliq' },
-  @{ cls='f-amiri';     label='&#1593;&#1585;&#1576;&#1740; Amiri' }
+  @{ cls='f-cormorant';  label='Classic serif' },
+  @{ cls='f-playfair';   label='Playfair' },
+  @{ cls='f-bodoni';     label='Bodoni' },
+  @{ cls='f-libre';      label='Book serif' },
+  @{ cls='f-marcellus';  label='Elegant' },
+  @{ cls='f-italiana';   label='Fine display' },
+  @{ cls='f-cinzel';     label='Roman caps' },
+  @{ cls='f-cinzel-dec'; label='Ornate caps' },
+  @{ cls='f-script';     label='Flowing script' },
+  @{ cls='f-parisienne'; label='Casual script' },
+  @{ cls='f-sacramento'; label='Light script' },
+  @{ cls='f-josefin';    label='Modern sans' },
+  @{ cls='f-tenor';      label='Clean sans' },
+  @{ cls='f-urdu';       label='&#1575;&#1585;&#1583;&#1608; Nastaliq' },
+  @{ cls='f-amiri';      label='&#1593;&#1585;&#1576;&#1740; Amiri' },
+  @{ cls='f-naskh';      label='&#1593;&#1585;&#1576;&#1740; Naskh' }
+)
+
+# --- editor: background treatments -------------------------------------------
+
+$BgChoices = @(
+  @{ cls='bg-plain'; label='Plain' },
+  @{ cls='bg-grad';  label='Soft glow' },
+  @{ cls='bg-wash';  label='Watercolour' },
+  @{ cls='bg-edge';  label='Vignette' }
+)
+
+# --- card sizes ---------------------------------------------------------------
+
+$SizeChoices = @(
+  @{ cls='sz-5x7';    label='5 x 7 in';  note='Standard invitation' },
+  @{ cls='sz-a5';     label='A5';        note='Common at print shops' },
+  @{ cls='sz-square'; label='Square';    note='Best for WhatsApp &amp; Instagram' }
 )
 
 # --- sample wording used inside each card ------------------------------------
@@ -44,40 +88,49 @@ $Body = @{
   wedding = @{ pre='Together with their families'; title='Ayesha &amp; Bilal'
     mid='request the pleasure of your company at their wedding'
     date='Saturday &middot; 14 March 2026'
-    venue='Rose Garden Hall, Lahore<br>Six in the evening' }
+    venue='Rose Garden Hall, Lahore<br>Six in the evening'
+    note='Kindly reply by 21 February' }
   nikah = @{ pre='Bismillah ir-Rahman ir-Raheem'; title='Fatima &amp; Usman'
     mid='request the honour of your presence at their Nikah'
     date='Friday &middot; 20 March 2026'
-    venue="Jamia Masjid Al-Noor, Karachi<br>Following Jumu'ah prayers" }
+    venue="Jamia Masjid Al-Noor, Karachi<br>Following Jumu'ah prayers"
+    note='Dinner to follow at Marquee Hall' }
   engagement = @{ pre='Save the moment'; title='Sara &amp; Hamza'
     mid='are getting engaged, and would love you there'
     date='Sunday &middot; 12 April 2026'
-    venue='The Orchard Lawn, Islamabad<br>Seven in the evening' }
+    venue='The Orchard Lawn, Islamabad<br>Seven in the evening'
+    note='RSVP 0300 1234567' }
   bridal = @{ pre='Let us shower the bride'; title='Zara Ahmed'
     mid='join us to celebrate before the big day'
     date='Saturday &middot; 9 May 2026 &middot; 2 pm'
-    venue='12 Gulberg Avenue, Lahore<br>Brunch and gifts' }
+    venue='12 Gulberg Avenue, Lahore<br>Brunch and gifts'
+    note='Hosted by Mariam and Sana' }
   baby = @{ pre='A little one is on the way'; title='Baby Khan'
     mid='please join us for a baby shower honouring Ayesha'
     date='Sunday &middot; 7 June 2026 &middot; 3 pm'
-    venue='Garden Terrace, DHA Phase 5<br>Tea and cake to follow' }
+    venue='Garden Terrace, DHA Phase 5<br>Tea and cake to follow'
+    note='Please reply by 24 May' }
   grad = @{ pre='Class of 2026'; title='Hania Malik'
     mid='Bachelor of Science in Computer Science'
     date='Saturday &middot; 27 June 2026 &middot; 4 pm'
-    venue='Convocation Hall, Punjab University<br>Reception afterwards' }
+    venue='Convocation Hall, Punjab University<br>Reception afterwards'
+    note='Two guest passes enclosed' }
   house = @{ pre='We have moved'; title='The Khan Family'
     mid='please join us for a housewarming afternoon'
     date='Saturday &middot; 18 July 2026 &middot; 5 pm'
-    venue='24 Marigold Street, Bahria Town<br>Dinner and tea' }
+    venue='24 Marigold Street, Bahria Town<br>Dinner and tea'
+    note='Your company is gift enough' }
   farewell = @{ pre='With gratitude'; title='Imran Shah'
     mid='join us for a farewell gathering after thirty years of service'
     date='Friday &middot; 21 August 2026 &middot; 6 pm'
-    venue='The Atrium, Head Office<br>Refreshments served' }
+    venue='The Atrium, Head Office<br>Refreshments served'
+    note='Reply to Ayesha in HR' }
 }
 
-function New-Tpl($slug,$name,$style,$design,$font,$art,$bg,$ink,$accent,$soft,$body){
+function New-Tpl($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent, $soft, $body,
+                 $bgstyle = 'bg-plain', $foil = $false) {
   @{ slug=$slug; name=$name; style=$style; design=$design; font=$font; art=$art
-     bg=$bg; ink=$ink; accent=$accent; soft=$soft; body=$body }
+     bg=$bg; ink=$ink; accent=$accent; soft=$soft; body=$body; bgstyle=$bgstyle; foil=$foil }
 }
 
 # --- category ----------------------------------------------------------------
@@ -103,119 +156,119 @@ $Subcats = @(
     desc='Printable wedding invitation card templates in classic, floral and modern styles. Print at home on 5x7 card stock or save as PDF - free to use.'
     intro=@(
       'Every wedding invitation on this page is designed as a 5&times;7 inch card, the size most printers and envelope suppliers stock, so a design that looks right on screen also looks right on paper. Each one is drawn as clean typography and line work rather than a photograph, which means it prints sharply on matte, textured or lightly coated card.',
-      'The four designs below cover the styles couples ask for most often: a traditional double-rule frame, a soft script layout, a formal dark card with metallic-look lettering, and a stripped-back modern layout. Open any design to see it full size, then print it or save it as a PDF to send to a local press.')
+      'The four designs below cover the styles couples ask for most often: a foiled vine border, a full floral wreath with script lettering, a dark art deco card, and a stripped-back modern layout. Open any design to change the wording, colours, lettering and ornament, then print it or save it as a PDF.')
     faq=@(
       @('When should you send wedding invitations?','Send them six to eight weeks before the wedding day. If a large number of guests are travelling from another city or country, send a save-the-date around six months ahead and follow it with the full invitation at the eight week mark. Ask for RSVPs two to three weeks before the date so you can confirm catering numbers in time.'),
       @('What should be included in a wedding invitation?','Six things: who is hosting, the names of the couple, the request line, the date and time written out clearly, the venue with its full address, and how to reply. Dress code and reception details usually sit on a separate small card rather than crowding the main one.'),
       @('What is a wedding invitation suite?','A suite is the full set that goes into one envelope - the main invitation, an RSVP card, and often a details card for directions, hotels or dress code. Keeping every piece in the same typeface and colour is what makes a suite feel considered.'),
-      @('Can I change the wording on these templates?','Yes. Print the design, or save it as a PDF and open it in any editor you already use. Our wedding invitation wording guide has phrasing for formal, casual and bride-hosted wordings you can copy directly.'))
+      @('Can I change the wording on these templates?','Yes. Every template on this site is editable in your browser: type your own names and details into the boxes beside the card, change the colours and lettering, then print or download. No account is needed.'))
     templates=@(
-      (New-Tpl 'classic-forest-frame' 'Classic Forest Frame' 'Traditional &middot; double rule' 'd-frame' 'f-cormorant' $null '#fbf8f1' '#1f3328' '#a8823f' '#5d6b5f' $Body.wedding),
-      (New-Tpl 'blush-script' 'Blush Script' 'Romantic &middot; calligraphy' 'd-scallop' 'f-script' 'botanical' '#fdf6f4' '#4a2c2a' '#c08497' '#7b5c5c' $Body.wedding),
-      (New-Tpl 'midnight-gold' 'Midnight Gold' 'Formal &middot; dark card' 'd-solid' 'f-cinzel' $null '#1b2a41' '#f3efe6' '#c9a227' '#b9c2cf' $Body.wedding),
-      (New-Tpl 'sage-minimal' 'Sage Minimal' 'Modern &middot; asymmetric' 'd-rule' 'f-josefin' $null '#f2f4ef' '#2f3b33' '#7e9b76' '#63705f' $Body.wedding)) },
+      (New-Tpl 'classic-forest-frame' 'Classic Forest Frame' 'Traditional &middot; foiled vine' 'd-frame' 'f-cormorant' 'vine' '#fbf8f1' '#1f3328' '#a8823f' '#5d6b5f' $Body.wedding 'bg-grad' $true),
+      (New-Tpl 'blush-script' 'Blush Script' 'Romantic &middot; floral wreath' 'd-plain' 'f-script' 'wreath' '#fdf6f4' '#4a2c2a' '#c08497' '#7b5c5c' $Body.wedding 'bg-wash'),
+      (New-Tpl 'midnight-gold' 'Midnight Gold' 'Art deco &middot; dark card' 'd-plain' 'f-cinzel' 'deco' '#1b2a41' '#f3efe6' '#c9a227' '#b9c2cf' $Body.wedding 'bg-edge' $true),
+      (New-Tpl 'sage-minimal' 'Sage Minimal' 'Modern &middot; asymmetric' 'd-rule' 'f-josefin' 'botanical' '#f2f4ef' '#2f3b33' '#7e9b76' '#63705f' $Body.wedding)) },
 
  @{ slug='nikah-invitations'; name='Nikah Invitation Cards'; nav='Nikah Invitations'
     h1='Nikah Invitation Card Templates'
     title='Nikah Invitation Card Template - Free Printable Designs'
-    desc='Printable nikah invitation card templates with geometric and calligraphic layouts. 5x7 inch, print at home or save as PDF.'
+    desc='Printable nikah invitation card templates with geometric, mandala and calligraphic layouts. 5x7 inch, editable in your browser, Urdu and Arabic supported.'
     intro=@(
       'A nikah card carries less text than a full wedding invitation, so the typography has to do more work. These four designs give the names room to breathe and keep the ceremony details in a clear second line, which is what makes a small card readable at arm''s length.',
-      'Two of the designs use geometric line work built from rotated squares and diamonds - a pattern family that sits comfortably alongside Arabic and Urdu lettering if you add it. All four print as 5&times;7 inch cards and leave a safe margin inside the trim edge.')
+      'Two of the designs use geometric line work built from rotated squares and a radial mandala - pattern families that sit comfortably alongside Arabic and Urdu lettering. Switch the card to Nastaliq, Amiri or Naskh in the editor and the whole layout flips to right-to-left with the spacing those scripts need.')
     faq=@(
       @('What details go on a nikah invitation card?','The names of the couple, the families hosting, the date, the masjid or venue with its address, and the time - often given in relation to a prayer, such as after Jumu''ah. Many families open the card with the Bismillah line, which these templates leave space for.'),
       @('Should the nikah and walima be on the same card?','Only if both happen on the same day at the same venue. When the walima falls on a different day it reads more clearly as a second card, or as a small insert behind the main one, so guests do not confuse the two dates.'),
-      @('Can these cards be printed in Urdu or Arabic?','Yes. Save the design as a PDF, then replace the sample lines with your own text in whichever script you need. Keep the layout centred and the line breaks short so the text stays balanced.'))
+      @('Can these cards be printed in Urdu or Arabic?','Yes. Pick Nastaliq, Amiri or Naskh from the typeface list in the editor and the card switches to right-to-left, then type your own text into the boxes. The line spacing adjusts for those scripts automatically.'))
     templates=@(
-      (New-Tpl 'emerald-geometry' 'Emerald Geometry' 'Geometric &middot; corner motifs' 'd-brackets' 'f-marcellus' 'geometric' '#f7f4ec' '#14392c' '#1f5c45' '#4f6459' $Body.nikah),
-      (New-Tpl 'gold-lattice' 'Gold Lattice' 'Formal &middot; dark card' 'd-frame' 'f-cinzel' 'geometric' '#14201b' '#f0e6d2' '#c9a227' '#bfc6b8' $Body.nikah),
-      (New-Tpl 'ivory-calligraphy' 'Ivory Calligraphy' 'Script &middot; header band' 'd-band' 'f-script' $null '#fcfaf5' '#2b2a26' '#8c7a4b' '#6d675c' $Body.nikah),
-      (New-Tpl 'teal-minimal' 'Teal Minimal' 'Modern &middot; side rule' 'd-rule' 'f-josefin' $null '#f1f5f4' '#17403c' '#2e7d74' '#5a716e' $Body.nikah)) },
+      (New-Tpl 'emerald-geometry' 'Emerald Geometry' 'Geometric &middot; inner panel' 'd-panel' 'f-marcellus' 'geometric' '#f7f4ec' '#14392c' '#1f5c45' '#4f6459' $Body.nikah 'bg-grad'),
+      (New-Tpl 'gold-lattice' 'Gold Lattice' 'Mandala &middot; dark card' 'd-plain' 'f-cinzel' 'mandala' '#14201b' '#f0e6d2' '#c9a227' '#bfc6b8' $Body.nikah 'bg-edge' $true),
+      (New-Tpl 'ivory-calligraphy' 'Ivory Calligraphy' 'Script &middot; flourish' 'd-band' 'f-script' 'flourish' '#fcfaf5' '#2b2a26' '#8c7a4b' '#6d675c' $Body.nikah),
+      (New-Tpl 'teal-minimal' 'Teal Minimal' 'Modern &middot; side rule' 'd-rule' 'f-josefin' 'botanical' '#f1f5f4' '#17403c' '#2e7d74' '#5a716e' $Body.nikah)) },
 
  @{ slug='engagement-invitations'; name='Engagement Invitations'; nav='Engagement Invitations'
     h1='Engagement Party Invitation Templates'
     title='Engagement Invitation Template - Free Printable Party Cards'
-    desc='Engagement party invitation templates in script, classic and modern layouts. Printable 5x7 cards, free to download as PDF.'
+    desc='Engagement party invitation templates in script, classic and modern layouts. Printable 5x7 cards, editable in your browser, free to use.'
     intro=@(
       'An engagement invitation is warmer in tone than a wedding invitation and usually shorter - the news itself is the headline. These designs put the couple''s names at the top of the visual hierarchy and keep the venue line quiet underneath.',
-      'Pick the script or dusty rose design for an evening party at home, or the ink band and taupe layouts if the celebration is more formal. Each one prints as a 5&times;7 card and works in black and white if you are printing at a local shop.')
+      'Pick the bouquet or wreath design for an evening party at home, or the ink band and taupe layouts if the celebration is more formal. Each one prints as a 5&times;7 card and works in black and white if you are printing at a local shop.')
     faq=@(
       @('How far in advance do engagement invitations go out?','Three to four weeks before the party is enough for most guest lists. If relatives are flying in, give them six weeks so flights stay affordable.'),
       @('Who is named as the host on an engagement invitation?','Whoever is hosting - traditionally the bride''s family, though couples increasingly host themselves. If both families are hosting together, a simple opening line such as "Together with their families" covers it without listing every name.'),
       @('Should the wedding date be mentioned?','Only if it is already fixed and you want guests to hold it. Otherwise leave it off; an engagement party invitation that promises a date you later change causes more confusion than it saves.'))
     templates=@(
-      (New-Tpl 'dusty-rose' 'Dusty Rose' 'Romantic &middot; scalloped edge' 'd-scallop' 'f-script' 'botanical' '#fbf3f1' '#55303a' '#b37b7b' '#7d5b62' $Body.engagement),
-      (New-Tpl 'wine-and-cream' 'Wine &amp; Cream' 'Classic &middot; double rule' 'd-frame' 'f-cormorant' $null '#faf6f2' '#4a1f2b' '#8e3b4e' '#71545c' $Body.engagement),
-      (New-Tpl 'modern-taupe' 'Modern Taupe' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' $null '#f5f2ee' '#3b3630' '#a08e75' '#6b645b' $Body.engagement),
-      (New-Tpl 'ink-band' 'Ink Band' 'Editorial &middot; header band' 'd-band' 'f-marcellus' $null '#fdfcfa' '#22282e' '#2f4858' '#5d666e' $Body.engagement)) },
+      (New-Tpl 'dusty-rose' 'Dusty Rose' 'Romantic &middot; corner bouquet' 'd-scallop' 'f-script' 'bouquet' '#fbf3f1' '#55303a' '#b37b7b' '#7d5b62' $Body.engagement 'bg-wash'),
+      (New-Tpl 'wine-and-cream' 'Wine &amp; Cream' 'Classic &middot; floral wreath' 'd-frame' 'f-cormorant' 'wreath' '#faf6f2' '#4a1f2b' '#8e3b4e' '#71545c' $Body.engagement 'bg-grad'),
+      (New-Tpl 'modern-taupe' 'Modern Taupe' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' '' '#f5f2ee' '#3b3630' '#a08e75' '#6b645b' $Body.engagement),
+      (New-Tpl 'ink-band' 'Ink Band' 'Editorial &middot; flourish' 'd-band' 'f-marcellus' 'flourish' '#fdfcfa' '#22282e' '#2f4858' '#5d666e' $Body.engagement)) },
 
  @{ slug='bridal-shower-invitations'; name='Bridal Shower Invitations'; nav='Bridal Shower Invitations'
     h1='Bridal Shower Invitation Templates'
     title='Bridal Shower Invitation Template - Free Printable Cards'
-    desc='Printable bridal shower and wedding shower invitation templates in floral, lilac and modern styles. 5x7 inch, free to print or save as PDF.'
+    desc='Printable bridal shower and wedding shower invitation templates in floral, lilac and modern styles. 5x7 inch, editable in your browser.'
     intro=@(
       'Bridal shower invitations carry practical information that the wedding invitation does not: the host''s home address, the start time, and often a note about gifts or a theme. These layouts keep that detail legible instead of squeezing it into a corner.',
-      'The peony and lilac designs suit a garden or brunch setting; the mint and champagne layouts are cleaner and work well for an office or restaurant celebration. All four print as 5&times;7 cards.')
+      'The bouquet and wreath designs suit a garden or brunch setting; the mint and champagne layouts are cleaner and work well for an office or restaurant celebration. All four print as 5&times;7 cards.')
     faq=@(
       @('What is the difference between a bridal shower and a wedding shower?','In practice, very little - wedding shower is simply the broader term, used when guests of any gender are invited rather than only the bride''s close circle. The invitation wording is the same either way.'),
       @('How early should bridal shower invitations be sent?','Four to six weeks ahead. That is early enough for guests to plan around it, and late enough that the wedding date itself is already confirmed in everyone''s diary.'),
       @('Should gift or registry details go on the invitation?','Keep them off the main card. A small separate insert, or a single line at the bottom pointing to a registry link, reads better than putting gift instructions beside the bride''s name.'))
     templates=@(
-      (New-Tpl 'peony-blush' 'Peony Blush' 'Floral &middot; scalloped edge' 'd-scallop' 'f-script' 'botanical' '#fdf4f5' '#5a3742' '#d08c9e' '#83616b' $Body.bridal),
-      (New-Tpl 'lilac-garden' 'Lilac Garden' 'Classic &middot; double rule' 'd-frame' 'f-cormorant' 'botanical' '#f7f4fb' '#3f3550' '#9b87c4' '#6a6079' $Body.bridal),
-      (New-Tpl 'mint-modern' 'Mint Modern' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' $null '#f0f7f4' '#24403a' '#64a88f' '#546a63' $Body.bridal),
-      (New-Tpl 'champagne-brunch' 'Champagne Brunch' 'Warm &middot; header band' 'd-band' 'f-marcellus' $null '#fdfaf3' '#3a3226' '#c9a870' '#6c6252' $Body.bridal)) },
+      (New-Tpl 'peony-blush' 'Peony Blush' 'Floral &middot; corner bouquet' 'd-plain' 'f-script' 'bouquet' '#fdf4f5' '#5a3742' '#d08c9e' '#83616b' $Body.bridal 'bg-wash'),
+      (New-Tpl 'lilac-garden' 'Lilac Garden' 'Classic &middot; floral wreath' 'd-frame' 'f-cormorant' 'wreath' '#f7f4fb' '#3f3550' '#9b87c4' '#6a6079' $Body.bridal 'bg-grad'),
+      (New-Tpl 'mint-modern' 'Mint Modern' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' 'botanical' '#f0f7f4' '#24403a' '#64a88f' '#546a63' $Body.bridal),
+      (New-Tpl 'champagne-brunch' 'Champagne Brunch' 'Warm &middot; foiled flourish' 'd-band' 'f-marcellus' 'flourish' '#fdfaf3' '#3a3226' '#c9a870' '#6c6252' $Body.bridal 'bg-edge' $true)) },
 
  @{ slug='baby-shower-invitations'; name='Baby Shower Invitations'; nav='Baby Shower Invitations'
     h1='Baby Shower Invitation Templates'
     title='Baby Shower Invitation Template - Free Printable Boy &amp; Girl Cards'
-    desc='Printable baby shower invitation templates for boys, girls and gender-neutral showers. 5x7 inch cards, free to print or save as PDF.'
+    desc='Printable baby shower invitation templates for boys, girls and gender-neutral showers. 5x7 inch cards, editable in your browser.'
     intro=@(
-      'These baby shower templates come in four colour directions - powder blue, blush, sage and warm yellow - so you can match a boy, girl or gender-neutral shower without redesigning anything. The confetti and botanical line work is drawn as vector shapes, so it stays crisp when printed.',
-      'Each card leaves room for the two details guests actually need: the address, and whether food is being served. If you are also collecting RSVPs by phone, the venue line has space for a number.')
+      'These baby shower templates come in four colour directions - powder blue, blush, sage and warm yellow - so you can match a boy, girl or gender-neutral shower without redesigning anything. Every palette on the site can be swapped onto any of them in the editor.',
+      'Each card leaves room for the two details guests actually need: the address, and whether food is being served. There is also a footer line you can use for an RSVP number or a note about gifts.')
     faq=@(
       @('When should baby shower invitations be sent?','Four to six weeks before the shower, which usually falls in the seventh or eighth month of pregnancy. Sending earlier gives guests time to arrange gifts and travel.'),
       @('Can these templates be used for a gender reveal?','Yes. The sage and yellow designs are deliberately gender-neutral, which is what a reveal invitation needs - the colour on the card should not give the answer away before the party.'),
       @('Whose name goes on a baby shower invitation?','The parent being celebrated, plus the host if someone else is organising it. The baby''s name only appears if it has already been chosen and shared.'))
     templates=@(
-      (New-Tpl 'powder-blue' 'Powder Blue' 'Boy &middot; confetti' 'd-brackets' 'f-script' 'confetti' '#f2f7fb' '#27394d' '#7fa8c9' '#5a6b7d' $Body.baby),
-      (New-Tpl 'blush-bloom' 'Blush Bloom' 'Girl &middot; scalloped edge' 'd-scallop' 'f-cormorant' 'botanical' '#fdf3f5' '#4e3038' '#db93a5' '#7d5f67' $Body.baby),
-      (New-Tpl 'sage-neutral' 'Sage Neutral' 'Neutral &middot; double rule' 'd-frame' 'f-marcellus' 'botanical' '#f3f6f0' '#2e3b2c' '#7d9a6e' '#5c6a58' $Body.baby),
-      (New-Tpl 'sunny-yellow' 'Sunny Yellow' 'Neutral &middot; header band' 'd-band' 'f-josefin' 'confetti' '#fdfaf0' '#46402a' '#dfb63f' '#726b52' $Body.baby)) },
+      (New-Tpl 'powder-blue' 'Powder Blue' 'Boy &middot; confetti' 'd-brackets' 'f-script' 'confetti' '#f2f7fb' '#27394d' '#7fa8c9' '#5a6b7d' $Body.baby 'bg-grad'),
+      (New-Tpl 'blush-bloom' 'Blush Bloom' 'Girl &middot; floral wreath' 'd-scallop' 'f-cormorant' 'wreath' '#fdf3f5' '#4e3038' '#db93a5' '#7d5f67' $Body.baby 'bg-wash'),
+      (New-Tpl 'sage-neutral' 'Sage Neutral' 'Neutral &middot; sprigs' 'd-frame' 'f-marcellus' 'botanical' '#f3f6f0' '#2e3b2c' '#7d9a6e' '#5c6a58' $Body.baby),
+      (New-Tpl 'sunny-yellow' 'Sunny Yellow' 'Neutral &middot; confetti' 'd-band' 'f-josefin' 'confetti' '#fdfaf0' '#46402a' '#dfb63f' '#726b52' $Body.baby 'bg-grad')) },
 
  @{ slug='graduation-invitations'; name='Graduation Invitations'; nav='Graduation Invitations'
     h1='Graduation Invitation Templates'
     title='Graduation Invitation Template - Free Printable Party &amp; Ceremony Cards'
     desc='Printable graduation invitation and announcement templates for ceremonies and parties. 5x7 inch cards in navy, black-gold and modern styles.'
     intro=@(
-      'A graduation card does two different jobs depending on how you use it: announcing the achievement, or inviting people to the party afterwards. These templates handle both - the degree line sits directly under the name, and the venue block below it can be dropped entirely if you are only announcing.',
-      'The navy laurel and black-gold designs read as formal ceremony cards. The confetti and burgundy layouts are lighter and suit a party at home.')
+      'A graduation card does two different jobs depending on how you use it: announcing the achievement, or inviting people to the party afterwards. These templates handle both - the degree line sits directly under the name, and the venue block below it can be cleared entirely if you are only announcing.',
+      'The navy laurel and black-gold designs read as formal ceremony cards, both with a metallic foil finish on the line work. The confetti and burgundy layouts are lighter and suit a party at home.')
     faq=@(
-      @('What is the difference between a graduation announcement and an invitation?','An announcement shares the news and expects nothing back. An invitation asks the reader to attend something, so it must carry a date, a venue and a way to reply. These templates work as either - remove the venue block for an announcement.'),
+      @('What is the difference between a graduation announcement and an invitation?','An announcement shares the news and expects nothing back. An invitation asks the reader to attend something, so it must carry a date, a venue and a way to reply. These templates work as either - clear the venue box for an announcement.'),
       @('When should graduation invitations be sent?','Three to four weeks before the ceremony or party. University ceremony tickets are often limited, so confirm how many guests you can bring before sending anything.'),
       @('Should the degree be written in full?','Yes, on a formal card - "Bachelor of Science in Computer Science" rather than "BSCS". Abbreviations read as informal and not every relative will recognise them.'))
     templates=@(
-      (New-Tpl 'navy-laurel' 'Navy Laurel' 'Formal &middot; laurel wreath' 'd-frame' 'f-cinzel' 'laurel' '#f7f7f4' '#16233d' '#b08a3e' '#565f70' $Body.grad),
-      (New-Tpl 'black-and-gold' 'Black &amp; Gold' 'Formal &middot; dark card' 'd-solid' 'f-cinzel' $null '#16161a' '#f2eee4' '#c9a227' '#bdb9b0' $Body.grad),
-      (New-Tpl 'confetti-bright' 'Confetti Bright' 'Party &middot; corner brackets' 'd-brackets' 'f-josefin' 'confetti' '#fbfaf6' '#2a2e35' '#3f7a8c' '#5d646d' $Body.grad),
-      (New-Tpl 'burgundy-classic' 'Burgundy Classic' 'Classic &middot; header band' 'd-band' 'f-marcellus' $null '#faf7f4' '#3b1f27' '#7b2c3b' '#6d5a5f' $Body.grad)) },
+      (New-Tpl 'navy-laurel' 'Navy Laurel' 'Formal &middot; foiled laurel' 'd-frame' 'f-cinzel' 'laurel' '#f7f7f4' '#16233d' '#b08a3e' '#565f70' $Body.grad 'bg-grad' $true),
+      (New-Tpl 'black-and-gold' 'Black &amp; Gold' 'Art deco &middot; dark card' 'd-plain' 'f-cinzel' 'deco' '#16161a' '#f2eee4' '#c9a227' '#bdb9b0' $Body.grad 'bg-edge' $true),
+      (New-Tpl 'confetti-bright' 'Confetti Bright' 'Party &middot; corner brackets' 'd-brackets' 'f-josefin' 'confetti' '#fbfaf6' '#2a2e35' '#3f7a8c' '#5d646d' $Body.grad 'bg-wash'),
+      (New-Tpl 'burgundy-classic' 'Burgundy Classic' 'Classic &middot; flourish' 'd-band' 'f-marcellus' 'flourish' '#faf7f4' '#3b1f27' '#7b2c3b' '#6d5a5f' $Body.grad)) },
 
  @{ slug='housewarming-invitations'; name='Housewarming Invitations'; nav='Housewarming Invitations'
     h1='Housewarming Invitation Templates'
     title='Housewarming Invitation Card Template - Free Printable Designs'
-    desc='Printable housewarming party invitation templates with the new address set clearly. 5x7 inch cards, free to print or save as PDF.'
+    desc='Printable housewarming party invitation templates with the new address set clearly. 5x7 inch cards, editable in your browser.'
     intro=@(
       'The address is the most important line on a housewarming invitation, and it is the line most designs bury. Each of these templates gives the new address its own block with generous spacing around it, so guests can read it at a glance or photograph it for their maps app.',
       'The arch design borrows the shape of a doorway, which suits the occasion without resorting to clip art. The clay, sage and slate layouts are quieter alternatives if you are inviting colleagues as well as family.')
     faq=@(
       @('How much notice do housewarming invitations need?','Two to three weeks is plenty. A housewarming is an informal gathering and most guests decide quickly, so sending months ahead tends to work against you.'),
-      @('Should I say that gifts are not expected?','If you mean it, say it plainly - a short line such as "Your company is gift enough" at the bottom of the card. It reads better than a longer explanation.'),
+      @('Should I say that gifts are not expected?','If you mean it, say it plainly - a short line such as "Your company is gift enough" at the bottom of the card. The footer box in the editor is there for exactly this.'),
       @('Can these templates be used for a casual or funny invite?','Yes. The layout stays the same; only the wording changes. A light opening line above the family name is usually enough to set an informal tone without making the address harder to read.'))
     templates=@(
-      (New-Tpl 'ochre-arch' 'Ochre Arch' 'Warm &middot; doorway arch' 'd-arch' 'f-marcellus' 'arch' '#fdf8ef' '#3e3324' '#c08a2e' '#6d6250' $Body.house),
-      (New-Tpl 'clay-minimal' 'Clay Minimal' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' $null '#f8f4f0' '#45372f' '#a4674c' '#6f625a' $Body.house),
-      (New-Tpl 'sage-cottage' 'Sage Cottage' 'Classic &middot; double rule' 'd-frame' 'f-cormorant' 'botanical' '#f2f5ef' '#2c3a2c' '#6e8b62' '#5a675a' $Body.house),
-      (New-Tpl 'slate-modern' 'Slate Modern' 'Modern &middot; header band' 'd-band' 'f-josefin' $null '#f4f6f7' '#253038' '#46626f' '#5c666d' $Body.house)) },
+      (New-Tpl 'ochre-arch' 'Ochre Arch' 'Warm &middot; doorway arch' 'd-arch' 'f-marcellus' 'arch' '#fdf8ef' '#3e3324' '#c08a2e' '#6d6250' $Body.house 'bg-grad'),
+      (New-Tpl 'clay-minimal' 'Clay Minimal' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' '' '#f8f4f0' '#45372f' '#a4674c' '#6f625a' $Body.house),
+      (New-Tpl 'sage-cottage' 'Sage Cottage' 'Classic &middot; vine border' 'd-frame' 'f-cormorant' 'vine' '#f2f5ef' '#2c3a2c' '#6e8b62' '#5a675a' $Body.house),
+      (New-Tpl 'slate-modern' 'Slate Modern' 'Modern &middot; geometric' 'd-band' 'f-josefin' 'geometric' '#f4f6f7' '#253038' '#46626f' '#5c666d' $Body.house 'bg-edge')) },
 
  @{ slug='farewell-retirement-invitations'; name='Farewell &amp; Retirement Invitations'; nav='Farewell &amp; Retirement'
     h1='Farewell and Retirement Party Invitation Templates'
@@ -229,10 +282,10 @@ $Subcats = @(
       @('How far ahead should a farewell invitation go out?','Two to three weeks for an office gathering. If the person is leaving sooner than that, send it as soon as the date is fixed - a short notice card is better than none.'),
       @('Can the same template work for a colleague relocating?','Yes. The wording above the name is the only part that changes - swap the years-of-service line for a farewell or good-luck line and the rest of the card still fits.'))
     templates=@(
-      (New-Tpl 'slate-gratitude' 'Slate Gratitude' 'Formal &middot; double rule' 'd-frame' 'f-marcellus' $null '#f6f7f8' '#232c33' '#4c6377' '#5b656d' $Body.farewell),
-      (New-Tpl 'deep-teal' 'Deep Teal' 'Formal &middot; dark card' 'd-solid' 'f-cormorant' $null '#14343a' '#eff3f1' '#c9a227' '#b3c4c1' $Body.farewell),
-      (New-Tpl 'warm-grey-classic' 'Warm Grey Classic' 'Classic &middot; side rule' 'd-rule' 'f-cinzel' $null '#f7f5f2' '#35302b' '#8a7a63' '#6b635a' $Body.farewell),
-      (New-Tpl 'gold-send-off' 'Gold Send-off' 'Warm &middot; header band' 'd-band' 'f-script' $null '#fcfaf6' '#2f2a22' '#b08a3e' '#6b6459' $Body.farewell)) }
+      (New-Tpl 'slate-gratitude' 'Slate Gratitude' 'Formal &middot; laurel' 'd-frame' 'f-marcellus' 'laurel' '#f6f7f8' '#232c33' '#4c6377' '#5b656d' $Body.farewell 'bg-grad'),
+      (New-Tpl 'deep-teal' 'Deep Teal' 'Art deco &middot; dark card' 'd-plain' 'f-cormorant' 'deco' '#14343a' '#eff3f1' '#c9a227' '#b3c4c1' $Body.farewell 'bg-edge' $true),
+      (New-Tpl 'warm-grey-classic' 'Warm Grey Classic' 'Classic &middot; flourish' 'd-rule' 'f-cinzel' 'flourish' '#f7f5f2' '#35302b' '#8a7a63' '#6b635a' $Body.farewell),
+      (New-Tpl 'gold-send-off' 'Gold Send-off' 'Warm &middot; foiled wreath' 'd-band' 'f-script' 'wreath' '#fcfaf6' '#2f2a22' '#b08a3e' '#6b6459' $Body.farewell 'bg-grad' $true)) }
 )
 
 # --- guides ------------------------------------------------------------------

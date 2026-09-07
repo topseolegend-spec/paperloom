@@ -77,6 +77,27 @@
 .ed-chip:hover{background:var(--surface-2);}
 .ed-chip[aria-pressed="true"]{border-color:var(--green); background:var(--gold-soft); font-weight:600;}
 
+/* wide chips carry a second line of explanation */
+.ed-chip-wide{display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;}
+.ed-chip-wide .sub{font-size:11.5px; color:var(--ink-faint); font-weight:400;}
+.ed-chip[aria-pressed="true"] .sub{color:var(--ink-soft);}
+
+/* checkbox row */
+.ed-toggle{
+  display:flex; align-items:center; gap:9px;
+  margin-top:16px; font-size:14.5px; cursor:pointer;
+}
+.ed-toggle input{width:16px; height:16px; accent-color:var(--green); cursor:pointer;}
+
+/* slider row */
+.ed-slider{display:flex; align-items:center; gap:12px; margin-top:18px;}
+.ed-slider label{font-size:13px; font-weight:600; color:var(--ink-soft); white-space:nowrap;}
+.ed-slider input[type="range"]{flex:1; accent-color:var(--green); cursor:pointer;}
+.ed-slider output{
+  font-size:13px; color:var(--ink-soft); min-width:42px; text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
 /* actions */
 .ed-actions{display:flex; flex-direction:column; gap:10px; margin-top:26px;}
 .ed-actions .btn{justify-content:center;}

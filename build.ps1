@@ -8,6 +8,7 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content.ps1')
+. (Join-Path $Root 'ornaments.ps1')
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -19,77 +20,6 @@ function Write-File($path, $text) {
   $dir = Split-Path -Parent $path
   if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
   [System.IO.File]::WriteAllText($path, $text, (New-Object System.Text.UTF8Encoding($false)))
-}
-
-# --- ornaments ---------------------------------------------------------------
-
-function Art-Arch($a) {
-  '<svg viewBox="0 0 100 140" aria-hidden="true"><path d="M50 20 C33 20 26 33 26 47 L26 118 L74 118 L74 47 C74 33 67 20 50 20 Z" fill="none" stroke="' + $a + '" stroke-width="0.6" opacity="0.55"/></svg>'
-}
-
-function Art-Sprig($x, $y, $flip, $a) {
-  $s = if ($flip) { -1 } else { 1 }
-  $leaves = ''
-  foreach ($i in 0..2) {
-    $y1 = $y + $s * (3 + $i * 4); $y2 = $y + $s * (1 + $i * 4)
-    $y3 = $y + $s * (5 + $i * 4); $y4 = $y + $s * (7 + $i * 4)
-    $leaves += "<path d=`"M$x $y1 C$($x-4) $y2 $($x-6) $y3 $($x-3) $y4`" fill=`"none`"/>"
-    $leaves += "<path d=`"M$x $y1 C$($x+4) $y2 $($x+6) $y3 $($x+3) $y4`" fill=`"none`"/>"
-  }
-  $ye = $y + $s * 18
-  "<g stroke=`"$a`" stroke-width=`"0.5`" opacity=`"0.7`"><path d=`"M$x $y L$x $ye`" fill=`"none`"/>$leaves</g>"
-}
-
-function Art-Botanical($a) {
-  '<svg viewBox="0 0 100 140" aria-hidden="true">' + (Art-Sprig 50 12 $false $a) + (Art-Sprig 50 128 $true $a) + '</svg>'
-}
-
-function Art-Geometric($a) {
-  $cells = ''
-  foreach ($p in @(@(14,16), @(86,16), @(14,124), @(86,124))) {
-    $gx = $p[0]; $gy = $p[1]
-    $cells += "<g stroke=`"$a`" stroke-width=`"0.5`" fill=`"none`" opacity=`"0.65`">" +
-      "<rect x=`"$($gx-7)`" y=`"$($gy-7)`" width=`"14`" height=`"14`" transform=`"rotate(45 $gx $gy)`"/>" +
-      "<rect x=`"$($gx-4)`" y=`"$($gy-4)`" width=`"8`" height=`"8`"/>" +
-      "<circle cx=`"$gx`" cy=`"$gy`" r=`"1.4`" fill=`"$a`" stroke=`"none`"/></g>"
-  }
-  '<svg viewBox="0 0 100 140" aria-hidden="true">' + $cells + '</svg>'
-}
-
-function Art-Laurel($a) {
-  $out = ''
-  foreach ($mirror in @($false, $true)) {
-    $m = if ($mirror) { ' transform="scale(-1,1) translate(-100,0)"' } else { '' }
-    $leaves = ''
-    foreach ($i in 0..6) {
-      $cx = 34 - $i; $cy = 40 + $i * 7; $rot = -38 + $i * 7
-      $leaves += "<ellipse cx=`"$cx`" cy=`"$cy`" rx=`"3.2`" ry=`"1.6`" transform=`"rotate($rot $cx $cy)`"/>"
-    }
-    $out += "<g$m stroke=`"$a`" stroke-width=`"0.5`" fill=`"none`" opacity=`"0.7`"><path d=`"M36 36 C28 52 28 72 34 86`"/>$leaves</g>"
-  }
-  '<svg viewBox="0 0 100 140" aria-hidden="true">' + $out + '</svg>'
-}
-
-function Art-Confetti($a) {
-  $pts = @(@(16,20,'1.6'),@(28,13,'1.1'),@(82,18,'1.7'),@(72,11,'1.0'),@(12,40,'1.2'),
-           @(89,44,'1.3'),@(18,112,'1.5'),@(84,118,'1.4'),@(30,128,'1.1'),@(68,130,'1.6'),
-           @(10,76,'1.0'),@(91,80,'1.1'))
-  $dots = ''
-  foreach ($p in $pts) {
-    $dots += "<circle cx=`"$($p[0])`" cy=`"$($p[1])`" r=`"$($p[2])`" fill=`"$a`" opacity=`"0.55`"/>"
-  }
-  '<svg viewBox="0 0 100 140" aria-hidden="true">' + $dots + '</svg>'
-}
-
-function Get-Art($kind, $a) {
-  switch ($kind) {
-    'arch'      { Art-Arch $a }
-    'botanical' { Art-Botanical $a }
-    'geometric' { Art-Geometric $a }
-    'laurel'    { Art-Laurel $a }
-    'confetti'  { Art-Confetti $a }
-    default     { '' }
-  }
 }
 
 # --- shared chrome -----------------------------------------------------------
@@ -232,17 +162,29 @@ $extraScripts
   [void]$Urls.Add($canonical)
 }
 
-function Get-Card($t, $extraClass) {
+function Get-Card($t, $extraClass, $allArt) {
+  # Editor pages carry every ornament so the switcher can swap them with no
+  # round trip; grid thumbnails carry only the one they use.
   $art = ''
-  if ($t.art) { $art = '<div class="card-art">' + (Get-Art $t.art $t.accent) + '</div>' }
-  $corners = ''
-  if ($t.design -eq 'd-brackets') { $corners = '<span class="corner tl"></span><span class="corner br"></span>' }
+  if ($allArt) {
+    $art = ($ArtKinds | Where-Object { $_.id -ne 'none' } | ForEach-Object {
+      $on = if ($_.id -eq $t.art) { ' is-on' } else { '' }
+      "<span class=`"art$on`" data-art=`"$($_.id)`">" + (Get-Art $_.id) + '</span>'
+    }) -join ''
+  } elseif ($t.art) {
+    $art = "<span class=`"art is-on`" data-art=`"$($t.art)`">" + (Get-Art $t.art) + '</span>'
+  }
+
+  $corners = '<span class="corner tl"></span><span class="corner br"></span>'
   $b = $t.body
+  $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
+  $foil = if ($t.foil) { ' is-foil' } else { '' }
+  $note = if ($b.note) { $b.note } else { '' }
   $style = "--c-bg:$($t.bg);--c-ink:$($t.ink);--c-accent:$($t.accent);--c-soft:$($t.soft)"
   if (-not $extraClass) { $extraClass = '' }
 @"
-<div class="card-preview $($t.design) $($t.font) $extraClass" style="$style">
-        $art$corners
+<div class="card-preview $($t.design) $($t.font) $bgs sz-5x7$foil $extraClass" style="$style" data-art="$($t.art)">
+        <div class="card-art">$art</div>$corners
         <div class="card-body">
           <p class="c-pre" data-field="pre">$($b.pre)</p>
           <p class="c-name" data-field="title">$($b.title)</p>
@@ -250,6 +192,7 @@ function Get-Card($t, $extraClass) {
           <span class="c-rule"></span>
           <p class="c-date" data-field="date">$($b.date)</p>
           <p class="c-venue" data-field="venue">$($b.venue)</p>
+          <p class="c-note" data-field="note">$note</p>
         </div>
       </div>
 "@
@@ -492,11 +435,24 @@ function Build-Template($s, $t) {
   $crumb = Get-Crumbs 3 @(@($Category.name, "$($Category.slug)/"), @($s.name, "$($Category.slug)/$($s.slug)/"), @($t.name, ''))
 
   $swatches = ($Palettes | ForEach-Object {
-    "<button class=`"ed-swatch`" type=`"button`" title=`"$($_.name)`" aria-label=`"$($_.name)`" aria-pressed=`"false`" data-swatch=`"$($_.bg),$($_.ink),$($_.accent)`"><span style=`"background:$($_.bg)`"></span><span style=`"background:$($_.accent)`"></span></button>"
+    $f = if ($_.foil) { '1' } else { '0' }
+    "<button class=`"ed-swatch`" type=`"button`" title=`"$($_.name)`" aria-label=`"$($_.name)`" aria-pressed=`"false`" data-swatch=`"$($_.bg),$($_.ink),$($_.accent),$f`"><span style=`"background:$($_.bg)`"></span><span style=`"background:$($_.accent)`"></span></button>"
   }) -join ''
 
   $fontChips = ($FontChoices | ForEach-Object {
     "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-font=`"$($_.cls)`">$($_.label)</button>"
+  }) -join ''
+
+  $artChips = ($ArtKinds | ForEach-Object {
+    "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-art=`"$($_.id)`">$($_.label)</button>"
+  }) -join ''
+
+  $bgChips = ($BgChoices | ForEach-Object {
+    "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-bg=`"$($_.cls)`">$($_.label)</button>"
+  }) -join ''
+
+  $sizeChips = ($SizeChoices | ForEach-Object {
+    "<button class=`"ed-chip ed-chip-wide`" type=`"button`" aria-pressed=`"false`" data-size=`"$($_.cls)`">$($_.label)<span class=`"sub`">$($_.note)</span></button>"
   }) -join ''
 
   $body = @"
@@ -508,7 +464,7 @@ $crumb
           <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Fill in the boxes and the card updates as you type - or click a line on the card itself.
         </p>
-        <div class="detail-stage" data-template="$($t.slug)">$card</div>
+        <div class="detail-stage" data-template="$($t.slug)">$(Get-Card $t '' $true)</div>
       </div>
       <div class="detail-side">
         <div class="editor-panel">
@@ -540,6 +496,10 @@ $crumb
                 <label for="ed-text-venue">Venue and address <span class="sub">Enter for a new line</span></label>
                 <textarea id="ed-text-venue" data-text="venue"></textarea>
               </div>
+              <div class="ed-field">
+                <label for="ed-text-note">Footer line <span class="sub">RSVP, dress code - leave empty to hide</span></label>
+                <input type="text" id="ed-text-note" data-text="note" autocomplete="off">
+              </div>
             </div>
           </div>
 
@@ -552,24 +512,49 @@ $crumb
               <label class="ed-color"><span>Text</span><input type="color" id="ed-ink"></label>
               <label class="ed-color"><span>Accent</span><input type="color" id="ed-accent"></label>
             </div>
+            <label class="ed-toggle">
+              <input type="checkbox" id="ed-foil">
+              <span>Metallic foil finish</span>
+            </label>
           </div>
 
           <div class="ed-step">
-            <div class="ed-step-head"><span class="ed-step-num">3</span><h2>Choose a font</h2></div>
+            <div class="ed-step-head"><span class="ed-step-num">3</span><h2>Choose the lettering</h2></div>
             <p class="ed-label" style="margin-bottom:10px;">
               <span class="hint">Urdu and Arabic switch the card to right-to-left</span></p>
             <div class="ed-chips">$fontChips</div>
+            <div class="ed-slider">
+              <label for="ed-size">Name size</label>
+              <input type="range" id="ed-size" min="60" max="150" step="5" value="100">
+              <output for="ed-size" id="ed-size-out">100%</output>
+            </div>
           </div>
 
           <div class="ed-step">
-            <div class="ed-step-head"><span class="ed-step-num">4</span><h2>Save your card</h2></div>
+            <div class="ed-step-head"><span class="ed-step-num">4</span><h2>Decoration</h2></div>
+            <p class="ed-label" style="margin-bottom:10px;">Ornament</p>
+            <div class="ed-chips">$artChips</div>
+            <p class="ed-label" style="margin:16px 0 10px;">Background</p>
+            <div class="ed-chips">$bgChips</div>
+          </div>
+
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">5</span><h2>Card size</h2></div>
+            <div class="ed-chips">$sizeChips</div>
+          </div>
+
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">6</span><h2>Save your card</h2></div>
             <div class="ed-actions">
               <button class="btn btn-primary" type="button" data-png>Download PNG</button>
               <div class="ed-row">
                 <button class="btn btn-ghost" type="button" data-print>Print / PDF</button>
                 <button class="btn btn-ghost" type="button" data-share>Copy link</button>
               </div>
-              <button class="btn btn-ghost" type="button" data-reset>Start over</button>
+              <div class="ed-row">
+                <button class="btn btn-ghost" type="button" data-undo disabled>Undo</button>
+                <button class="btn btn-ghost" type="button" data-reset>Start over</button>
+              </div>
             </div>
             <p class="ed-status" role="status"></p>
             <p class="form-note" style="margin-top:14px;">Your changes are kept in this browser.
@@ -586,7 +571,7 @@ $crumb
     </div>
   </section>
 "@
-  $head = "<link rel=`"stylesheet`" href=`"../../../assets/css/editor.css`">`n<link rel=`"stylesheet`" href=`"$FontsRtl`">"
+  $head = "<link rel=`"stylesheet`" href=`"../../../assets/css/editor.css`">`n<link rel=`"stylesheet`" href=`"$FontsExtra`">"
   $scripts = "<script src=`"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js`" defer></script>`n<script src=`"../../../assets/js/editor.js`" defer></script>"
   Save-Page 3 "$($Category.slug)/$($s.slug)/$($t.slug)" $title $desc $body '' $head $scripts
 }

@@ -1,20 +1,34 @@
 /* ==========================================================================
-   Card designs — every template is drawn in CSS + inline SVG.
+   Card designs - every template is drawn in CSS + inline SVG.
    No stock photography, no third-party artwork: nothing here needs a licence.
-   Sizes use container query units so one design renders correctly at any width.
+
+   Sizes use container query units, so one design renders correctly whether it
+   is a 200px thumbnail or a 420px editor preview.
+
+   Colour comes from four custom properties set on .card-preview:
+     --c-bg  --c-ink  --c-accent  --c-soft
+   The ornament SVGs inherit --c-accent through currentColor, so changing the
+   palette recolours the artwork too.
    ========================================================================== */
 
 .card-preview{
   container-type:inline-size;
   position:relative;
-  aspect-ratio:5/7;               /* real 5x7in invitation proportions */
+  aspect-ratio:5/7;                 /* real 5x7in invitation proportions */
   background:var(--c-bg,#fff);
   color:var(--c-ink,#22221f);
   border-radius:3px;
   overflow:hidden;
   box-shadow:var(--shadow-md);
   transition:box-shadow .22s ease, transform .22s ease;
+  --name-scale:1;
+  --name-fit:1;
 }
+
+/* alternate paper sizes offered in the editor */
+.card-preview.sz-a5{aspect-ratio:148/210;}
+.card-preview.sz-square{aspect-ratio:1/1;}
+.card-preview.sz-square .card-body{padding:9cqw 11cqw;}
 
 .card-body{
   position:absolute; inset:0;
@@ -24,8 +38,9 @@
   gap:2.4cqw;
 }
 
-/* --- shared text roles ------------------------------------------------- */
-.c-pre, .c-mid, .c-post{
+/* ---------- text roles --------------------------------------------------- */
+
+.c-pre, .c-mid, .c-note{
   font-family:'Karla', sans-serif;
   font-size:3.1cqw; line-height:1.5;
   letter-spacing:.16em; text-transform:uppercase;
@@ -35,7 +50,8 @@
 .c-mid{letter-spacing:.1em; text-transform:none; font-size:3.3cqw;}
 .c-name{
   font-family:'Cormorant Garamond', serif;
-  font-size:11cqw; line-height:1.05; font-weight:500;
+  font-size:calc(11cqw * var(--name-scale) * var(--name-fit,1));
+  line-height:1.05; font-weight:500;
   margin:1cqw 0; color:var(--c-ink);
 }
 .c-date{
@@ -48,63 +64,161 @@
   font-size:3cqw; line-height:1.5; color:var(--c-soft,var(--c-ink)); margin:0;
   letter-spacing:.04em;
 }
+.c-note{
+  font-size:2.6cqw; letter-spacing:.14em; opacity:.85;
+  margin-top:1.5cqw;
+}
+.c-note:empty{display:none;}
 .c-rule{width:16cqw; height:1px; background:var(--c-accent); opacity:.7; margin:1.5cqw 0;}
 
-/* alternate type voices, mixed across the library so designs read differently */
-.f-script .c-name{font-family:'Great Vibes', cursive; font-size:13cqw; line-height:1.15;}
-.f-cinzel .c-name{font-family:'Cinzel', serif; font-size:7.6cqw; letter-spacing:.06em;}
-.f-josefin .c-name{font-family:'Josefin Sans', sans-serif; font-size:8cqw; font-weight:300; letter-spacing:.1em; text-transform:uppercase;}
-.f-marcellus .c-name{font-family:'Marcellus', serif; font-size:8.6cqw; letter-spacing:.03em;}
+/* ---------- typefaces ---------------------------------------------------- */
+/* Each face gets its own size, because a script at 11cqw and roman caps at
+   11cqw are nowhere near the same optical size. */
 
-/* --- ornament layer ---------------------------------------------------- */
-.card-art{position:absolute; inset:0; pointer-events:none;}
-.card-art svg{width:100%; height:100%; display:block;}
+.f-cormorant  .c-name{font-family:'Cormorant Garamond', serif;}
+.f-playfair   .c-name{font-family:'Playfair Display', serif; font-size:calc(9cqw * var(--name-scale) * var(--name-fit,1));}
+.f-bodoni     .c-name{font-family:'Bodoni Moda', serif; font-size:calc(9cqw * var(--name-scale) * var(--name-fit,1));}
+.f-libre      .c-name{font-family:'Libre Baskerville', serif; font-size:calc(7.4cqw * var(--name-scale) * var(--name-fit,1));}
+.f-marcellus  .c-name{font-family:'Marcellus', serif; font-size:calc(8.6cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.03em;}
+.f-italiana   .c-name{font-family:'Italiana', serif; font-size:calc(10.5cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.04em;}
+.f-cinzel     .c-name{font-family:'Cinzel', serif; font-size:calc(7.6cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.06em;}
+.f-cinzel-dec .c-name{font-family:'Cinzel Decorative', serif; font-size:calc(7.4cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.04em;}
+.f-script     .c-name{font-family:'Great Vibes', cursive; font-size:calc(13cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.15;}
+.f-parisienne .c-name{font-family:'Parisienne', cursive; font-size:calc(12cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.2;}
+.f-sacramento .c-name{font-family:'Sacramento', cursive; font-size:calc(13cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.15;}
+.f-josefin    .c-name{font-family:'Josefin Sans', sans-serif; font-size:calc(8cqw * var(--name-scale) * var(--name-fit,1)); font-weight:300; letter-spacing:.1em; text-transform:uppercase;}
+.f-tenor      .c-name{font-family:'Tenor Sans', sans-serif; font-size:calc(8.2cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.08em;}
 
-/* --- design: classic double frame -------------------------------------- */
+/* right-to-left faces */
+.f-urdu  .c-name{font-family:'Noto Nastaliq Urdu', 'Amiri', serif; font-size:calc(7cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.9;}
+.f-amiri .c-name{font-family:'Amiri', serif; font-size:calc(9cqw * var(--name-scale) * var(--name-fit,1));}
+.f-naskh .c-name{font-family:'Noto Naskh Arabic', 'Amiri', serif; font-size:calc(8cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.7;}
+
+.f-urdu .c-pre, .f-urdu .c-mid, .f-urdu .c-venue, .f-urdu .c-note{
+  font-family:'Noto Nastaliq Urdu', 'Amiri', serif; letter-spacing:0; line-height:2; text-transform:none;
+}
+.f-amiri .c-pre, .f-amiri .c-mid, .f-amiri .c-venue, .f-amiri .c-note{
+  font-family:'Amiri', serif; letter-spacing:.02em; text-transform:none;
+}
+.f-naskh .c-pre, .f-naskh .c-mid, .f-naskh .c-venue, .f-naskh .c-note{
+  font-family:'Noto Naskh Arabic', 'Amiri', serif; letter-spacing:0; line-height:1.9; text-transform:none;
+}
+.f-urdu .c-date, .f-amiri .c-date, .f-naskh .c-date{font-family:'Amiri', serif; letter-spacing:.06em;}
+
+.card-preview.is-rtl .card-body{direction:rtl;}
+.card-preview.is-rtl.d-rule .card-body{text-align:right; padding-right:16cqw; padding-left:9cqw;}
+.card-preview.is-rtl.d-rule::before{left:auto; right:7cqw;}
+
+/* ---------- ornament layer ----------------------------------------------- */
+
+.card-art{position:absolute; inset:0; pointer-events:none; color:var(--c-accent);}
+.card-art svg{width:100%; height:100%; display:block; position:absolute; inset:0;}
+.card-art .art{display:none;}
+.card-art .art.is-on{display:block;}
+.card-art .s{stroke:currentColor; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+.card-art .f{fill:currentColor; stroke:none;}
+
+/* Metallic foil. An SVG gradient cannot be shared across cards here - it would
+   resolve --c-accent against its own ancestors, not each card's - so the line
+   work is lightened towards a warm highlight instead, and the gradient is spent
+   where it actually reads: the date and the rule. */
+.is-foil .card-art .s{stroke:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+.is-foil .card-art .f{fill:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+.is-foil .c-date{
+  background:linear-gradient(105deg,
+    color-mix(in srgb, var(--c-accent) 70%, #000 8%) 0%,
+    #fff6d8 38%, var(--c-accent) 55%,
+    color-mix(in srgb, var(--c-accent) 80%, #000 10%) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.is-foil .c-rule{
+  background:linear-gradient(90deg, transparent, var(--c-accent), #fff3cf, var(--c-accent), transparent);
+  opacity:1;
+}
+
+/* ---------- background treatments ---------------------------------------- */
+
+.bg-grad::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 0%,
+    color-mix(in srgb, var(--c-accent) 13%, transparent) 0%, transparent 62%);
+}
+.bg-wash::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(38% 28% at 18% 12%, color-mix(in srgb, var(--c-accent) 22%, transparent) 0%, transparent 70%),
+    radial-gradient(42% 32% at 84% 88%, color-mix(in srgb, var(--c-accent) 17%, transparent) 0%, transparent 72%);
+}
+.bg-edge::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(78% 60% at 50% 50%,
+    transparent 45%, color-mix(in srgb, var(--c-accent) 15%, transparent) 100%);
+}
+/* the wash sits under the ornament and text */
+.card-preview::after{z-index:0;}
+.card-art{z-index:1;}
+.card-body{z-index:2;}
+
+/* Ring ornaments enclose the wording, so the text column has to pull in far
+   enough to sit inside the ring rather than crossing it. */
+.card-preview[data-art="wreath"],
+.card-preview[data-art="mandala"]{--name-fit:0.82;}
+.card-preview[data-art="wreath"] .card-body,
+.card-preview[data-art="mandala"] .card-body{padding:15cqw 17cqw;}
+.card-preview[data-art="wreath"] .c-venue,
+.card-preview[data-art="mandala"] .c-venue{font-size:2.7cqw;}
+.card-preview[data-art="wreath"] .c-pre,
+.card-preview[data-art="mandala"] .c-pre{font-size:2.8cqw;}
+
+/* ---------- layouts ------------------------------------------------------ */
+
+/* d-plain: no CSS decoration at all - the ornament carries the design */
+
 .d-frame .card-body{padding:14cqw 11cqw;}
 .d-frame::before{
-  content:""; position:absolute; inset:5cqw;
+  content:""; position:absolute; inset:5cqw; z-index:1;
   border:1px solid var(--c-accent); opacity:.55;
 }
-.d-frame::after{
-  content:""; position:absolute; inset:6.6cqw;
-  border:1px solid var(--c-accent); opacity:.3;
-}
+.is-foil.d-frame::before{border-color:color-mix(in srgb, var(--c-accent) 85%, #fff);}
 
-/* --- design: top colour band ------------------------------------------- */
 .d-band::before{
-  content:""; position:absolute; top:0; left:0; right:0; height:16cqw;
+  content:""; position:absolute; top:0; left:0; right:0; height:16cqw; z-index:1;
   background:var(--c-accent);
 }
 .d-band .card-body{padding-top:24cqw;}
 
-/* --- design: side rule -------------------------------------------------- */
 .d-rule::before{
-  content:""; position:absolute; top:8cqw; bottom:8cqw; left:7cqw; width:2px;
+  content:""; position:absolute; top:8cqw; bottom:8cqw; left:7cqw; width:2px; z-index:1;
   background:var(--c-accent); opacity:.8;
 }
 .d-rule .card-body{align-items:flex-start; text-align:left; padding-left:16cqw; padding-right:9cqw;}
 .d-rule .c-rule{margin-left:0;}
 
-/* --- design: full bleed ink -------------------------------------------- */
 .d-solid{--c-soft:rgba(255,255,255,.72);}
 .d-solid .card-body{padding:13cqw 10cqw;}
 
-/* --- design: scalloped edge -------------------------------------------- */
 .d-scallop::before{
-  content:""; position:absolute; inset:4cqw;
+  content:""; position:absolute; inset:4cqw; z-index:1;
   border:1.5px dashed var(--c-accent); opacity:.5; border-radius:4cqw;
 }
 
-/* --- design: corner brackets ------------------------------------------- */
-.d-brackets .corner{position:absolute; width:13cqw; height:13cqw; border:1.5px solid var(--c-accent); opacity:.75;}
+.d-brackets .corner{position:absolute; width:13cqw; height:13cqw; z-index:1;
+  border:1.5px solid var(--c-accent); opacity:.75;}
 .d-brackets .tl{top:5cqw; left:5cqw; border-right:0; border-bottom:0;}
 .d-brackets .br{bottom:5cqw; right:5cqw; border-left:0; border-top:0;}
 
-/* --- design: arch ------------------------------------------------------ */
-.d-arch .card-body{padding-top:16cqw;}
+/* inner panel in a slightly different tone */
+.d-panel::before{
+  content:""; position:absolute; inset:6cqw; z-index:0;
+  background:color-mix(in srgb, var(--c-accent) 8%, var(--c-bg));
+  border:1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
+}
+.d-panel .card-body{padding:15cqw 12cqw;}
 
-/* --- print ------------------------------------------------------------- */
+.d-arch .card-body{padding-top:19cqw; padding-bottom:15cqw;}
+
+/* ---------- print -------------------------------------------------------- */
+
 @media print{
   .card-preview{box-shadow:none; border:1px solid #ddd;}
 }
