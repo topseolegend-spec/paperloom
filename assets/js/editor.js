@@ -85,10 +85,29 @@
 
   // ---- render ------------------------------------------------------------
 
+  // ---- html <-> plain text (the form shows plain text, the card holds html) --
+
+  function htmlToText(html) {
+    var div = document.createElement('div');
+    div.innerHTML = String(html).replace(/<br\s*\/?>/gi, '\n');
+    return (div.textContent || '').replace(/ /g, ' ');
+  }
+
+  function textToHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
   function apply() {
     FIELDS.forEach(function (f) {
       var el = card.querySelector('[data-field="' + f + '"]');
       if (el && el.innerHTML !== state.texts[f]) el.innerHTML = state.texts[f];
+      var input = document.querySelector('[data-text="' + f + '"]');
+      if (input && document.activeElement !== input) {
+        var asText = htmlToText(state.texts[f]);
+        if (input.value !== asText) input.value = asText;
+      }
     });
     card.style.setProperty('--c-bg', state.bg);
     card.style.setProperty('--c-ink', state.ink);
@@ -124,7 +143,30 @@
     return '#ffffff';
   }
 
-  // ---- inline editing ----------------------------------------------------
+  // ---- the form: the main way to edit ------------------------------------
+
+  FIELDS.forEach(function (f) {
+    var input = document.querySelector('[data-text="' + f + '"]');
+    var target = card.querySelector('[data-field="' + f + '"]');
+    if (!input) return;
+
+    input.value = htmlToText(state.texts[f]);
+
+    input.addEventListener('input', function () {
+      state.texts[f] = textToHtml(input.value);
+      if (target) target.innerHTML = state.texts[f];
+      save();
+      flash('Saved in this browser');
+    });
+
+    // show which line on the card this box controls
+    if (target) {
+      input.addEventListener('focus', function () { target.classList.add('is-target'); });
+      input.addEventListener('blur', function () { target.classList.remove('is-target'); });
+    }
+  });
+
+  // ---- inline editing on the card itself (still available) ---------------
 
   card.classList.add('is-editable');
   FIELDS.forEach(function (f) {
@@ -134,6 +176,8 @@
     el.setAttribute('spellcheck', 'false');
     el.addEventListener('input', function () {
       state.texts[f] = el.innerHTML;
+      var input = document.querySelector('[data-text="' + f + '"]');
+      if (input) input.value = htmlToText(el.innerHTML);
       save();
       flash('Saved in this browser');
     });

@@ -59,7 +59,7 @@
       <div>
         <p class="stage-hint">
           <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Click any line on the card to type your own names and details.
+          Fill in the boxes and the card updates as you type - or click a line on the card itself.
         </p>
         <div class="detail-stage" data-template="classic-forest-frame"><div class="card-preview d-frame f-cormorant " style="--c-bg:#fbf8f1;--c-ink:#1f3328;--c-accent:#a8823f;--c-soft:#5d6b5f">
         
@@ -76,17 +76,40 @@
       <div class="detail-side">
         <div class="editor-panel">
           <p class="eyebrow">Wedding Invitations</p>
-          <h1 style="font-size:32px;">Classic Forest Frame</h1>
-          <p class="form-note" style="margin:8px 0 26px;">Traditional &middot; double rule &middot; 5 &times; 7 in &middot;
+          <h1 style="font-size:30px;">Classic Forest Frame</h1>
+          <p class="form-note" style="margin:8px 0 28px;">Traditional &middot; double rule &middot; 5 &times; 7 in &middot;
             free to print, no account needed</p>
 
-          <div class="ed-group">
-            <p class="ed-label">Colour palette</p>
-            <div class="ed-swatches"><button class="ed-swatch" type="button" title="Ivory &amp; gold" aria-label="Ivory &amp; gold" aria-pressed="false" data-swatch="#fbf8f1,#1f3328,#a8823f"><span style="background:#fbf8f1"></span><span style="background:#a8823f"></span></button><button class="ed-swatch" type="button" title="Blush" aria-label="Blush" aria-pressed="false" data-swatch="#fdf6f4,#4a2c2a,#c08497"><span style="background:#fdf6f4"></span><span style="background:#c08497"></span></button><button class="ed-swatch" type="button" title="Emerald" aria-label="Emerald" aria-pressed="false" data-swatch="#f7f4ec,#14392c,#1f5c45"><span style="background:#f7f4ec"></span><span style="background:#1f5c45"></span></button><button class="ed-swatch" type="button" title="Midnight" aria-label="Midnight" aria-pressed="false" data-swatch="#1b2a41,#f3efe6,#c9a227"><span style="background:#1b2a41"></span><span style="background:#c9a227"></span></button><button class="ed-swatch" type="button" title="Charcoal" aria-label="Charcoal" aria-pressed="false" data-swatch="#16161a,#f2eee4,#c9a227"><span style="background:#16161a"></span><span style="background:#c9a227"></span></button><button class="ed-swatch" type="button" title="Slate" aria-label="Slate" aria-pressed="false" data-swatch="#f6f7f8,#232c33,#4c6377"><span style="background:#f6f7f8"></span><span style="background:#4c6377"></span></button></div>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">1</span><h2>Fill in your details</h2></div>
+            <div class="ed-fields">
+              <div class="ed-field">
+                <label for="ed-text-title">Names</label>
+                <input type="text" id="ed-text-title" data-text="title" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-pre">Line above the names</label>
+                <input type="text" id="ed-text-pre" data-text="pre" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-mid">Line below the names</label>
+                <input type="text" id="ed-text-mid" data-text="mid" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-date">Date and time</label>
+                <input type="text" id="ed-text-date" data-text="date" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-venue">Venue and address <span class="sub">Enter for a new line</span></label>
+                <textarea id="ed-text-venue" data-text="venue"></textarea>
+              </div>
+            </div>
           </div>
 
-          <div class="ed-group">
-            <p class="ed-label">Or pick your own</p>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">2</span><h2>Pick your colours</h2></div>
+            <div class="ed-swatches"><button class="ed-swatch" type="button" title="Ivory &amp; gold" aria-label="Ivory &amp; gold" aria-pressed="false" data-swatch="#fbf8f1,#1f3328,#a8823f"><span style="background:#fbf8f1"></span><span style="background:#a8823f"></span></button><button class="ed-swatch" type="button" title="Blush" aria-label="Blush" aria-pressed="false" data-swatch="#fdf6f4,#4a2c2a,#c08497"><span style="background:#fdf6f4"></span><span style="background:#c08497"></span></button><button class="ed-swatch" type="button" title="Emerald" aria-label="Emerald" aria-pressed="false" data-swatch="#f7f4ec,#14392c,#1f5c45"><span style="background:#f7f4ec"></span><span style="background:#1f5c45"></span></button><button class="ed-swatch" type="button" title="Midnight" aria-label="Midnight" aria-pressed="false" data-swatch="#1b2a41,#f3efe6,#c9a227"><span style="background:#1b2a41"></span><span style="background:#c9a227"></span></button><button class="ed-swatch" type="button" title="Charcoal" aria-label="Charcoal" aria-pressed="false" data-swatch="#16161a,#f2eee4,#c9a227"><span style="background:#16161a"></span><span style="background:#c9a227"></span></button><button class="ed-swatch" type="button" title="Slate" aria-label="Slate" aria-pressed="false" data-swatch="#f6f7f8,#232c33,#4c6377"><span style="background:#f6f7f8"></span><span style="background:#4c6377"></span></button></div>
+            <p class="ed-label" style="margin:18px 0 10px;">Or choose exactly</p>
             <div class="ed-colors">
               <label class="ed-color"><span>Background</span><input type="color" id="ed-bg"></label>
               <label class="ed-color"><span>Text</span><input type="color" id="ed-ink"></label>
@@ -94,23 +117,27 @@
             </div>
           </div>
 
-          <div class="ed-group">
-            <p class="ed-label">Typeface <span class="hint">Urdu &amp; Arabic included</span></p>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">3</span><h2>Choose a font</h2></div>
+            <p class="ed-label" style="margin-bottom:10px;">
+              <span class="hint">Urdu and Arabic switch the card to right-to-left</span></p>
             <div class="ed-chips"><button class="ed-chip" type="button" aria-pressed="false" data-font="f-cormorant">Classic serif</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-script">Script</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-cinzel">Roman caps</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-marcellus">Elegant</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-josefin">Modern sans</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-urdu">&#1575;&#1585;&#1583;&#1608; Nastaliq</button><button class="ed-chip" type="button" aria-pressed="false" data-font="f-amiri">&#1593;&#1585;&#1576;&#1740; Amiri</button></div>
           </div>
 
-          <div class="ed-actions">
-            <button class="btn btn-primary" type="button" data-png>Download PNG</button>
-            <div class="ed-row">
-              <button class="btn btn-ghost" type="button" data-print>Print / PDF</button>
-              <button class="btn btn-ghost" type="button" data-share>Copy link</button>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">4</span><h2>Save your card</h2></div>
+            <div class="ed-actions">
+              <button class="btn btn-primary" type="button" data-png>Download PNG</button>
+              <div class="ed-row">
+                <button class="btn btn-ghost" type="button" data-print>Print / PDF</button>
+                <button class="btn btn-ghost" type="button" data-share>Copy link</button>
+              </div>
+              <button class="btn btn-ghost" type="button" data-reset>Start over</button>
             </div>
-            <button class="btn btn-ghost" type="button" data-reset>Reset design</button>
+            <p class="ed-status" role="status"></p>
+            <p class="form-note" style="margin-top:14px;">Your changes are kept in this browser.
+              Copy link turns them into a link you can send to anyone - no sign-up on either side.</p>
           </div>
-          <p class="ed-status" role="status"></p>
-
-          <p class="form-note" style="margin-top:18px;">Your changes stay in this browser. The copy
-            link button turns them into a link you can send to anyone - no sign-up on either side.</p>
         </div>
       </div>
     </div>

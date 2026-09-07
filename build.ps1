@@ -506,24 +506,47 @@ $crumb
       <div>
         <p class="stage-hint">
           <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Click any line on the card to type your own names and details.
+          Fill in the boxes and the card updates as you type - or click a line on the card itself.
         </p>
         <div class="detail-stage" data-template="$($t.slug)">$card</div>
       </div>
       <div class="detail-side">
         <div class="editor-panel">
           <p class="eyebrow">$($s.name)</p>
-          <h1 style="font-size:32px;">$($t.name)</h1>
-          <p class="form-note" style="margin:8px 0 26px;">$($t.style) &middot; 5 &times; 7 in &middot;
+          <h1 style="font-size:30px;">$($t.name)</h1>
+          <p class="form-note" style="margin:8px 0 28px;">$($t.style) &middot; 5 &times; 7 in &middot;
             free to print, no account needed</p>
 
-          <div class="ed-group">
-            <p class="ed-label">Colour palette</p>
-            <div class="ed-swatches">$swatches</div>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">1</span><h2>Fill in your details</h2></div>
+            <div class="ed-fields">
+              <div class="ed-field">
+                <label for="ed-text-title">Names</label>
+                <input type="text" id="ed-text-title" data-text="title" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-pre">Line above the names</label>
+                <input type="text" id="ed-text-pre" data-text="pre" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-mid">Line below the names</label>
+                <input type="text" id="ed-text-mid" data-text="mid" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-date">Date and time</label>
+                <input type="text" id="ed-text-date" data-text="date" autocomplete="off">
+              </div>
+              <div class="ed-field">
+                <label for="ed-text-venue">Venue and address <span class="sub">Enter for a new line</span></label>
+                <textarea id="ed-text-venue" data-text="venue"></textarea>
+              </div>
+            </div>
           </div>
 
-          <div class="ed-group">
-            <p class="ed-label">Or pick your own</p>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">2</span><h2>Pick your colours</h2></div>
+            <div class="ed-swatches">$swatches</div>
+            <p class="ed-label" style="margin:18px 0 10px;">Or choose exactly</p>
             <div class="ed-colors">
               <label class="ed-color"><span>Background</span><input type="color" id="ed-bg"></label>
               <label class="ed-color"><span>Text</span><input type="color" id="ed-ink"></label>
@@ -531,23 +554,27 @@ $crumb
             </div>
           </div>
 
-          <div class="ed-group">
-            <p class="ed-label">Typeface <span class="hint">Urdu &amp; Arabic included</span></p>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">3</span><h2>Choose a font</h2></div>
+            <p class="ed-label" style="margin-bottom:10px;">
+              <span class="hint">Urdu and Arabic switch the card to right-to-left</span></p>
             <div class="ed-chips">$fontChips</div>
           </div>
 
-          <div class="ed-actions">
-            <button class="btn btn-primary" type="button" data-png>Download PNG</button>
-            <div class="ed-row">
-              <button class="btn btn-ghost" type="button" data-print>Print / PDF</button>
-              <button class="btn btn-ghost" type="button" data-share>Copy link</button>
+          <div class="ed-step">
+            <div class="ed-step-head"><span class="ed-step-num">4</span><h2>Save your card</h2></div>
+            <div class="ed-actions">
+              <button class="btn btn-primary" type="button" data-png>Download PNG</button>
+              <div class="ed-row">
+                <button class="btn btn-ghost" type="button" data-print>Print / PDF</button>
+                <button class="btn btn-ghost" type="button" data-share>Copy link</button>
+              </div>
+              <button class="btn btn-ghost" type="button" data-reset>Start over</button>
             </div>
-            <button class="btn btn-ghost" type="button" data-reset>Reset design</button>
+            <p class="ed-status" role="status"></p>
+            <p class="form-note" style="margin-top:14px;">Your changes are kept in this browser.
+              Copy link turns them into a link you can send to anyone - no sign-up on either side.</p>
           </div>
-          <p class="ed-status" role="status"></p>
-
-          <p class="form-note" style="margin-top:18px;">Your changes stay in this browser. The copy
-            link button turns them into a link you can send to anyone - no sign-up on either side.</p>
         </div>
       </div>
     </div>
