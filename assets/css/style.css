@@ -249,7 +249,14 @@ p{margin:0 0 1em;}
   background:var(--surface-2); border:1px solid var(--line); border-radius:10px;
   padding:44px; display:flex; justify-content:center;
 }
-.detail-stage .card-preview{width:min(420px,100%);}
+/* The preview is a flex item whose own content is absolutely positioned, so it
+   collapses to zero width unless it is given one here. */
+.detail-stage .card-preview,
+.detail-stage .doc-preview{width:min(420px,100%); flex:0 0 auto;}
+.detail-stage .doc-preview.sz-cert,
+.detail-stage .doc-preview.sz-cert-letter,
+.detail-stage .doc-preview.sz-bcard,
+.detail-stage .doc-preview.sz-bcard-eu{width:min(520px,100%);}
 .spec-list{list-style:none; padding:0; margin:20px 0 24px; border-top:1px solid var(--line);}
 .spec-list li{display:flex; justify-content:space-between; gap:20px; padding:11px 0; border-bottom:1px solid var(--line); font-size:14.5px;}
 .spec-list .k{color:var(--ink-faint);}

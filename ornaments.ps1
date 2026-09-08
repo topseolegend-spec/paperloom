@@ -21,7 +21,12 @@ function Blossom($cx, $cy, $r) {
   $p
 }
 
-function Svg($inner) { '<svg viewBox="0 0 100 140" aria-hidden="true" focusable="false">' + $inner + '</svg>' }
+# preserveAspectRatio="none" so the frame meets the page edges exactly. The
+# element is always given the page's own proportions in CSS, so on a 5x7 card
+# there is no distortion at all, and on A4 it is under one per cent.
+function Svg($inner) {
+  '<svg viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">' + $inner + '</svg>'
+}
 
 # --- full floral wreath, sits behind the names -------------------------------
 #  Radius is deliberately wide: the wording sits inside the ring, so the ring

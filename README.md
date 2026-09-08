@@ -22,19 +22,38 @@ Phir browser mein `http://localhost:8080` kholein. Band karne ke liye us window 
 
 | File | Kaam |
 |---|---|
-| `content.ps1` | Saara content — categories, subcategories, templates, guides, FAQs. **Naya content yahan add karein.** |
+| `content.ps1` | Shared config (site, palettes, fonts, sizes) + Weddings & Events category |
+| `content-business.ps1` | Business & Office category — CV, invoice, certificate, business card, cover letter, menu, letterhead |
+| `ornaments.ps1` | Saare SVG ornaments (wreath, bouquet, deco, mandala, vine, flourish…) |
 | `build.ps1` | HTML generate karta hai (header, footer, SEO tags, sitemap) |
 | `assets/css/style.css` | Site ka design |
-| `assets/css/cards.css` | Card template designs |
-| `assets/css/editor.css`, `assets/js/editor.js` | In-browser card editor |
+| `assets/css/cards.css` | Invitation card layouts (5×7) |
+| `assets/css/docs.css` | Document layouts (A4 CV/invoice/menu, landscape certificate, business card) |
+| `assets/css/editor.css`, `assets/js/editor.js` | In-browser editor |
 | `serve.ps1` | Local preview server |
 | `docs/` | Generated output — ise manually edit **na** karein, har build par dobara banta hai |
 
-## Naya occasion add karna
+## Kaise kaam karta hai
 
-`content.ps1` mein `$Subcats` array ke andar ek naya block add karein (slug, name, h1, title, desc,
-intro, faq, templates), phir `build.ps1` chala dein. Header ka dropdown, sitemap, aur internal links
-khud update ho jayenge.
+Har subcategory declare karti hai:
+
+- **`kind`** — `card`, `resume`, `letter`, `cert`, `bcard`, `invoice`, `menu`, `letterhead`.
+  Isi se decide hota hai konsa renderer aur konsa layout use hoga.
+- **`fields`** — form ke fields (id, label, type, group). **Editor ka form isi list se khud banta
+  hai**, aur `editor.js` fields ko page se parhta hai — is liye naya document type add karne ke liye
+  JavaScript chhune ki zaroorat nahi.
+- **`size`** — default page size (`sz-5x7`, `sz-a4`, `sz-cert`, `sz-bcard`).
+
+## Naya template type add karna
+
+1. `content-business.ps1` (ya nayi file) mein field set banayein: `New-Field 'id' 'Label' 'text|area' 'Group' 'hint'`
+2. Subcategory block add karein — `kind`, `fields`, `size`, `templates`
+3. `build.ps1` mein us `kind` ke liye ek renderer likhein (`Get-Resume` waghera dekhein) aur
+   `Get-Preview` ke switch mein add karein
+4. `docs.css` mein us layout ka design likhein
+5. Nayi category ho to `build.ps1` ke `$Categories` array mein add karein
+
+Header ka dropdown, footer, sitemap aur internal links khud update ho jayenge.
 
 ## Abhi set karna baqi hai
 

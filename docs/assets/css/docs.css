@@ -1,0 +1,419 @@
+/* ==========================================================================
+   Document templates - CVs, invoices, certificates, business cards, letters,
+   menus and letterheads.
+
+   Same idea as cards.css: everything is drawn in CSS, sized in container query
+   units so one layout renders correctly as a thumbnail or a full-width editor
+   preview, and coloured through --c-bg / --c-ink / --c-accent / --c-soft.
+   ========================================================================== */
+
+.doc-preview{
+  container-type:inline-size;
+  position:relative;
+  aspect-ratio:210/297;              /* A4 portrait */
+  background:var(--c-bg,#fff);
+  color:var(--c-ink,#20262c);
+  border-radius:2px;
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+  transition:box-shadow .22s ease, transform .22s ease;
+  --name-scale:1;
+}
+
+.doc-preview.sz-letter{aspect-ratio:8.5/11;}
+.doc-preview.sz-cert{aspect-ratio:297/210;}        /* A4 landscape */
+.doc-preview.sz-cert-letter{aspect-ratio:11/8.5;}
+.doc-preview.sz-bcard{aspect-ratio:3.5/2;}
+.doc-preview.sz-bcard-eu{aspect-ratio:85/55;}
+
+.doc-inner{position:absolute; inset:0; z-index:2; display:flex; flex-direction:column;}
+
+/* ---------- shared text roles -------------------------------------------- */
+
+.doc-preview p{margin:0;}
+
+.d-name{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(6.4cqw * var(--name-scale));
+  line-height:1.1; letter-spacing:.01em; color:var(--c-ink);
+}
+.d-role{
+  font-family:'Karla', sans-serif;
+  font-size:2.5cqw; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--c-accent); margin-top:1.2cqw;
+}
+.d-sec{
+  font-family:'Karla', sans-serif;
+  font-size:2.1cqw; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--c-accent); margin-bottom:1.6cqw;
+}
+.d-text, .d-lines, .d-item-d{
+  font-family:'Karla', sans-serif;
+  font-size:2.15cqw; line-height:1.65; color:var(--c-soft);
+}
+.d-item{margin-bottom:2.6cqw;}
+.d-item:last-child{margin-bottom:0;}
+.d-item-t{
+  font-family:'Karla', sans-serif;
+  font-size:2.5cqw; font-weight:600; color:var(--c-ink);
+}
+.d-item-m{
+  font-family:'Karla', sans-serif;
+  font-size:2.05cqw; color:var(--c-accent); margin:.3cqw 0 .8cqw;
+}
+.d-block{margin-bottom:4cqw;}
+.d-block:last-child{margin-bottom:0;}
+
+/* a field left empty should collapse, not leave a hole */
+.d-item:has(> .d-item-t:empty){display:none;}
+.d-block:has(> .d-sec:empty):has(> :nth-child(2):empty){display:none;}
+.d-role:empty, .d-name:empty{display:none;}
+
+/* typeface overrides reach the document name the same way cards do */
+.f-cormorant  .d-name{font-family:'Cormorant Garamond', serif; font-size:calc(7.4cqw * var(--name-scale));}
+.f-playfair   .d-name{font-family:'Playfair Display', serif;}
+.f-bodoni     .d-name{font-family:'Bodoni Moda', serif;}
+.f-libre      .d-name{font-family:'Libre Baskerville', serif; font-size:calc(5.4cqw * var(--name-scale));}
+.f-marcellus  .d-name{font-family:'Marcellus', serif;}
+.f-italiana   .d-name{font-family:'Italiana', serif; font-size:calc(7.2cqw * var(--name-scale));}
+.f-cinzel     .d-name{font-family:'Cinzel', serif; font-size:calc(5.4cqw * var(--name-scale));}
+.f-cinzel-dec .d-name{font-family:'Cinzel Decorative', serif; font-size:calc(5.2cqw * var(--name-scale));}
+.f-script     .d-name{font-family:'Great Vibes', cursive; font-size:calc(8.4cqw * var(--name-scale));}
+.f-parisienne .d-name{font-family:'Parisienne', cursive; font-size:calc(8cqw * var(--name-scale));}
+.f-sacramento .d-name{font-family:'Sacramento', cursive; font-size:calc(8.4cqw * var(--name-scale));}
+.f-josefin    .d-name{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.06em;}
+.f-tenor      .d-name{font-family:'Tenor Sans', sans-serif;}
+.f-urdu  .d-name{font-family:'Noto Nastaliq Urdu','Amiri',serif; font-size:calc(5cqw * var(--name-scale)); line-height:1.9;}
+.f-amiri .d-name{font-family:'Amiri', serif;}
+.f-naskh .d-name{font-family:'Noto Naskh Arabic','Amiri',serif; font-size:calc(5.6cqw * var(--name-scale));}
+
+.doc-preview.is-rtl .doc-inner{direction:rtl;}
+
+/* ornament layer, shared with the card system */
+.doc-preview .card-art{position:absolute; inset:0; z-index:1; pointer-events:none; color:var(--c-accent);}
+.doc-preview .card-art svg{width:100%; height:100%; position:absolute; inset:0;}
+.doc-preview .card-art .art{display:none;}
+.doc-preview .card-art .art.is-on{display:block;}
+
+/* Ornaments are drawn in a portrait 100x140 box. Turned on its side that box is
+   1.4:1 - which is almost exactly A4 landscape - so a landscape page borrows the
+   same artwork by rotating it a quarter turn rather than needing a second set
+   drawn from scratch. The element is sized so the rotated result covers the page
+   exactly. */
+.doc-preview.sz-cert .card-art svg,
+.doc-preview.sz-cert-letter .card-art svg,
+.doc-preview.sz-bcard .card-art svg,
+.doc-preview.sz-bcard-eu .card-art svg{
+  inset:auto; top:50%; left:50%;
+  height:100cqw; transform-origin:center; transform:translate(-50%,-50%) rotate(90deg);
+}
+.doc-preview.sz-cert .card-art svg{width:70.71cqw;}          /* 297:210 */
+.doc-preview.sz-cert-letter .card-art svg{width:77.27cqw;}   /* 11:8.5  */
+.doc-preview.sz-bcard .card-art svg{width:57.14cqw;}         /* 3.5:2   */
+.doc-preview.sz-bcard-eu .card-art svg{width:64.71cqw;}      /* 85:55   */
+
+/* background treatments (same names as the cards) */
+.doc-preview.bg-grad::after,
+.doc-preview.bg-wash::after,
+.doc-preview.bg-edge::after{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;}
+.doc-preview.bg-grad::after{
+  background:radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--c-accent) 11%, transparent) 0%, transparent 60%);
+}
+.doc-preview.bg-wash::after{
+  background:
+    radial-gradient(36% 22% at 14% 8%, color-mix(in srgb, var(--c-accent) 16%, transparent) 0%, transparent 70%),
+    radial-gradient(38% 24% at 88% 94%, color-mix(in srgb, var(--c-accent) 13%, transparent) 0%, transparent 72%);
+}
+.doc-preview.bg-edge::after{
+  background:radial-gradient(76% 62% at 50% 50%, transparent 48%, color-mix(in srgb, var(--c-accent) 13%, transparent) 100%);
+}
+
+/* =====================  CV / RESUME  ====================================== */
+
+/* Two columns: a coloured sidebar carrying identity and skills, the record of
+   work in the wider column beside it. */
+.r-sidebar .doc-inner{display:grid; grid-template-columns:34% 1fr;}
+.r-sidebar .d-col-a{
+  background:var(--c-accent); color:#fff;
+  padding:6.5cqw 4.5cqw;
+  display:flex; flex-direction:column; gap:5cqw;
+}
+/* the sidebar is a third of the page - everything in it steps down a size, and
+   long emails wrap rather than running off the edge */
+.r-sidebar .d-col-a .d-name{color:#fff; font-size:calc(5.2cqw * var(--name-scale)); line-height:1.16;}
+.r-sidebar .d-col-a .d-role{color:rgba(255,255,255,.82); font-size:2.05cqw; letter-spacing:.12em; line-height:1.5;}
+.r-sidebar .d-col-a .d-sec{color:rgba(255,255,255,.72); font-size:1.9cqw;}
+.r-sidebar .d-col-a .d-lines{color:rgba(255,255,255,.9); font-size:1.85cqw; line-height:1.75; overflow-wrap:anywhere;}
+.r-sidebar .d-col-b{padding:7cqw 6cqw;}
+
+/* Single column, centred masthead, hairline rules - reads as a document
+   rather than a dashboard. */
+.r-serif .doc-inner{display:flex; flex-direction:column; padding:8cqw 9cqw;}
+.r-serif .d-col-a, .r-serif .d-col-b{display:contents;}
+.r-serif .d-head{order:1; text-align:center; padding-bottom:4cqw; border-bottom:1px solid var(--c-accent); margin-bottom:5cqw;}
+.r-serif .d-head .d-lines{margin-top:1.6cqw;}
+.r-serif .d-profile{order:2;}
+.r-serif .d-exp{order:3;}
+.r-serif .d-edu{order:4;}
+.r-serif .d-skills{order:5;}
+.r-serif .d-sec{
+  text-align:center; border-bottom:1px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+  padding-bottom:1.2cqw;
+}
+
+/* Full-width colour band across the top. */
+.r-header .doc-inner{display:flex; flex-direction:column;}
+.r-header .d-col-a, .r-header .d-col-b{display:contents;}
+.r-header .d-head{
+  order:1; background:var(--c-accent); color:#fff; padding:6.5cqw 7cqw;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:5cqw;
+}
+.r-header .d-head .d-name, .r-header .d-head .d-role{color:#fff;}
+.r-header .d-head .d-role{color:rgba(255,255,255,.85);}
+.r-header .d-head .d-lines{color:rgba(255,255,255,.9); text-align:right; font-size:1.95cqw;}
+.r-header .d-profile{order:2; padding:6cqw 7cqw 0;}
+.r-header .d-exp{order:3; padding:0 7cqw;}
+.r-header .d-edu{order:4; padding:0 7cqw;}
+.r-header .d-skills{order:5; padding:0 7cqw;}
+
+/* Section titles in a narrow left column, content beside them. */
+.r-grid .doc-inner{display:flex; flex-direction:column; padding:8cqw 7cqw;}
+.r-grid .d-col-a, .r-grid .d-col-b{display:contents;}
+.r-grid .d-head{order:1; margin-bottom:6cqw;}
+.r-grid .d-head .d-lines{margin-top:1.6cqw; columns:2; font-size:2cqw;}
+.r-grid .d-profile{order:2;}
+.r-grid .d-exp{order:3;}
+.r-grid .d-edu{order:4;}
+.r-grid .d-skills{order:5;}
+.r-grid .d-block{display:grid; grid-template-columns:24% 1fr; gap:4cqw; align-items:start;}
+.r-grid .d-sec{margin:0; text-align:right; padding-top:.6cqw;}
+
+/* Skills read as a list, one per line, with a small accent marker. */
+.d-skills .d-lines{line-height:2;}
+
+/* =====================  COVER LETTER  ===================================== */
+
+.l-meta{font-family:'Karla',sans-serif; font-size:2.1cqw; color:var(--c-soft); margin-bottom:3cqw;}
+.l-to{font-family:'Karla',sans-serif; font-size:2.15cqw; line-height:1.6; color:var(--c-soft); margin-bottom:4cqw;}
+.l-greet{font-family:'Karla',sans-serif; font-size:2.3cqw; color:var(--c-ink); margin-bottom:2.4cqw;}
+.l-body{font-family:'Karla',sans-serif; font-size:2.2cqw; line-height:1.8; color:var(--c-soft);}
+.l-signoff{font-family:'Karla',sans-serif; font-size:2.2cqw; color:var(--c-soft); margin-top:4cqw;}
+.l-signname{font-family:'Karla',sans-serif; font-size:2.4cqw; font-weight:600; color:var(--c-ink); margin-top:3cqw;}
+
+.l-sidebar .doc-inner{display:grid; grid-template-columns:32% 1fr;}
+.l-sidebar .d-head{background:var(--c-accent); color:#fff; padding:7cqw 5cqw;}
+.l-sidebar .d-head .d-name, .l-sidebar .d-head .d-role{color:#fff;}
+.l-sidebar .d-head .d-role{color:rgba(255,255,255,.82);}
+.l-sidebar .d-head .d-lines{color:rgba(255,255,255,.9); margin-top:3cqw;}
+.l-sidebar .l-main{padding:7cqw 6cqw;}
+
+.l-serif .doc-inner{padding:8cqw 9cqw;}
+.l-serif .d-head{text-align:center; padding-bottom:4cqw; border-bottom:1px solid var(--c-accent); margin-bottom:5cqw;}
+.l-serif .d-head .d-lines{margin-top:1.4cqw;}
+
+.l-header .d-head{
+  background:var(--c-accent); color:#fff; padding:6cqw 7cqw;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:4cqw;
+}
+.l-header .d-head .d-name, .l-header .d-head .d-role{color:#fff;}
+.l-header .d-head .d-role{color:rgba(255,255,255,.85);}
+.l-header .d-head .d-lines{color:rgba(255,255,255,.9); text-align:right; font-size:1.95cqw;}
+.l-header .l-main{padding:6cqw 7cqw;}
+
+/* =====================  CERTIFICATE  ====================================== */
+
+.doc-preview.sz-cert .doc-inner,
+.doc-preview.sz-cert-letter .doc-inner{
+  align-items:center; justify-content:center; text-align:center;
+  padding:10cqw 16cqw;                 /* clears the border ornaments */
+}
+.ct-award{
+  font-family:'Cinzel', serif;
+  font-size:calc(3.5cqw * var(--name-scale));
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);
+  line-height:1.3;
+}
+.ct-pre{
+  font-family:'Karla',sans-serif; font-size:1.9cqw; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--c-soft); margin-top:3.5cqw;
+}
+.ct-name{
+  font-family:'Cormorant Garamond', serif;
+  font-size:calc(7.6cqw * var(--name-scale));
+  line-height:1.15; color:var(--c-ink); margin:1.6cqw 0;
+}
+.ct-reason{
+  font-family:'Karla',sans-serif; font-size:2cqw; line-height:1.8;
+  color:var(--c-soft); max-width:62%; margin:0 auto;
+}
+.ct-date{
+  font-family:'Karla',sans-serif; font-size:1.8cqw; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--c-accent); margin-top:3cqw;
+}
+.ct-signs{display:flex; gap:9cqw; justify-content:center; margin-top:6cqw; width:100%;}
+.ct-sign{min-width:22%;}
+.ct-sign:has(> p:first-of-type:empty){display:none;}
+.ct-line{display:block; height:1px; background:var(--c-accent); opacity:.6; margin-bottom:1.4cqw;}
+.ct-sign p{font-family:'Karla',sans-serif; font-size:1.9cqw; font-weight:600; color:var(--c-ink);}
+.ct-sign .ct-role{font-weight:400; font-size:1.6cqw; letter-spacing:.12em; text-transform:uppercase; color:var(--c-soft); margin-top:.5cqw;}
+
+/* the name takes the display face; the award line stays roman */
+.f-cormorant .ct-name{font-family:'Cormorant Garamond', serif;}
+.f-cinzel .ct-name{font-family:'Cinzel', serif; font-size:calc(5.4cqw * var(--name-scale));}
+.f-cinzel-dec .ct-name{font-family:'Cinzel Decorative', serif; font-size:calc(5.2cqw * var(--name-scale));}
+.f-script .ct-name{font-family:'Great Vibes', cursive; font-size:calc(9cqw * var(--name-scale));}
+.f-parisienne .ct-name{font-family:'Parisienne', cursive; font-size:calc(8.6cqw * var(--name-scale));}
+.f-sacramento .ct-name{font-family:'Sacramento', cursive; font-size:calc(9cqw * var(--name-scale));}
+.f-josefin .ct-name{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.08em; font-size:calc(5.6cqw * var(--name-scale));}
+.f-tenor .ct-name{font-family:'Tenor Sans', sans-serif; font-size:calc(5.8cqw * var(--name-scale));}
+.f-playfair .ct-name{font-family:'Playfair Display', serif; font-size:calc(6.4cqw * var(--name-scale));}
+.f-bodoni .ct-name{font-family:'Bodoni Moda', serif; font-size:calc(6.4cqw * var(--name-scale));}
+.f-libre .ct-name{font-family:'Libre Baskerville', serif; font-size:calc(5cqw * var(--name-scale));}
+.f-italiana .ct-name{font-family:'Italiana', serif; font-size:calc(7.4cqw * var(--name-scale));}
+.f-marcellus .ct-name{font-family:'Marcellus', serif; font-size:calc(6cqw * var(--name-scale));}
+.f-urdu .ct-name{font-family:'Noto Nastaliq Urdu','Amiri',serif; font-size:calc(5cqw * var(--name-scale)); line-height:2;}
+.f-amiri .ct-name{font-family:'Amiri',serif; font-size:calc(6.4cqw * var(--name-scale));}
+.f-naskh .ct-name{font-family:'Noto Naskh Arabic','Amiri',serif; font-size:calc(5.6cqw * var(--name-scale));}
+
+.c-classic .ct-award{border-bottom:1px solid color-mix(in srgb, var(--c-accent) 45%, transparent); padding-bottom:1.6cqw;}
+.c-modern .doc-inner{align-items:flex-start; text-align:left; padding:9cqw 11cqw;}
+.c-modern .ct-reason{margin:0; max-width:66%;}
+.c-modern .ct-signs{justify-content:flex-start;}
+.c-modern .ct-award{font-family:'Josefin Sans', sans-serif; letter-spacing:.28em;}
+
+.is-foil .ct-award, .is-foil .ct-date{
+  background:linear-gradient(105deg,
+    color-mix(in srgb, var(--c-accent) 70%, #000 8%) 0%, #fff6d8 38%,
+    var(--c-accent) 55%, color-mix(in srgb, var(--c-accent) 80%, #000 10%) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.doc-preview.is-foil .card-art .s{stroke:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+.doc-preview.is-foil .card-art .f{fill:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+
+/* =====================  BUSINESS CARD  ==================================== */
+
+/* A 3.5 x 2 inch card is only about 57cqw tall, so every line here is sized to
+   let a name, role, company, tagline and four contact lines fit without the
+   block running off the bottom edge. */
+.doc-preview.sz-bcard .doc-inner,
+.doc-preview.sz-bcard-eu .doc-inner{padding:6cqw;}
+.bc-name{font-family:'Tenor Sans',sans-serif; font-size:calc(6.2cqw * var(--name-scale)); line-height:1.1; color:var(--c-ink);}
+.bc-role{font-family:'Karla',sans-serif; font-size:2.5cqw; letter-spacing:.18em; text-transform:uppercase; color:var(--c-accent); margin-top:1.2cqw;}
+.bc-co{font-family:'Karla',sans-serif; font-size:2.9cqw; font-weight:600; color:var(--c-ink); margin-top:2cqw;}
+.bc-tag{font-family:'Karla',sans-serif; font-size:2.3cqw; color:var(--c-soft); margin-top:.6cqw; font-style:italic;}
+.bc-tag:empty, .bc-contact p:empty{display:none;}
+.bc-contact{margin-top:auto; display:flex; flex-direction:column; gap:.4cqw;}
+.bc-contact p{font-family:'Karla',sans-serif; font-size:2.3cqw; line-height:1.4; color:var(--c-soft);}
+
+.doc-preview.sz-bcard .f-cormorant .bc-name,
+.f-cormorant .bc-name{font-family:'Cormorant Garamond',serif; font-size:calc(8.4cqw * var(--name-scale));}
+.f-cinzel .bc-name{font-family:'Cinzel',serif; font-size:calc(6cqw * var(--name-scale));}
+.f-script .bc-name{font-family:'Great Vibes',cursive; font-size:calc(9.6cqw * var(--name-scale));}
+.f-josefin .bc-name{font-family:'Josefin Sans',sans-serif; font-weight:300; letter-spacing:.07em;}
+.f-tenor .bc-name{font-family:'Tenor Sans',sans-serif;}
+
+.b-band .doc-inner{padding-left:11cqw;}
+.b-band::before{content:""; position:absolute; top:0; bottom:0; left:0; width:5cqw; background:var(--c-accent); z-index:2;}
+.b-dark .bc-contact p{color:rgba(255,255,255,.75);}
+.b-bordered .doc-inner{padding:8cqw;}
+.b-bordered::before{content:""; position:absolute; inset:3.5cqw; border:1px solid var(--c-accent); opacity:.55; z-index:1;}
+
+/* =====================  INVOICE  ========================================== */
+
+.i-clean .doc-inner, .i-band .doc-inner, .i-classic .doc-inner{padding:8cqw 7cqw;}
+.iv-head{display:flex; justify-content:space-between; gap:5cqw; align-items:flex-start;}
+.iv-biz{font-family:'Karla',sans-serif; font-size:3.4cqw; font-weight:700; color:var(--c-ink); margin-bottom:1.2cqw;}
+.iv-title p{font-family:'Karla',sans-serif; font-size:5.4cqw; letter-spacing:.16em; text-transform:uppercase; color:var(--c-accent); text-align:right;}
+.iv-num{font-size:2.2cqw !important; letter-spacing:.1em !important; color:var(--c-soft) !important; margin-top:1cqw;}
+.iv-meta{display:flex; justify-content:space-between; gap:5cqw; margin:6cqw 0 5cqw;}
+.iv-label{font-family:'Karla',sans-serif; font-size:1.9cqw; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--c-accent); margin-bottom:1.2cqw;}
+.iv-dates{text-align:right; font-family:'Karla',sans-serif; font-size:2.1cqw; color:var(--c-soft); line-height:1.9;}
+.iv-dates .iv-k{color:var(--c-accent); letter-spacing:.1em; text-transform:uppercase; font-size:1.8cqw;}
+.iv-items{border-top:1.5px solid var(--c-accent); margin-bottom:4cqw;}
+.iv-row{
+  display:flex; justify-content:space-between; gap:4cqw;
+  padding:2.4cqw 0; border-bottom:1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  font-family:'Karla',sans-serif; font-size:2.2cqw; color:var(--c-soft);
+}
+.iv-row:has(> span:first-child:empty){display:none;}
+.iv-amt{color:var(--c-ink); font-variant-numeric:tabular-nums; white-space:nowrap;}
+.iv-total{
+  display:flex; justify-content:space-between; align-items:baseline; gap:4cqw;
+  padding:3cqw 0; border-top:1.5px solid var(--c-accent);
+  font-family:'Karla',sans-serif;
+}
+.iv-total .iv-tl{font-size:2.4cqw; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);}
+.iv-total .iv-tv{font-size:4cqw; font-weight:700; color:var(--c-ink); font-variant-numeric:tabular-nums;}
+.iv-notes{font-family:'Karla',sans-serif; font-size:2cqw; line-height:1.7; color:var(--c-soft); margin-top:auto; padding-top:4cqw;}
+
+.i-band .iv-head{
+  background:var(--c-accent); color:#fff; margin:-8cqw -7cqw 6cqw; padding:7cqw;
+}
+.i-band .iv-biz{color:#fff;}
+.i-band .iv-head .d-lines{color:rgba(255,255,255,.88);}
+.i-band .iv-title p{color:#fff;}
+.i-band .iv-num{color:rgba(255,255,255,.8) !important;}
+.i-classic .iv-title p{font-family:'Cormorant Garamond', serif; letter-spacing:.08em; font-size:6cqw;}
+.i-classic .iv-items{border-top-style:double; border-top-width:3px;}
+
+/* =====================  MENU  ============================================= */
+
+.m-elegant .doc-inner, .m-modern .doc-inner, .m-bistro .doc-inner{padding:9cqw 9cqw;}
+.mn-head{margin-bottom:6cqw;}
+.mn-name{font-family:'Cormorant Garamond',serif; font-size:calc(7.6cqw * var(--name-scale)); line-height:1.1; color:var(--c-ink);}
+.mn-tag{font-family:'Karla',sans-serif; font-size:2.1cqw; letter-spacing:.24em; text-transform:uppercase; color:var(--c-accent); margin-top:1.4cqw;}
+.mn-sec{margin-bottom:5.5cqw;}
+.mn-sec:has(> .mn-sec-t:empty){display:none;}
+.mn-sec-t{
+  font-family:'Karla',sans-serif; font-size:2.2cqw; font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent);
+  padding-bottom:1.4cqw; margin-bottom:2.4cqw;
+  border-bottom:1px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+}
+.mn-items{font-family:'Karla',sans-serif; font-size:2.3cqw; line-height:2.1; color:var(--c-soft);}
+.mn-foot{font-family:'Karla',sans-serif; font-size:1.9cqw; letter-spacing:.12em; color:var(--c-soft); margin-top:auto; padding-top:4cqw; text-align:center;}
+
+.m-elegant .doc-inner{align-items:center; text-align:center;}
+.m-elegant .mn-sec{width:100%; max-width:74%;}
+.m-elegant .mn-head{max-width:74%;}
+.m-modern .mn-name{font-family:'Josefin Sans',sans-serif; font-weight:300; letter-spacing:.06em;}
+.m-bistro .doc-inner{padding:11cqw;}
+.m-bistro::before{content:""; position:absolute; inset:5cqw; border:1px solid var(--c-accent); opacity:.5; z-index:1;}
+
+.f-cormorant .mn-name{font-family:'Cormorant Garamond',serif;}
+.f-marcellus .mn-name{font-family:'Marcellus',serif; font-size:calc(6.2cqw * var(--name-scale));}
+.f-josefin .mn-name{font-family:'Josefin Sans',sans-serif; font-weight:300;}
+.f-script .mn-name{font-family:'Great Vibes',cursive; font-size:calc(9cqw * var(--name-scale));}
+
+/* =====================  LETTERHEAD  ======================================= */
+
+.h-classic .doc-inner, .h-modern .doc-inner, .h-band .doc-inner{padding:0;}
+.lh-head{padding:8cqw 8cqw 5cqw;}
+.lh-co{font-family:'Cormorant Garamond',serif; font-size:calc(6.4cqw * var(--name-scale)); line-height:1.1; color:var(--c-ink);}
+.lh-tag{font-family:'Karla',sans-serif; font-size:2.1cqw; letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent); margin-top:1.2cqw;}
+.lh-tag:empty{display:none;}
+.lh-meta{display:flex; gap:6cqw; margin-top:3.5cqw; font-family:'Karla',sans-serif; font-size:2cqw; line-height:1.7; color:var(--c-soft);}
+.lh-body{flex:1; border-top:1px solid color-mix(in srgb, var(--c-accent) 30%, transparent); margin:0 8cqw;}
+.lh-foot{
+  font-family:'Karla',sans-serif; font-size:1.8cqw; letter-spacing:.1em;
+  color:var(--c-soft); padding:4cqw 8cqw 6cqw; text-align:center;
+}
+.h-classic .lh-head{text-align:center;}
+.h-classic .lh-meta{justify-content:center;}
+.h-modern .lh-head{display:flex; justify-content:space-between; align-items:flex-end; gap:5cqw;}
+.h-modern .lh-meta{margin-top:0; text-align:right;}
+.h-modern .lh-co{font-family:'Tenor Sans',sans-serif; font-size:calc(5.4cqw * var(--name-scale));}
+.h-band .lh-head{background:var(--c-accent); color:#fff; padding:7cqw 8cqw;}
+.h-band .lh-co, .h-band .lh-tag{color:#fff;}
+.h-band .lh-tag{color:rgba(255,255,255,.85);}
+.h-band .lh-meta{color:rgba(255,255,255,.9);}
+
+.f-cormorant .lh-co{font-family:'Cormorant Garamond',serif;}
+.f-tenor .lh-co{font-family:'Tenor Sans',sans-serif;}
+.f-josefin .lh-co{font-family:'Josefin Sans',sans-serif; font-weight:300;}
+
+/* ---------- print -------------------------------------------------------- */
+
+@media print{
+  .doc-preview{box-shadow:none; border:1px solid #ddd;}
+}

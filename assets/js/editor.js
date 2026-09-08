@@ -7,17 +7,26 @@
   var stage = document.querySelector('.detail-stage');
   if (!stage) return;
 
-  var card = stage.querySelector('.card-preview');
+  var card = stage.querySelector('.card-preview, .doc-preview');
   var slug = stage.getAttribute('data-template');
   if (!card || !slug) return;
 
-  var FIELDS = ['pre', 'title', 'mid', 'date', 'venue', 'note'];
+  // The field list comes from the page, not from this file, so invitation
+  // cards, CVs, invoices and menus all drive the same editor.
+  var FIELDS = Array.prototype.map.call(
+    card.querySelectorAll('[data-field]'),
+    function (el) { return el.getAttribute('data-field'); });
+  if (!FIELDS.length) return;
   var FONTS = ['f-cormorant', 'f-playfair', 'f-bodoni', 'f-libre', 'f-marcellus',
                'f-italiana', 'f-cinzel', 'f-cinzel-dec', 'f-script', 'f-parisienne',
                'f-sacramento', 'f-josefin', 'f-tenor', 'f-urdu', 'f-amiri', 'f-naskh'];
   var RTL_FONTS = ['f-urdu', 'f-amiri', 'f-naskh'];
   var BGS = ['bg-plain', 'bg-grad', 'bg-wash', 'bg-edge'];
-  var SIZES = ['sz-5x7', 'sz-a5', 'sz-square'];
+  // sizes differ per template kind (5x7 / A5 / square for cards, A4 / Letter
+  // for documents), so take them from the controls the page rendered
+  var SIZES = Array.prototype.map.call(
+    document.querySelectorAll('[data-size]'),
+    function (b) { return b.getAttribute('data-size'); });
   var STORE_KEY = 'paperloom:' + slug;
 
   // ---- html <-> plain text ------------------------------------------------

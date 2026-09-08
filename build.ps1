@@ -8,7 +8,22 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content.ps1')
+. (Join-Path $Root 'content-business.ps1')
 . (Join-Path $Root 'ornaments.ps1')
+
+# Weddings ke subcategories purane format mein hain - unhein wahi defaults de dein
+# jo baaki system expect karta hai.
+foreach ($s in $Subcats) {
+  if (-not $s.kind)   { $s.kind = 'card' }
+  if (-not $s.fields) { $s.fields = $FieldsCard }
+  if (-not $s.size)   { $s.size = 'sz-5x7' }
+}
+
+$Categories = @(
+  @{ meta = $Category;    subs = $Subcats },
+  @{ meta = $BizCategory; subs = $BizSubcats }
+)
+$AllGuides = @($Guides) + @($BizGuides)
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -28,25 +43,35 @@ function Get-Rel($depth) { if ($depth -gt 0) { '../' * $depth } else { '' } }
 
 function Get-Nav($depth, $current) {
   $r = Get-Rel $depth
-  $items = ($Subcats | ForEach-Object { "<a href=`"${r}$($Category.slug)/$($_.slug)/`">$($_.nav)</a>" }) -join ''
   $cHome    = if ($current -eq 'home')    { ' aria-current="page"' } else { '' }
   $cGuides  = if ($current -eq 'guides')  { ' aria-current="page"' } else { '' }
   $cAbout   = if ($current -eq 'about')   { ' aria-current="page"' } else { '' }
   $cContact = if ($current -eq 'contact') { ' aria-current="page"' } else { '' }
-@"
-<nav class="nav" aria-label="Main">
-        <a class="nav-link" href="$r"$cHome>Home</a>
-        <div class="has-dropdown">
-          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">Weddings &amp; Events
+
+  $drops = ''
+  $n = 0
+  foreach ($cat in $Categories) {
+    $n++
+    $m = $cat.meta
+    $items = ($cat.subs | ForEach-Object { "<a href=`"${r}$($m.slug)/$($_.slug)/`">$($_.nav)</a>" }) -join ''
+    $drops += @"
+<div class="has-dropdown">
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="$n">$($m.name)
             <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           </button>
-          <div class="dropdown-panel" hidden>
-            <p class="panel-head">All occasions</p>
-            <a href="${r}$($Category.slug)/">All wedding &amp; event templates</a>
+          <div class="dropdown-panel" data-dd-panel="$n" hidden>
+            <p class="panel-head">$($m.panel)</p>
+            <a href="${r}$($m.slug)/">All $($m.name.ToLower()) templates</a>
             $items
           </div>
         </div>
-        <a class="nav-link" href="${r}guides/"$cGuides>Guides</a>
+
+"@
+  }
+@"
+<nav class="nav" aria-label="Main">
+        <a class="nav-link" href="$r"$cHome>Home</a>
+        $drops<a class="nav-link" href="${r}guides/"$cGuides>Guides</a>
         <a class="nav-link" href="${r}about/"$cAbout>About</a>
         <a class="nav-link" href="${r}contact/"$cContact>Contact</a>
       </nav>
@@ -77,22 +102,24 @@ function Get-Header($depth, $current) {
 
 function Get-Footer($depth) {
   $r = Get-Rel $depth
-  $occ = ($Subcats | Select-Object -First 5 | ForEach-Object {
-    "<li><a href=`"${r}$($Category.slug)/$($_.slug)/`">$($_.nav)</a></li>" }) -join ''
-  $gds = ($Guides | ForEach-Object { "<li><a href=`"${r}guides/$($_.slug)/`">$($_.h1)</a></li>" }) -join ''
+  $cols = ''
+  foreach ($cat in $Categories) {
+    $m = $cat.meta
+    $links = ($cat.subs | Select-Object -First 5 | ForEach-Object {
+      "<li><a href=`"${r}$($m.slug)/$($_.slug)/`">$($_.nav)</a></li>" }) -join ''
+    $cols += "<div><h4>$($m.name)</h4><ul>$links<li><a href=`"${r}$($m.slug)/`">See all</a></li></ul></div>"
+  }
+  $gds = ($AllGuides | ForEach-Object { "<li><a href=`"${r}guides/$($_.slug)/`">$($_.h1)</a></li>" }) -join ''
 @"
 <footer class="site-footer">
     <div class="wrap">
       <div class="footer-grid">
         <div class="footer-brand">
           <span class="brand-name" style="font-family:var(--display);font-size:21px;">$($Site.Name)</span>
-          <p>Printable invitation and card templates, drawn in-house so every design is free to
+          <p>Printable card and document templates, drawn in-house so every design is free to
              print, share and adapt.</p>
         </div>
-        <div>
-          <h4>Occasions</h4>
-          <ul>$occ<li><a href="${r}$($Category.slug)/">See all</a></li></ul>
-        </div>
+        $cols
         <div>
           <h4>Guides</h4>
           <ul>$gds</ul>
@@ -142,6 +169,7 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="stylesheet" href="$Fonts">
 <link rel="stylesheet" href="${r}assets/css/style.css">
 <link rel="stylesheet" href="${r}assets/css/cards.css">
+<link rel="stylesheet" href="${r}assets/css/docs.css">
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
@@ -165,16 +193,7 @@ $extraScripts
 function Get-Card($t, $extraClass, $allArt) {
   # Editor pages carry every ornament so the switcher can swap them with no
   # round trip; grid thumbnails carry only the one they use.
-  $art = ''
-  if ($allArt) {
-    $art = ($ArtKinds | Where-Object { $_.id -ne 'none' } | ForEach-Object {
-      $on = if ($_.id -eq $t.art) { ' is-on' } else { '' }
-      "<span class=`"art$on`" data-art=`"$($_.id)`">" + (Get-Art $_.id) + '</span>'
-    }) -join ''
-  } elseif ($t.art) {
-    $art = "<span class=`"art is-on`" data-art=`"$($t.art)`">" + (Get-Art $t.art) + '</span>'
-  }
-
+  $art = Get-ArtLayer $t $allArt
   $corners = '<span class="corner tl"></span><span class="corner br"></span>'
   $b = $t.body
   $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
@@ -196,6 +215,147 @@ function Get-Card($t, $extraClass, $allArt) {
         </div>
       </div>
 "@
+}
+
+# =============================================================================
+#  Document templates (CV, invoice, certificate, business card, letter, menu,
+#  letterhead). Cards ki tarah hi: HTML sirf fields ko data-field ke sath rakhta
+#  hai, layout poora CSS (docs.css) mein hai.
+# =============================================================================
+
+# Ek field ko uske wrapper ke sath likhta hai. Khali field CSS se chhup jati hai.
+function Fld($b, $id, $cls, $tag) {
+  $v = ''
+  if ($b -and $b.ContainsKey($id)) { $v = $b[$id] }
+  "<$tag class=`"$cls`" data-field=`"$id`">$v</$tag>"
+}
+
+function Get-ArtLayer($t, $allArt) {
+  if ($allArt) {
+    return ($ArtKinds | Where-Object { $_.id -ne 'none' } | ForEach-Object {
+      $on = if ($_.id -eq $t.art) { ' is-on' } else { '' }
+      "<span class=`"art$on`" data-art=`"$($_.id)`">" + (Get-Art $_.id) + '</span>'
+    }) -join ''
+  }
+  if ($t.art) { return "<span class=`"art is-on`" data-art=`"$($t.art)`">" + (Get-Art $t.art) + '</span>' }
+  ''
+}
+
+function Doc-Shell($s, $t, $extraClass, $allArt, $inner) {
+  $art  = Get-ArtLayer $t $allArt
+  $size = if ($s.size) { $s.size } else { 'sz-a4' }
+  $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
+  $foil = if ($t.foil) { ' is-foil' } else { '' }
+  if (-not $extraClass) { $extraClass = '' }
+  $style = "--c-bg:$($t.bg);--c-ink:$($t.ink);--c-accent:$($t.accent);--c-soft:$($t.soft)"
+  "<div class=`"doc-preview $($t.design) $($t.font) $bgs $size$foil $extraClass`" style=`"$style`" data-art=`"$($t.art)`">" +
+  "<div class=`"card-art`">$art</div><div class=`"doc-inner`">$inner</div></div>"
+}
+
+function Get-Resume($s, $t, $ec, $aa) {
+  $b = $t.body
+  $jobs = ''
+  foreach ($n in 1..3) {
+    $jobs += '<div class="d-item">' + (Fld $b "exp${n}role" 'd-item-t' 'p') +
+             (Fld $b "exp${n}meta" 'd-item-m' 'p') + (Fld $b "exp${n}desc" 'd-item-d' 'div') + '</div>'
+  }
+  $edu = ''
+  foreach ($n in 1..2) {
+    $edu += '<div class="d-item">' + (Fld $b "edu$n" 'd-item-t' 'p') + (Fld $b "edu${n}meta" 'd-item-m' 'p') + '</div>'
+  }
+  $inner = '<div class="d-col-a">' +
+      '<header class="d-head">' + (Fld $b 'name' 'd-name' 'p') + (Fld $b 'role' 'd-role' 'p') +
+      (Fld $b 'contact' 'd-lines' 'div') + '</header>' +
+      '<section class="d-block d-skills">' + (Fld $b 'secSkills' 'd-sec' 'p') + (Fld $b 'skills' 'd-lines' 'div') + '</section>' +
+    '</div><div class="d-col-b">' +
+      '<section class="d-block d-profile">' + (Fld $b 'secProfile' 'd-sec' 'p') + (Fld $b 'summary' 'd-text' 'p') + '</section>' +
+      '<section class="d-block d-exp">' + (Fld $b 'secExp' 'd-sec' 'p') + $jobs + '</section>' +
+      '<section class="d-block d-edu">' + (Fld $b 'secEdu' 'd-sec' 'p') + $edu + '</section>' +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Letter($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<header class="d-head">' + (Fld $b 'name' 'd-name' 'p') + (Fld $b 'role' 'd-role' 'p') +
+      (Fld $b 'contact' 'd-lines' 'div') + '</header>' +
+    '<div class="l-main">' + (Fld $b 'date' 'l-meta' 'p') + (Fld $b 'recipient' 'l-to' 'div') +
+      (Fld $b 'greeting' 'l-greet' 'p') + (Fld $b 'body' 'l-body' 'div') +
+      (Fld $b 'signoff' 'l-signoff' 'p') + (Fld $b 'signname' 'l-signname' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Cert($s, $t, $ec, $aa) {
+  $b = $t.body
+  $signs = ''
+  foreach ($n in 1..2) {
+    $signs += '<div class="ct-sign"><span class="ct-line"></span>' +
+              (Fld $b "sign$n" '' 'p') + (Fld $b "sign${n}role" 'ct-role' 'p') + '</div>'
+  }
+  $inner = (Fld $b 'award' 'ct-award' 'p') + (Fld $b 'pre' 'ct-pre' 'p') + (Fld $b 'name' 'ct-name' 'p') +
+    (Fld $b 'reason' 'ct-reason' 'div') + (Fld $b 'date' 'ct-date' 'p') +
+    "<div class=`"ct-signs`">$signs</div>"
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Bcard($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="bc-main">' + (Fld $b 'name' 'bc-name' 'p') + (Fld $b 'role' 'bc-role' 'p') +
+      (Fld $b 'company' 'bc-co' 'p') + (Fld $b 'tagline' 'bc-tag' 'p') + '</div>' +
+    '<div class="bc-contact">' + (Fld $b 'phone' '' 'p') + (Fld $b 'email' '' 'p') +
+      (Fld $b 'web' '' 'p') + (Fld $b 'address' '' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Invoice($s, $t, $ec, $aa) {
+  $b = $t.body
+  $rows = ''
+  foreach ($n in 1..4) {
+    $rows += '<div class="iv-row">' + (Fld $b "item$n" '' 'span') + (Fld $b "item${n}amt" 'iv-amt' 'span') + '</div>'
+  }
+  $inner = '<header class="iv-head"><div>' + (Fld $b 'bizname' 'iv-biz' 'p') + (Fld $b 'bizcontact' 'd-lines' 'div') + '</div>' +
+      '<div class="iv-title">' + (Fld $b 'title' '' 'p') + (Fld $b 'number' 'iv-num' 'p') + '</div></header>' +
+    '<div class="iv-meta"><div>' + (Fld $b 'clientlabel' 'iv-label' 'p') + (Fld $b 'client' 'd-lines' 'div') + '</div>' +
+      '<div class="iv-dates"><p><span class="iv-k">Issued</span> ' + (Fld $b 'date' '' 'span') + '</p>' +
+      '<p><span class="iv-k">Due</span> ' + (Fld $b 'due' '' 'span') + '</p></div></div>' +
+    "<div class=`"iv-items`">$rows</div>" +
+    '<div class="iv-total">' + (Fld $b 'totallabel' 'iv-tl' 'span') + (Fld $b 'total' 'iv-tv' 'span') + '</div>' +
+    (Fld $b 'notes' 'iv-notes' 'p')
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Menu($s, $t, $ec, $aa) {
+  $b = $t.body
+  $secs = ''
+  foreach ($n in 1..3) {
+    $secs += '<section class="mn-sec">' + (Fld $b "sec$n" 'mn-sec-t' 'p') + (Fld $b "sec${n}items" 'mn-items' 'div') + '</section>'
+  }
+  $inner = '<header class="mn-head">' + (Fld $b 'restname' 'mn-name' 'p') + (Fld $b 'tagline' 'mn-tag' 'p') + '</header>' +
+    $secs + (Fld $b 'footer' 'mn-foot' 'p')
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Letterhead($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<header class="lh-head"><div>' + (Fld $b 'company' 'lh-co' 'p') + (Fld $b 'tagline' 'lh-tag' 'p') + '</div>' +
+      '<div class="lh-meta">' + (Fld $b 'address' 'd-lines' 'div') + (Fld $b 'contact' 'd-lines' 'div') + '</div></header>' +
+    '<div class="lh-body"></div>' + (Fld $b 'footer' 'lh-foot' 'p')
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+# Subcategory ke kind ke hisaab se sahi renderer chunta hai.
+function Get-Preview($s, $t, $extraClass, $allArt) {
+  $kind = if ($s.kind) { $s.kind } else { 'card' }
+  switch ($kind) {
+    'resume'     { Get-Resume $s $t $extraClass $allArt }
+    'letter'     { Get-Letter $s $t $extraClass $allArt }
+    'cert'       { Get-Cert $s $t $extraClass $allArt }
+    'bcard'      { Get-Bcard $s $t $extraClass $allArt }
+    'invoice'    { Get-Invoice $s $t $extraClass $allArt }
+    'menu'       { Get-Menu $s $t $extraClass $allArt }
+    'letterhead' { Get-Letterhead $s $t $extraClass $allArt }
+    default      { Get-Card $t $extraClass $allArt }
+  }
 }
 
 function Get-Crumbs($depth, $trail) {
@@ -224,21 +384,46 @@ function Get-FaqSchema($faq) {
 # --- pages -------------------------------------------------------------------
 
 function Build-Home {
-  $featured = @($Subcats[0].templates[0], $Subcats[1].templates[1], $Subcats[4].templates[1])
-  $letters = @('a','b','c')
+  # Har category ke pehle template ka preview, taake home page par dono
+  # duniyaon ka namoona dikhe - card bhi, document bhi.
   $fan = ''
-  for ($i = 0; $i -lt 3; $i++) { $fan += Get-Card $featured[$i] "fan-$($letters[$i])" }
+  $letters = @('a','b','c')
+  $picks = @(
+    @{ s=$Categories[1].subs[0]; t=$Categories[1].subs[0].templates[0] },
+    @{ s=$Categories[0].subs[0]; t=$Categories[0].subs[0].templates[1] },
+    @{ s=$Categories[1].subs[2]; t=$Categories[1].subs[2].templates[0] }
+  )
+  for ($i = 0; $i -lt 3; $i++) {
+    $fan += Get-Preview $picks[$i].s $picks[$i].t "fan-$($letters[$i])" $false
+  }
 
-  $tiles = ($Subcats | ForEach-Object {
+  $catBlocks = ''
+  foreach ($cat in $Categories) {
+    $m = $cat.meta
+    $tiles = ($cat.subs | ForEach-Object {
+      $count = $_.templates.Count
 @"
-<a class="cat-tile" href="$($Category.slug)/$($_.slug)/">
+<a class="cat-tile" href="$($m.slug)/$($_.slug)/">
           <h3>$($_.name)</h3>
           <p>$(($_.desc -split '\.')[0]).</p>
-          <span class="count">$($_.templates.Count) templates</span>
+          <span class="count">$count templates</span>
         </a>
 "@ }) -join ''
+    $catBlocks += @"
+<section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>$($m.name)</h2>
+        <p>$($m.blurb)</p>
+      </div>
+      <div class="cat-grid">$tiles</div>
+    </div>
+  </section>
 
-  $guides = ($Guides | ForEach-Object {
+"@
+  }
+
+  $guides = ($AllGuides | ForEach-Object {
 @"
 <a class="cat-tile" href="guides/$($_.slug)/">
           <h3>$($_.h1)</h3>
@@ -247,44 +432,39 @@ function Build-Home {
         </a>
 "@ }) -join ''
 
+  $totalTemplates = 0
+  foreach ($cat in $Categories) { foreach ($s in $cat.subs) { $totalTemplates += $s.templates.Count } }
+
   $body = @"
 <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Free printable templates</p>
-        <h1>Type your names. Print it tonight.</h1>
-        <p class="lede">Thirty-two invitation designs for weddings, nikah ceremonies, showers,
-          graduations and farewells. Click straight onto a card to put your own names on it -
-          no account, no watermark, no download queue.</p>
+        <p class="eyebrow">Free editable templates</p>
+        <h1>Type your details. Print it tonight.</h1>
+        <p class="lede">$totalTemplates designs - CVs, invoices, certificates and business cards
+          alongside wedding, nikah and party invitations. Fill in the boxes beside the page and it
+          updates as you type. No account, no watermark, no download queue.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="$($Category.slug)/">Browse templates</a>
-          <a class="btn btn-ghost" href="guides/">Read the guides</a>
+          <a class="btn btn-primary" href="$($Categories[1].meta.slug)/$($Categories[1].subs[0].slug)/">Start with a CV</a>
+          <a class="btn btn-ghost" href="$($Categories[0].meta.slug)/">Browse invitations</a>
         </div>
         <div class="pill-row">
           <span class="pill">Edit in your browser</span>
           <span class="pill">&#1575;&#1585;&#1583;&#1608; &amp; &#1593;&#1585;&#1576;&#1740; supported</span>
-          <span class="pill">5&times;7 inch, print ready</span>
+          <span class="pill">Print ready at 300dpi</span>
         </div>
       </div>
       <div class="hero-fan">$fan</div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Browse by occasion</h2>
-        <p>Eight occasions inside Weddings &amp; Events, each with four designs in different styles.</p>
-      </div>
-      <div class="cat-grid">$tiles</div>
-    </div>
-  </section>
-
+  $catBlocks
   <section class="section" style="background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
     <div class="wrap">
       <div class="section-head">
         <h2>Before you print</h2>
-        <p>Short guides on timing, wording and what actually needs to be on the card.</p>
+        <p>Short guides on what belongs on a CV, how to word an invitation, and what makes an
+          invoice get paid.</p>
       </div>
       <div class="cat-grid">$guides</div>
     </div>
@@ -299,29 +479,29 @@ function Build-Home {
       </div>
       <div class="feature-grid">
         <div class="feature">
-          <h3>Edit on the card itself</h3>
-          <p>Click any line and type. Names, dates, venue - the card updates as you write, and your
-            work is kept in your browser if you close the tab.</p>
+          <h3>Fill in a form, not a design tool</h3>
+          <p>Labelled boxes beside the page - Names, Date, Venue, or Job title and Experience. The
+            page updates as you type, and your work is kept in your browser.</p>
         </div>
         <div class="feature">
           <h3>&#1575;&#1585;&#1583;&#1608; and &#1593;&#1585;&#1576;&#1740;, properly set</h3>
-          <p>Switch a card to Nastaliq or Amiri and the whole layout flips to right-to-left with the
+          <p>Switch to Nastaliq, Amiri or Naskh and the whole layout flips to right-to-left with the
             line spacing those scripts actually need.</p>
         </div>
         <div class="feature">
-          <h3>Your own colours</h3>
-          <p>Six ready palettes, or pick the exact background, text and accent colours to match a
-            theme you have already chosen.</p>
+          <h3>Sixteen palettes, sixteen faces</h3>
+          <p>Or set the exact background, text and accent colours to match a theme, a brand, or a
+            wedding you have already planned around.</p>
         </div>
         <div class="feature">
           <h3>Share without an account</h3>
-          <p>One button turns your edited card into a link. Whoever opens it sees your version -
+          <p>One button turns your edited page into a link. Whoever opens it sees your version -
             neither of you signs up for anything.</p>
         </div>
         <div class="feature">
-          <h3>Print-size PNG, no watermark</h3>
-          <p>Download at 1500 &times; 2100 pixels - a true 5 &times; 7 inches at 300dpi, which is
-            what a print shop asks for.</p>
+          <h3>Print size, no watermark</h3>
+          <p>Download at 300dpi, or print straight to PDF. Nothing is stamped, nothing is held back
+            behind a paid tier.</p>
         </div>
         <div class="feature">
           <h3>Nothing borrowed</h3>
@@ -332,13 +512,14 @@ function Build-Home {
     </div>
   </section>
 "@
-  Save-Page 0 '' "$($Site.Name) - Free Printable Invitation &amp; Card Templates" `
-    'Free printable invitation templates for weddings, nikah, engagements, baby showers, graduations and more. 5x7 inch designs you can print at home or save as PDF.' `
-    $body 'home' ''
+  Save-Page 0 '' "$($Site.Name) - Free Editable CV, Invoice &amp; Invitation Templates" `
+    'Free editable templates you can fill in and print: CVs and resumes, invoices, certificates, business cards, and wedding, nikah and party invitations. No account, no watermark.' `
+    $body 'home' '' ''
 }
 
-function Build-Category {
-  $tiles = ($Subcats | ForEach-Object {
+function Build-Category($cat) {
+  $m = $cat.meta
+  $tiles = ($cat.subs | ForEach-Object {
 @"
 <a class="cat-tile" href="$($_.slug)/">
           <h3>$($_.name)</h3>
@@ -347,27 +528,28 @@ function Build-Category {
         </a>
 "@ }) -join ''
 
-  $previews = ($Subcats | Select-Object -First 4 | ForEach-Object {
-    $t = $_.templates[0]
-    "<a class=`"tpl-item`" href=`"$($_.slug)/$($t.slug)/`">" + (Get-Card $t '') +
-    "<span class=`"tpl-meta`"><span class=`"name`">$($t.name)</span><span class=`"sub`">$($_.name)</span></span></a>"
-  }) -join ''
+  $previews = ''
+  foreach ($s in ($cat.subs | Select-Object -First 4)) {
+    $t = $s.templates[0]
+    $previews += "<a class=`"tpl-item`" href=`"$($s.slug)/$($t.slug)/`">" + (Get-Preview $s $t '' $false) +
+      "<span class=`"tpl-meta`"><span class=`"name`">$($t.name)</span><span class=`"sub`">$($s.name)</span></span></a>"
+  }
 
-  $intro = ($Category.intro | ForEach-Object { "<p>$_</p>" }) -join ''
-  $crumb = Get-Crumbs 1 @(,@($Category.name, "$($Category.slug)/"))
+  $intro = ($m.intro | ForEach-Object { "<p>$_</p>" }) -join ''
+  $crumb = Get-Crumbs 1 @(,@($m.name, "$($m.slug)/"))
 
   $body = @"
 $crumb
   <section class="section" style="padding-top:26px;">
     <div class="wrap">
       <p class="eyebrow">Category</p>
-      <h1>$($Category.h1)</h1>
+      <h1>$($m.h1)</h1>
       <div class="prose" style="margin-top:16px;">$intro</div>
     </div>
   </section>
   <section class="section" style="padding-top:0;">
     <div class="wrap">
-      <div class="section-head"><h2>Occasions</h2></div>
+      <div class="section-head"><h2>$($m.panel)</h2></div>
       <div class="cat-grid">$tiles</div>
     </div>
   </section>
@@ -378,26 +560,27 @@ $crumb
     </div>
   </section>
 "@
-  Save-Page 1 $Category.slug $Category.title $Category.desc $body '' ''
+  Save-Page 1 $m.slug $m.title $m.desc $body '' '' ''
 }
 
-function Build-Subcat($s) {
+function Build-Subcat($cat, $s) {
+  $m = $cat.meta
   $grid = ($s.templates | ForEach-Object {
-    "<a class=`"tpl-item`" href=`"$($_.slug)/`">" + (Get-Card $_ '') +
+    "<a class=`"tpl-item`" href=`"$($_.slug)/`">" + (Get-Preview $s $_ '' $false) +
     "<span class=`"tpl-meta`"><span class=`"name`">$($_.name)</span><span class=`"sub`">$($_.style)</span></span></a>"
   }) -join ''
 
-  $intro = ($s.intro | ForEach-Object { "<p>$_</p>" }) -join ''
-  $faqs  = ($s.faq | ForEach-Object { "<details><summary>$($_[0])</summary><p>$($_[1])</p></details>" }) -join ''
-  $others = ($Subcats | Where-Object { $_.slug -ne $s.slug } | ForEach-Object {
+  $intro  = ($s.intro | ForEach-Object { "<p>$_</p>" }) -join ''
+  $faqs   = ($s.faq | ForEach-Object { "<details><summary>$($_[0])</summary><p>$($_[1])</p></details>" }) -join ''
+  $others = ($cat.subs | Where-Object { $_.slug -ne $s.slug } | ForEach-Object {
     "<li><a href=`"../$($_.slug)/`">$($_.name)</a></li>" }) -join ''
-  $crumb = Get-Crumbs 2 @(@($Category.name, "$($Category.slug)/"), @($s.name, ''))
+  $crumb  = Get-Crumbs 2 @(@($m.name, "$($m.slug)/"), @($s.name, ''))
 
   $body = @"
 $crumb
   <section class="section" style="padding:26px 0 40px;">
     <div class="wrap">
-      <p class="eyebrow">$($Category.name)</p>
+      <p class="eyebrow">$($m.name)</p>
       <h1>$($s.h1)</h1>
       <div class="prose" style="margin-top:16px;">$intro</div>
     </div>
@@ -413,26 +596,57 @@ $crumb
   </section>
   <section class="section">
     <div class="wrap">
-      <div class="section-head"><h2>Other occasions</h2></div>
+      <div class="section-head"><h2>More in $($m.name)</h2></div>
       <ul class="link-list">$others</ul>
     </div>
   </section>
 "@
-  Save-Page 2 "$($Category.slug)/$($s.slug)" $s.title $s.desc $body '' (Get-FaqSchema $s.faq)
+  Save-Page 2 "$($m.slug)/$($s.slug)" $s.title $s.desc $body '' (Get-FaqSchema $s.faq) ''
 }
 
-function Build-Template($s, $t) {
+# Editor ka form subcategory ke fields se banta hai, groups ke hisaab se.
+function Get-EditorForm($s) {
+  $fields = if ($s.fields) { $s.fields } else { $FieldsCard }
+  $groups = New-Object System.Collections.Specialized.OrderedDictionary
+  foreach ($f in $fields) {
+    if (-not $groups.Contains($f.group)) { $groups[$f.group] = New-Object System.Collections.ArrayList }
+    [void]$groups[$f.group].Add($f)
+  }
+
+  $single = $groups.Count -le 1
+  $out = ''
+  $i = 0
+  foreach ($g in $groups.Keys) {
+    $i++
+    $rows = ''
+    foreach ($f in $groups[$g]) {
+      $hint = if ($f.hint) { " <span class=`"sub`">$($f.hint)</span>" } else { '' }
+      $ctl = if ($f.type -eq 'area') {
+        "<textarea id=`"ed-text-$($f.id)`" data-text=`"$($f.id)`"></textarea>"
+      } else {
+        "<input type=`"text`" id=`"ed-text-$($f.id)`" data-text=`"$($f.id)`" autocomplete=`"off`">"
+      }
+      $rows += "<div class=`"ed-field`"><label for=`"ed-text-$($f.id)`">$($f.label)$hint</label>$ctl</div>"
+    }
+    if ($single) {
+      $out += "<div class=`"ed-fields`">$rows</div>"
+    } else {
+      $open = if ($i -le 2) { ' open' } else { '' }
+      $out += "<details class=`"ed-group-box`"$open><summary>$g</summary><div class=`"ed-fields`">$rows</div></details>"
+    }
+  }
+  $out
+}
+
+function Build-Template($cat, $s, $t) {
+  $m = $cat.meta
+  $kind = if ($s.kind) { $s.kind } else { 'card' }
+  $showArt = ($kind -eq 'card') -or $s.ornaments
+
   $related = ($s.templates | Where-Object { $_.slug -ne $t.slug } | ForEach-Object {
-    "<a class=`"tpl-item`" href=`"../$($_.slug)/`">" + (Get-Card $_ '') +
+    "<a class=`"tpl-item`" href=`"../$($_.slug)/`">" + (Get-Preview $s $_ '' $false) +
     "<span class=`"tpl-meta`"><span class=`"name`">$($_.name)</span><span class=`"sub`">$($_.style)</span></span></a>"
   }) -join ''
-
-  $singular = $s.name.TrimEnd('s')
-  $title = "$($t.name) - $singular Template"
-  $descStyle = ($t.style -replace '&middot;', 'and').ToLower()
-  $desc = "$($t.name): a printable $($singular.ToLower()) template in a $descStyle style. 5x7 inch, print at home or save as PDF."
-  $card = Get-Card $t ''
-  $crumb = Get-Crumbs 3 @(@($Category.name, "$($Category.slug)/"), @($s.name, "$($Category.slug)/$($s.slug)/"), @($t.name, ''))
 
   $swatches = ($Palettes | ForEach-Object {
     $f = if ($_.foil) { '1' } else { '0' }
@@ -443,17 +657,38 @@ function Build-Template($s, $t) {
     "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-font=`"$($_.cls)`">$($_.label)</button>"
   }) -join ''
 
-  $artChips = ($ArtKinds | ForEach-Object {
-    "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-art=`"$($_.id)`">$($_.label)</button>"
-  }) -join ''
-
   $bgChips = ($BgChoices | ForEach-Object {
     "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-bg=`"$($_.cls)`">$($_.label)</button>"
   }) -join ''
 
-  $sizeChips = ($SizeChoices | ForEach-Object {
+  $sizes = $SizeSets[$SizeSetFor[$kind]]
+  $sizeChips = ($sizes | ForEach-Object {
     "<button class=`"ed-chip ed-chip-wide`" type=`"button`" aria-pressed=`"false`" data-size=`"$($_.cls)`">$($_.label)<span class=`"sub`">$($_.note)</span></button>"
   }) -join ''
+
+  $artStep = ''
+  if ($showArt) {
+    $artChips = ($ArtKinds | ForEach-Object {
+      "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-art=`"$($_.id)`">$($_.label)</button>"
+    }) -join ''
+    $artStep = "<p class=`"ed-label`" style=`"margin-bottom:10px;`">Ornament</p><div class=`"ed-chips`">$artChips</div><p class=`"ed-label`" style=`"margin:16px 0 10px;`">Background</p>"
+  } else {
+    $artStep = "<p class=`"ed-label`" style=`"margin-bottom:10px;`">Background</p>"
+  }
+
+  $noun = if ($kind -eq 'card') { 'card' } elseif ($kind -eq 'bcard') { 'card' } else { 'page' }
+  $form = Get-EditorForm $s
+  $preview = Get-Preview $s $t '' $true
+
+  # "CV &amp; Resume Templates" -> "CV &amp; Resume", "Wedding Invitations" -> "Wedding Invitation".
+  # Without the first case the title reads "... Template Template".
+  $singular = $s.name
+  if ($singular -match '\s+Templates?$') { $singular = $singular -replace '\s+Templates?$', '' }
+  else { $singular = $singular -replace 's$', '' }
+  $title = "$($t.name) - $singular Template"
+  $descStyle = ($t.style -replace '&middot;', 'and').ToLower()
+  $desc = "$($t.name): an editable $($singular.ToLower()) template in a $descStyle style. Fill it in online, then print or download - free, no account."
+  $crumb = Get-Crumbs 3 @(@($m.name, "$($m.slug)/"), @($s.name, "$($m.slug)/$($s.slug)/"), @($t.name, ''))
 
   $body = @"
 $crumb
@@ -462,45 +697,19 @@ $crumb
       <div>
         <p class="stage-hint">
           <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Fill in the boxes and the card updates as you type - or click a line on the card itself.
+          Fill in the boxes and the $noun updates as you type - or click a line on the $noun itself.
         </p>
-        <div class="detail-stage" data-template="$($t.slug)">$(Get-Card $t '' $true)</div>
+        <div class="detail-stage" data-template="$($t.slug)">$preview</div>
       </div>
       <div class="detail-side">
         <div class="editor-panel">
           <p class="eyebrow">$($s.name)</p>
           <h1 style="font-size:30px;">$($t.name)</h1>
-          <p class="form-note" style="margin:8px 0 28px;">$($t.style) &middot; 5 &times; 7 in &middot;
-            free to print, no account needed</p>
+          <p class="form-note" style="margin:8px 0 28px;">$($t.style) &middot; free to print, no account needed</p>
 
           <div class="ed-step">
             <div class="ed-step-head"><span class="ed-step-num">1</span><h2>Fill in your details</h2></div>
-            <div class="ed-fields">
-              <div class="ed-field">
-                <label for="ed-text-title">Names</label>
-                <input type="text" id="ed-text-title" data-text="title" autocomplete="off">
-              </div>
-              <div class="ed-field">
-                <label for="ed-text-pre">Line above the names</label>
-                <input type="text" id="ed-text-pre" data-text="pre" autocomplete="off">
-              </div>
-              <div class="ed-field">
-                <label for="ed-text-mid">Line below the names</label>
-                <input type="text" id="ed-text-mid" data-text="mid" autocomplete="off">
-              </div>
-              <div class="ed-field">
-                <label for="ed-text-date">Date and time</label>
-                <input type="text" id="ed-text-date" data-text="date" autocomplete="off">
-              </div>
-              <div class="ed-field">
-                <label for="ed-text-venue">Venue and address <span class="sub">Enter for a new line</span></label>
-                <textarea id="ed-text-venue" data-text="venue"></textarea>
-              </div>
-              <div class="ed-field">
-                <label for="ed-text-note">Footer line <span class="sub">RSVP, dress code - leave empty to hide</span></label>
-                <input type="text" id="ed-text-note" data-text="note" autocomplete="off">
-              </div>
-            </div>
+            $form
           </div>
 
           <div class="ed-step">
@@ -521,7 +730,7 @@ $crumb
           <div class="ed-step">
             <div class="ed-step-head"><span class="ed-step-num">3</span><h2>Choose the lettering</h2></div>
             <p class="ed-label" style="margin-bottom:10px;">
-              <span class="hint">Urdu and Arabic switch the card to right-to-left</span></p>
+              <span class="hint">Urdu and Arabic switch to right-to-left</span></p>
             <div class="ed-chips">$fontChips</div>
             <div class="ed-slider">
               <label for="ed-size">Name size</label>
@@ -532,19 +741,17 @@ $crumb
 
           <div class="ed-step">
             <div class="ed-step-head"><span class="ed-step-num">4</span><h2>Decoration</h2></div>
-            <p class="ed-label" style="margin-bottom:10px;">Ornament</p>
-            <div class="ed-chips">$artChips</div>
-            <p class="ed-label" style="margin:16px 0 10px;">Background</p>
+            $artStep
             <div class="ed-chips">$bgChips</div>
           </div>
 
           <div class="ed-step">
-            <div class="ed-step-head"><span class="ed-step-num">5</span><h2>Card size</h2></div>
+            <div class="ed-step-head"><span class="ed-step-num">5</span><h2>Page size</h2></div>
             <div class="ed-chips">$sizeChips</div>
           </div>
 
           <div class="ed-step">
-            <div class="ed-step-head"><span class="ed-step-num">6</span><h2>Save your card</h2></div>
+            <div class="ed-step-head"><span class="ed-step-num">6</span><h2>Save it</h2></div>
             <div class="ed-actions">
               <button class="btn btn-primary" type="button" data-png>Download PNG</button>
               <div class="ed-row">
@@ -573,11 +780,11 @@ $crumb
 "@
   $head = "<link rel=`"stylesheet`" href=`"../../../assets/css/editor.css`">`n<link rel=`"stylesheet`" href=`"$FontsExtra`">"
   $scripts = "<script src=`"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js`" defer></script>`n<script src=`"../../../assets/js/editor.js`" defer></script>"
-  Save-Page 3 "$($Category.slug)/$($s.slug)/$($t.slug)" $title $desc $body '' $head $scripts
+  Save-Page 3 "$($m.slug)/$($s.slug)/$($t.slug)" $title $desc $body '' $head $scripts
 }
 
 function Build-GuidesIndex {
-  $tiles = ($Guides | ForEach-Object {
+  $tiles = ($AllGuides | ForEach-Object {
 @"
 <a class="cat-tile" href="$($_.slug)/">
           <h3>$($_.h1)</h3>
@@ -591,16 +798,17 @@ $crumb
   <section class="section" style="padding-top:26px;">
     <div class="wrap">
       <p class="eyebrow">Guides</p>
-      <h1>Invitation guides</h1>
+      <h1>Guides</h1>
       <p class="lede" style="margin-top:14px;">Practical answers to the questions that come up while
-        you are choosing a design - timing, wording, and what has to be on the card.</p>
+        you are filling a template in - what belongs on a CV, how to word an invitation, and what
+        makes an invoice get paid on time.</p>
       <div class="cat-grid" style="margin-top:32px;">$tiles</div>
     </div>
   </section>
 "@
-  Save-Page 1 'guides' 'Invitation Guides - Timing, Wording and What to Include' `
-    'Practical guides on when to send wedding invitations, what to include on the card, and wording examples for formal, modern and nikah invitations.' `
-    $body 'guides' ''
+  Save-Page 1 'guides' 'Template Guides - CVs, Invoices and Invitations' `
+    'Practical guides on what to include in a CV, how to write an invoice that gets paid, when to send wedding invitations and how to word them.' `
+    $body 'guides' '' ''
 }
 
 function Build-Guide($g) {
@@ -614,8 +822,12 @@ function Build-Guide($g) {
       'ol' { $parts += '<ol>' + (($val | ForEach-Object { "<li>$_</li>" }) -join '') + '</ol>' }
       'blockquote' { $parts += "<blockquote><p>$val</p></blockquote>" }
       'cta' {
-        $sub = $Subcats | Where-Object { $_.slug -eq $val }
-        $parts += "<div class=`"note-band`" style=`"margin-top:34px;`">Ready to choose a design? Browse the <a href=`"../../$($Category.slug)/$($sub.slug)/`">$($sub.name.ToLower())</a> - four printable layouts, free to use.</div>"
+        foreach ($cat in $Categories) {
+          $sub = $cat.subs | Where-Object { $_.slug -eq $val }
+          if ($sub) {
+            $parts += "<div class=`"note-band`" style=`"margin-top:34px;`">Ready to make one? Open the <a href=`"../../$($cat.meta.slug)/$($sub.slug)/`">$($sub.name.ToLower())</a> - $($sub.templates.Count) editable designs, free to use.</div>"
+          }
+        }
       }
     }
   }
@@ -633,7 +845,7 @@ $crumb
     </div>
   </article>
 "@
-  Save-Page 2 "guides/$($g.slug)" $g.title $g.desc $body 'guides' $schema
+  Save-Page 2 "guides/$($g.slug)" $g.title $g.desc $body 'guides' $schema ''
 }
 
 function Build-About {
@@ -655,13 +867,21 @@ $crumb
           prints cleanly at 5&times;7 inches. The second is licensing - because nothing is borrowed,
           there are no attribution requirements and no third-party conditions attached to anything
           you use here.</p>
-        <h2>Why 5&times;7 inches</h2>
-        <p>It is the size most envelope suppliers and print shops stock as standard, and it fits on
-          both A4 and US Letter paper with room for trim marks. Building every template to the same
-          size means one pack of envelopes works for any card on the site.</p>
+        <h2>Everything is editable, and nothing needs an account</h2>
+        <p>Each template opens with a form beside it. Type into the boxes - names and dates on an
+          invitation, job titles and achievements on a CV - and the page updates as you write. You
+          can change all sixteen colour palettes and sixteen typefaces, including Nastaliq, Amiri
+          and Naskh, which switch the whole layout to right-to-left.</p>
+        <p>Your work is kept in your browser, and the copy-link button turns it into a link anyone
+          can open. There is no sign-up step on either side, and nothing is watermarked.</p>
+        <h2>Standard sizes, so printing is not a surprise</h2>
+        <p>Invitations are 5&times;7 inches, the size envelope suppliers stock. CVs, invoices,
+          letters and menus are A4, switching to US Letter in the editor. Certificates are A4
+          landscape, and business cards are 3.5&times;2 inches. Downloads come out at 300dpi, which
+          is what a print shop asks for.</p>
         <h2>What we are working on</h2>
-        <p>Weddings and events is the first category. Greeting cards, business stationery, social
-          media layouts and school certificates are being drawn next, in that order.</p>
+        <p>Weddings and events came first, then business and office. Greeting cards, social media
+          layouts and school worksheets are being drawn next, in that order.</p>
         <h2>Get in touch</h2>
         <p>If a design does not print the way you expected, or you want an occasion added, the
           <a href="../contact/">contact page</a> is the fastest way to reach us.</p>
@@ -878,13 +1098,15 @@ New-Item -ItemType Directory -Force $Out | Out-Null
 Copy-Item (Join-Path $Root 'assets') (Join-Path $Out 'assets') -Recurse
 
 Build-Home
-Build-Category
-foreach ($s in $Subcats) {
-  Build-Subcat $s
-  foreach ($t in $s.templates) { Build-Template $s $t }
+foreach ($cat in $Categories) {
+  Build-Category $cat
+  foreach ($s in $cat.subs) {
+    Build-Subcat $cat $s
+    foreach ($t in $s.templates) { Build-Template $cat $s $t }
+  }
 }
 Build-GuidesIndex
-foreach ($g in $Guides) { Build-Guide $g }
+foreach ($g in $AllGuides) { Build-Guide $g }
 Build-About
 Build-Contact
 Build-Privacy

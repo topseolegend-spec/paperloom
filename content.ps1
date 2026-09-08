@@ -74,12 +74,45 @@ $BgChoices = @(
   @{ cls='bg-edge';  label='Vignette' }
 )
 
-# --- card sizes ---------------------------------------------------------------
+# --- sizes, per template kind -------------------------------------------------
 
-$SizeChoices = @(
-  @{ cls='sz-5x7';    label='5 x 7 in';  note='Standard invitation' },
-  @{ cls='sz-a5';     label='A5';        note='Common at print shops' },
-  @{ cls='sz-square'; label='Square';    note='Best for WhatsApp &amp; Instagram' }
+$SizeSets = @{
+  card = @(
+    @{ cls='sz-5x7';    label='5 x 7 in';  note='Standard invitation' },
+    @{ cls='sz-a5';     label='A5';        note='Common at print shops' },
+    @{ cls='sz-square'; label='Square';    note='Best for WhatsApp &amp; Instagram' })
+  doc = @(
+    @{ cls='sz-a4';     label='A4';        note='Standard almost everywhere' },
+    @{ cls='sz-letter'; label='US Letter'; note='North America' })
+  cert = @(
+    @{ cls='sz-cert';        label='A4 landscape';     note='Fits ready-made frames' },
+    @{ cls='sz-cert-letter'; label='Letter landscape'; note='North America' })
+  bcard = @(
+    @{ cls='sz-bcard';    label='3.5 x 2 in';  note='Pakistan, US and most of Asia' },
+    @{ cls='sz-bcard-eu'; label='85 x 55 mm';  note='Europe' })
+}
+
+# kind -> konsa size set milega
+$SizeSetFor = @{
+  card='card'; resume='doc'; letter='doc'; invoice='doc'; menu='doc'; letterhead='doc'
+  cert='cert'; bcard='bcard'
+}
+
+# --- editor form fields -------------------------------------------------------
+#  Har subcategory apne fields declare karti hai; editor ka form isi se banta hai.
+#  type: text (ek line) ya area (kai lines). group = form ka section.
+
+function New-Field($id, $label, $type, $group, $hint) {
+  @{ id=$id; label=$label; type=$type; group=$group; hint=$hint }
+}
+
+$FieldsCard = @(
+  (New-Field 'title' 'Names'                 'text' 'Details' ''),
+  (New-Field 'pre'   'Line above the names'  'text' 'Details' ''),
+  (New-Field 'mid'   'Line below the names'  'text' 'Details' ''),
+  (New-Field 'date'  'Date and time'         'text' 'Details' ''),
+  (New-Field 'venue' 'Venue and address'     'area' 'Details' 'Enter for a new line'),
+  (New-Field 'note'  'Footer line'           'text' 'Details' 'RSVP, dress code - leave empty to hide')
 )
 
 # --- sample wording used inside each card ------------------------------------
@@ -138,6 +171,8 @@ function New-Tpl($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent,
 $Category = @{
   slug  = 'wedding-events'
   name  = 'Weddings &amp; Events'
+  panel = 'Occasions'
+  blurb = 'Eight occasions, four designs each, every one editable in the browser.'
   h1    = 'Wedding and Event Invitation Templates'
   title = 'Wedding &amp; Event Invitation Templates - Free Printable Cards'
   desc  = 'Free printable invitation templates for weddings, nikah ceremonies, engagements, showers, graduations, housewarmings and farewells. 5x7 inch designs.'

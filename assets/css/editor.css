@@ -77,6 +77,19 @@
 .ed-chip:hover{background:var(--surface-2);}
 .ed-chip[aria-pressed="true"]{border-color:var(--green); background:var(--gold-soft); font-weight:600;}
 
+/* long forms (a CV has five groups) collapse into sections */
+.ed-group-box{border:1px solid var(--line); border-radius:var(--radius); margin-bottom:10px; background:var(--surface);}
+.ed-group-box summary{
+  cursor:pointer; padding:11px 14px; list-style:none;
+  font-size:14px; font-weight:600; color:var(--ink);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.ed-group-box summary::-webkit-details-marker{display:none;}
+.ed-group-box summary::after{content:"+"; color:var(--gold); font-size:18px; line-height:1;}
+.ed-group-box[open] summary::after{content:"\2013";}
+.ed-group-box[open] summary{border-bottom:1px solid var(--line);}
+.ed-group-box .ed-fields{padding:14px;}
+
 /* wide chips carry a second line of explanation */
 .ed-chip-wide{display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;}
 .ed-chip-wide .sub{font-size:11.5px; color:var(--ink-faint); font-weight:400;}

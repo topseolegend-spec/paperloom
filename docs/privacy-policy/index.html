@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Cinzel:wght@400;600&family=Josefin+Sans:wght@300;400&display=swap">
 <link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="../assets/css/cards.css">
+<link rel="stylesheet" href="../assets/css/docs.css">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 
 </head>
@@ -36,16 +37,26 @@
       <nav class="nav" aria-label="Main">
         <a class="nav-link" href="../">Home</a>
         <div class="has-dropdown">
-          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">Weddings &amp; Events
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="1">Weddings &amp; Events
             <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           </button>
-          <div class="dropdown-panel" hidden>
-            <p class="panel-head">All occasions</p>
-            <a href="../wedding-events/">All wedding &amp; event templates</a>
+          <div class="dropdown-panel" data-dd-panel="1" hidden>
+            <p class="panel-head">Occasions</p>
+            <a href="../wedding-events/">All weddings &amp; events templates</a>
             <a href="../wedding-events/wedding-invitations/">Wedding Invitations</a><a href="../wedding-events/nikah-invitations/">Nikah Invitations</a><a href="../wedding-events/engagement-invitations/">Engagement Invitations</a><a href="../wedding-events/bridal-shower-invitations/">Bridal Shower Invitations</a><a href="../wedding-events/baby-shower-invitations/">Baby Shower Invitations</a><a href="../wedding-events/graduation-invitations/">Graduation Invitations</a><a href="../wedding-events/housewarming-invitations/">Housewarming Invitations</a><a href="../wedding-events/farewell-retirement-invitations/">Farewell &amp; Retirement</a>
           </div>
         </div>
-        <a class="nav-link" href="../guides/">Guides</a>
+<div class="has-dropdown">
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="2">Business &amp; Office
+            <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <div class="dropdown-panel" data-dd-panel="2" hidden>
+            <p class="panel-head">Document types</p>
+            <a href="../business-office/">All business &amp; office templates</a>
+            <a href="../business-office/cv-resume-templates/">CV &amp; Resume</a><a href="../business-office/invoice-templates/">Invoices</a><a href="../business-office/certificate-templates/">Certificates</a><a href="../business-office/business-card-templates/">Business Cards</a><a href="../business-office/cover-letter-templates/">Cover Letters</a><a href="../business-office/menu-templates/">Menus</a><a href="../business-office/letterhead-templates/">Letterheads</a>
+          </div>
+        </div>
+<a class="nav-link" href="../guides/">Guides</a>
         <a class="nav-link" href="../about/">About</a>
         <a class="nav-link" href="../contact/">Contact</a>
       </nav>
@@ -114,16 +125,13 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <span class="brand-name" style="font-family:var(--display);font-size:21px;">Paperloom</span>
-          <p>Printable invitation and card templates, drawn in-house so every design is free to
+          <p>Printable card and document templates, drawn in-house so every design is free to
              print, share and adapt.</p>
         </div>
-        <div>
-          <h4>Occasions</h4>
-          <ul><li><a href="../wedding-events/wedding-invitations/">Wedding Invitations</a></li><li><a href="../wedding-events/nikah-invitations/">Nikah Invitations</a></li><li><a href="../wedding-events/engagement-invitations/">Engagement Invitations</a></li><li><a href="../wedding-events/bridal-shower-invitations/">Bridal Shower Invitations</a></li><li><a href="../wedding-events/baby-shower-invitations/">Baby Shower Invitations</a></li><li><a href="../wedding-events/">See all</a></li></ul>
-        </div>
+        <div><h4>Weddings &amp; Events</h4><ul><li><a href="../wedding-events/wedding-invitations/">Wedding Invitations</a></li><li><a href="../wedding-events/nikah-invitations/">Nikah Invitations</a></li><li><a href="../wedding-events/engagement-invitations/">Engagement Invitations</a></li><li><a href="../wedding-events/bridal-shower-invitations/">Bridal Shower Invitations</a></li><li><a href="../wedding-events/baby-shower-invitations/">Baby Shower Invitations</a></li><li><a href="../wedding-events/">See all</a></li></ul></div><div><h4>Business &amp; Office</h4><ul><li><a href="../business-office/cv-resume-templates/">CV &amp; Resume</a></li><li><a href="../business-office/invoice-templates/">Invoices</a></li><li><a href="../business-office/certificate-templates/">Certificates</a></li><li><a href="../business-office/business-card-templates/">Business Cards</a></li><li><a href="../business-office/cover-letter-templates/">Cover Letters</a></li><li><a href="../business-office/">See all</a></li></ul></div>
         <div>
           <h4>Guides</h4>
-          <ul><li><a href="../guides/when-to-send-wedding-invitations/">When to Send Wedding Invitations</a></li><li><a href="../guides/what-to-include-in-a-wedding-invitation/">What Should Be Included in a Wedding Invitation</a></li><li><a href="../guides/wedding-invitation-wording/">Wedding Card Invitation Wording Examples</a></li></ul>
+          <ul><li><a href="../guides/when-to-send-wedding-invitations/">When to Send Wedding Invitations</a></li><li><a href="../guides/what-to-include-in-a-wedding-invitation/">What Should Be Included in a Wedding Invitation</a></li><li><a href="../guides/wedding-invitation-wording/">Wedding Card Invitation Wording Examples</a></li><li><a href="../guides/what-to-include-in-a-cv/">What to Include in a CV</a></li><li><a href="../guides/cv-vs-resume/">CV vs Resume: What Is the Difference?</a></li><li><a href="../guides/how-to-write-an-invoice/">How to Write an Invoice</a></li></ul>
         </div>
         <div>
           <h4>Site</h4>
