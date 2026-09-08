@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://topseolegend-spec.github.io/paperloom/sitemap.xml
+Sitemap: https://paperloom-rho.vercel.app/sitemap.xml
