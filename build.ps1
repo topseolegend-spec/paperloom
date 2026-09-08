@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 #  Paperloom - static site generator
 #  Chalane ka tareeqa:   powershell -ExecutionPolicy Bypass -File build.ps1
 #  Output "docs" folder mein banta hai - GitHub Pages isi ko serve karta hai.
@@ -30,6 +30,23 @@ $Year  = (Get-Date).Year
 # GitHub Pages project site "/paperloom" par serve hoti hai; apne domain par ye khali ho jayega.
 $BasePath = ([System.Uri]$Site.Url).AbsolutePath.TrimEnd('/')
 $Urls  = New-Object System.Collections.ArrayList
+
+# html2canvas (jo PNG export karta hai) color-mix() parse nahi kar sakta, is liye
+# CSS rgba(var(--x-rgb), a) use karti hai. Yahan hex se RGB components nikalte hain.
+function HexRgb($hex) {
+  $h = "$hex".TrimStart('#')
+  if ($h.Length -eq 3) { $h = "$($h[0])$($h[0])$($h[1])$($h[1])$($h[2])$($h[2])" }
+  if ($h.Length -lt 6) { return '0,0,0' }
+  $r = [Convert]::ToInt32($h.Substring(0,2), 16)
+  $g = [Convert]::ToInt32($h.Substring(2,2), 16)
+  $b = [Convert]::ToInt32($h.Substring(4,2), 16)
+  "$r,$g,$b"
+}
+
+function CardVars($t) {
+  "--c-bg:$($t.bg);--c-ink:$($t.ink);--c-accent:$($t.accent);--c-soft:$($t.soft);" +
+  "--c-accent-rgb:$(HexRgb $t.accent);--c-ink-rgb:$(HexRgb $t.ink);--c-bg-rgb:$(HexRgb $t.bg)"
+}
 
 function Write-File($path, $text) {
   $dir = Split-Path -Parent $path
@@ -199,7 +216,7 @@ function Get-Card($t, $extraClass, $allArt) {
   $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
   $foil = if ($t.foil) { ' is-foil' } else { '' }
   $note = if ($b.note) { $b.note } else { '' }
-  $style = "--c-bg:$($t.bg);--c-ink:$($t.ink);--c-accent:$($t.accent);--c-soft:$($t.soft)"
+  $style = CardVars $t
   if (-not $extraClass) { $extraClass = '' }
 @"
 <div class="card-preview $($t.design) $($t.font) $bgs sz-5x7$foil $extraClass" style="$style" data-art="$($t.art)">
@@ -247,7 +264,7 @@ function Doc-Shell($s, $t, $extraClass, $allArt, $inner) {
   $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
   $foil = if ($t.foil) { ' is-foil' } else { '' }
   if (-not $extraClass) { $extraClass = '' }
-  $style = "--c-bg:$($t.bg);--c-ink:$($t.ink);--c-accent:$($t.accent);--c-soft:$($t.soft)"
+  $style = CardVars $t
   "<div class=`"doc-preview $($t.design) $($t.font) $bgs $size$foil $extraClass`" style=`"$style`" data-art=`"$($t.art)`">" +
   "<div class=`"card-art`">$art</div><div class=`"doc-inner`">$inner</div></div>"
 }
@@ -263,15 +280,19 @@ function Get-Resume($s, $t, $ec, $aa) {
   foreach ($n in 1..2) {
     $edu += '<div class="d-item">' + (Fld $b "edu$n" 'd-item-t' 'p') + (Fld $b "edu${n}meta" 'd-item-m' 'p') + '</div>'
   }
-  $inner = '<div class="d-col-a">' +
-      '<header class="d-head">' + (Fld $b 'name' 'd-name' 'p') + (Fld $b 'role' 'd-role' 'p') +
+  # Five sections as direct children, so each design can place them with grid
+  # (sidebar, split columns) or just stack them (the plain layouts).
+  $inner =
+    '<header class="d-head">' + (Fld $b 'name' 'd-name' 'p') + (Fld $b 'role' 'd-role' 'p') +
       (Fld $b 'contact' 'd-lines' 'div') + '</header>' +
-      '<section class="d-block d-skills">' + (Fld $b 'secSkills' 'd-sec' 'p') + (Fld $b 'skills' 'd-lines' 'div') + '</section>' +
-    '</div><div class="d-col-b">' +
-      '<section class="d-block d-profile">' + (Fld $b 'secProfile' 'd-sec' 'p') + (Fld $b 'summary' 'd-text' 'p') + '</section>' +
-      '<section class="d-block d-exp">' + (Fld $b 'secExp' 'd-sec' 'p') + $jobs + '</section>' +
-      '<section class="d-block d-edu">' + (Fld $b 'secEdu' 'd-sec' 'p') + $edu + '</section>' +
-    '</div>'
+    '<section class="d-block d-profile">' + (Fld $b 'secProfile' 'd-sec' 'p') +
+      '<div class="d-items">' + (Fld $b 'summary' 'd-text' 'p') + '</div></section>' +
+    '<section class="d-block d-exp">' + (Fld $b 'secExp' 'd-sec' 'p') +
+      "<div class=`"d-items`">$jobs</div></section>" +
+    '<section class="d-block d-edu">' + (Fld $b 'secEdu' 'd-sec' 'p') +
+      "<div class=`"d-items`">$edu</div></section>" +
+    '<section class="d-block d-skills">' + (Fld $b 'secSkills' 'd-sec' 'p') +
+      '<div class="d-items">' + (Fld $b 'skills' 'd-lines' 'div') + '</div></section>'
   Doc-Shell $s $t $ec $aa $inner
 }
 

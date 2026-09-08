@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Document templates - CVs, invoices, certificates, business cards, letters,
    menus and letterheads.
 
@@ -117,78 +117,169 @@
 .doc-preview.bg-wash::after,
 .doc-preview.bg-edge::after{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;}
 .doc-preview.bg-grad::after{
-  background:radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--c-accent) 11%, transparent) 0%, transparent 60%);
+  background:radial-gradient(120% 70% at 50% 0%, rgba(var(--c-accent-rgb), 0.11) 0%, transparent 60%);
 }
 .doc-preview.bg-wash::after{
   background:
-    radial-gradient(36% 22% at 14% 8%, color-mix(in srgb, var(--c-accent) 16%, transparent) 0%, transparent 70%),
-    radial-gradient(38% 24% at 88% 94%, color-mix(in srgb, var(--c-accent) 13%, transparent) 0%, transparent 72%);
+    radial-gradient(36% 22% at 14% 8%, rgba(var(--c-accent-rgb), 0.16) 0%, transparent 70%),
+    radial-gradient(38% 24% at 88% 94%, rgba(var(--c-accent-rgb), 0.13) 0%, transparent 72%);
 }
 .doc-preview.bg-edge::after{
-  background:radial-gradient(76% 62% at 50% 50%, transparent 48%, color-mix(in srgb, var(--c-accent) 13%, transparent) 100%);
+  background:radial-gradient(76% 62% at 50% 50%, transparent 48%, rgba(var(--c-accent-rgb), 0.13) 100%);
 }
 
-/* =====================  CV / RESUME  ====================================== */
+/* =====================  CV / RESUME  ======================================
+   Four layouts: two deliberately plain, two designed.
 
-/* Two columns: a coloured sidebar carrying identity and skills, the record of
-   work in the wider column beside it. */
-.r-sidebar .doc-inner{display:grid; grid-template-columns:34% 1fr;}
-.r-sidebar .d-col-a{
+   The five sections (head, profile, experience, education, skills) are direct
+   children of .doc-inner, so a layout either stacks them or places them with
+   grid. Nothing is nested for one design's benefit.
+   ========================================================================== */
+
+.d-items > .d-item:last-child{margin-bottom:0;}
+
+/* ---------- SIMPLE 1: Clean Classic --------------------------------------
+   No colour blocks anywhere. Prints cheaply, copies cleanly into an
+   application form, and survives being forwarded as a scan. */
+
+.r-clean .doc-inner{padding:8cqw 8cqw 7cqw; gap:5cqw;}
+.r-clean .d-head{
+  padding-bottom:4cqw;
+  border-bottom:2px solid var(--c-accent);
+}
+.r-clean .d-head .d-lines{
+  margin-top:2cqw; font-size:2.05cqw; line-height:1.7;
+}
+.r-clean .d-block{margin-bottom:0;}
+.r-clean .d-sec{
+  position:relative; padding-bottom:1.4cqw; margin-bottom:2.4cqw;
+}
+.r-clean .d-sec::after{
+  content:""; position:absolute; left:0; bottom:0; width:7cqw; height:2px;
+  background:var(--c-accent);
+}
+
+/* ---------- SIMPLE 2: Plain Serif ----------------------------------------
+   Centred masthead, hairline rules, nothing but type. The traditional CV,
+   and the one that suits academic and government applications. */
+
+.r-plain .doc-inner{padding:9cqw 10cqw; gap:5.5cqw;}
+.r-plain .d-head{text-align:center; padding-bottom:4cqw; border-bottom:1px solid var(--c-accent);}
+.r-plain .d-head .d-role{letter-spacing:.3em;}
+.r-plain .d-head .d-lines{margin-top:2cqw; font-size:2cqw;}
+.r-plain .d-block{margin-bottom:0;}
+.r-plain .d-sec{
+  text-align:center; font-weight:400; letter-spacing:.28em;
+  padding-bottom:1.4cqw; margin-bottom:2.6cqw;
+  border-bottom:1px solid rgba(var(--c-accent-rgb), 0.3);
+}
+.r-plain .d-item-t{font-family:'Cormorant Garamond', serif; font-size:3.1cqw; font-weight:600;}
+.r-plain .d-item-m{font-style:italic;}
+
+/* ---------- ADVANCED 1: Studio Sidebar -----------------------------------
+   A coloured sidebar carrying identity and skills, and the work history set as
+   a timeline beside it.
+
+   The sidebar is painted as a gradient stop on the grid itself rather than as a
+   background on one cell, so it runs the full height of the page whatever the
+   sections inside it happen to contain. */
+
+.r-studio .doc-inner{
+  display:grid;
+  grid-template-columns:35% 1fr;
+  grid-template-rows:auto auto 1fr;
+  background:linear-gradient(to right, var(--c-accent) 0 35%, transparent 35%);
+}
+.r-studio .d-head{
+  grid-column:1; grid-row:1;
+  padding:7cqw 4.5cqw 3cqw;
+}
+.r-studio .d-skills{
+  grid-column:1; grid-row:2 / 4;
+  padding:2cqw 4.5cqw 7cqw;
+  margin-bottom:0;
+}
+.r-studio .d-head .d-name{color:#fff; font-size:calc(5.4cqw * var(--name-scale)); line-height:1.15;}
+.r-studio .d-head .d-role{color:rgba(255,255,255,.8); font-size:2.05cqw; letter-spacing:.14em; line-height:1.5;}
+.r-studio .d-head .d-lines,
+.r-studio .d-skills .d-lines{
+  color:rgba(255,255,255,.88); font-size:1.85cqw; line-height:1.9; overflow-wrap:anywhere;
+}
+.r-studio .d-head .d-lines{margin-top:2.6cqw;}
+.r-studio .d-skills .d-sec{
+  color:rgba(255,255,255,.65);
+  padding-bottom:1.2cqw; margin-bottom:2cqw;
+  border-bottom:1px solid rgba(255,255,255,.25);
+}
+
+.r-studio .d-profile{grid-column:2; grid-row:1; padding:7cqw 6cqw 0; margin:0;}
+.r-studio .d-exp{grid-column:2; grid-row:2; padding:5cqw 6cqw 0; margin:0;}
+.r-studio .d-edu{grid-column:2; grid-row:3; padding:5cqw 6cqw 7cqw; margin:0;}
+
+/* the profile sits in a tinted panel so the page opens on something, not a
+   paragraph floating in white space */
+.r-studio .d-profile .d-items{
+  background:rgba(var(--c-accent-rgb), 0.07);
+  border-left:2px solid var(--c-accent);
+  padding:3cqw 3.5cqw;
+}
+
+/* experience as a timeline: a rule down the column, a ring on each role */
+.r-studio .d-exp .d-items{
+  border-left:1.5px solid rgba(var(--c-accent-rgb), 0.28);
+  padding-left:5cqw; margin-left:1cqw;
+}
+.r-studio .d-exp .d-item{position:relative;}
+.r-studio .d-exp .d-item::before{
+  content:""; position:absolute; left:-6cqw; top:.8cqw;
+  width:2.2cqw; height:2.2cqw; border-radius:50%;
+  background:var(--c-bg); border:1.5px solid var(--c-accent);
+}
+
+/* ---------- ADVANCED 2: Split Header -------------------------------------
+   A full-width header band, then a wide column of work beside a tinted column
+   of supporting detail. */
+
+.r-split .doc-inner{
+  display:grid;
+  grid-template-columns:61% 39%;
+  grid-template-rows:auto auto 1fr;
+}
+.r-split .d-head{
+  grid-column:1 / 3; grid-row:1;
   background:var(--c-accent); color:#fff;
-  padding:6.5cqw 4.5cqw;
-  display:flex; flex-direction:column; gap:5cqw;
-}
-/* the sidebar is a third of the page - everything in it steps down a size, and
-   long emails wrap rather than running off the edge */
-.r-sidebar .d-col-a .d-name{color:#fff; font-size:calc(5.2cqw * var(--name-scale)); line-height:1.16;}
-.r-sidebar .d-col-a .d-role{color:rgba(255,255,255,.82); font-size:2.05cqw; letter-spacing:.12em; line-height:1.5;}
-.r-sidebar .d-col-a .d-sec{color:rgba(255,255,255,.72); font-size:1.9cqw;}
-.r-sidebar .d-col-a .d-lines{color:rgba(255,255,255,.9); font-size:1.85cqw; line-height:1.75; overflow-wrap:anywhere;}
-.r-sidebar .d-col-b{padding:7cqw 6cqw;}
-
-/* Single column, centred masthead, hairline rules - reads as a document
-   rather than a dashboard. */
-.r-serif .doc-inner{display:flex; flex-direction:column; padding:8cqw 9cqw;}
-.r-serif .d-col-a, .r-serif .d-col-b{display:contents;}
-.r-serif .d-head{order:1; text-align:center; padding-bottom:4cqw; border-bottom:1px solid var(--c-accent); margin-bottom:5cqw;}
-.r-serif .d-head .d-lines{margin-top:1.6cqw;}
-.r-serif .d-profile{order:2;}
-.r-serif .d-exp{order:3;}
-.r-serif .d-edu{order:4;}
-.r-serif .d-skills{order:5;}
-.r-serif .d-sec{
-  text-align:center; border-bottom:1px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
-  padding-bottom:1.2cqw;
-}
-
-/* Full-width colour band across the top. */
-.r-header .doc-inner{display:flex; flex-direction:column;}
-.r-header .d-col-a, .r-header .d-col-b{display:contents;}
-.r-header .d-head{
-  order:1; background:var(--c-accent); color:#fff; padding:6.5cqw 7cqw;
+  padding:6.5cqw 7cqw;
   display:flex; justify-content:space-between; align-items:flex-end; gap:5cqw;
 }
-.r-header .d-head .d-name, .r-header .d-head .d-role{color:#fff;}
-.r-header .d-head .d-role{color:rgba(255,255,255,.85);}
-.r-header .d-head .d-lines{color:rgba(255,255,255,.9); text-align:right; font-size:1.95cqw;}
-.r-header .d-profile{order:2; padding:6cqw 7cqw 0;}
-.r-header .d-exp{order:3; padding:0 7cqw;}
-.r-header .d-edu{order:4; padding:0 7cqw;}
-.r-header .d-skills{order:5; padding:0 7cqw;}
+.r-split .d-head .d-name{color:#fff; font-size:calc(6.6cqw * var(--name-scale));}
+.r-split .d-head .d-role{color:rgba(255,255,255,.85);}
+.r-split .d-head .d-lines{
+  color:rgba(255,255,255,.9); font-size:1.9cqw; line-height:1.8;
+  text-align:right; white-space:nowrap;
+}
 
-/* Section titles in a narrow left column, content beside them. */
-.r-grid .doc-inner{display:flex; flex-direction:column; padding:8cqw 7cqw;}
-.r-grid .d-col-a, .r-grid .d-col-b{display:contents;}
-.r-grid .d-head{order:1; margin-bottom:6cqw;}
-.r-grid .d-head .d-lines{margin-top:1.6cqw; columns:2; font-size:2cqw;}
-.r-grid .d-profile{order:2;}
-.r-grid .d-exp{order:3;}
-.r-grid .d-edu{order:4;}
-.r-grid .d-skills{order:5;}
-.r-grid .d-block{display:grid; grid-template-columns:24% 1fr; gap:4cqw; align-items:start;}
-.r-grid .d-sec{margin:0; text-align:right; padding-top:.6cqw;}
+.r-split .d-profile{grid-column:1; grid-row:2; padding:6cqw 5cqw 0 7cqw; margin:0;}
+.r-split .d-exp{grid-column:1; grid-row:3; padding:5cqw 5cqw 7cqw 7cqw; margin:0;}
+.r-split .d-edu{
+  grid-column:2; grid-row:2;
+  background:rgba(var(--c-accent-rgb), 0.07);
+  padding:6cqw 6cqw 3cqw 5cqw; margin:0;
+}
+.r-split .d-skills{
+  grid-column:2; grid-row:3;
+  background:rgba(var(--c-accent-rgb), 0.07);
+  padding:2cqw 6cqw 7cqw 5cqw; margin:0;
+}
 
-/* Skills read as a list, one per line, with a small accent marker. */
+/* a small filled square ahead of each section title */
+.r-split .d-sec{position:relative; padding-left:3.4cqw;}
+.r-split .d-sec::before{
+  content:""; position:absolute; left:0; top:.65cqw;
+  width:1.8cqw; height:1.8cqw; background:var(--c-accent);
+}
+.r-split .d-edu .d-item-t, .r-split .d-skills .d-lines{font-size:2.1cqw;}
+
+/* skills read as a list with room to breathe in every layout */
 .d-skills .d-lines{line-height:2;}
 
 /* =====================  COVER LETTER  ===================================== */
@@ -275,7 +366,7 @@
 .f-amiri .ct-name{font-family:'Amiri',serif; font-size:calc(6.4cqw * var(--name-scale));}
 .f-naskh .ct-name{font-family:'Noto Naskh Arabic','Amiri',serif; font-size:calc(5.6cqw * var(--name-scale));}
 
-.c-classic .ct-award{border-bottom:1px solid color-mix(in srgb, var(--c-accent) 45%, transparent); padding-bottom:1.6cqw;}
+.c-classic .ct-award{border-bottom:1px solid rgba(var(--c-accent-rgb), 0.45); padding-bottom:1.6cqw;}
 .c-modern .doc-inner{align-items:flex-start; text-align:left; padding:9cqw 11cqw;}
 .c-modern .ct-reason{margin:0; max-width:66%;}
 .c-modern .ct-signs{justify-content:flex-start;}
@@ -283,12 +374,12 @@
 
 .is-foil .ct-award, .is-foil .ct-date{
   background:linear-gradient(105deg,
-    color-mix(in srgb, var(--c-accent) 70%, #000 8%) 0%, #fff6d8 38%,
-    var(--c-accent) 55%, color-mix(in srgb, var(--c-accent) 80%, #000 10%) 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
+    var(--c-accent) 0%, #fff6d8 38%, var(--c-accent) 62%, var(--c-accent) 100%);
+  -webkit-background-clip:text; background-clip:text;
+  color:var(--c-accent);
+  -webkit-text-fill-color:transparent;
 }
-.doc-preview.is-foil .card-art .s{stroke:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
-.doc-preview.is-foil .card-art .f{fill:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+.doc-preview.is-foil .card-art{filter:saturate(1.12) brightness(1.06);}
 
 /* =====================  BUSINESS CARD  ==================================== */
 
@@ -332,7 +423,7 @@
 .iv-items{border-top:1.5px solid var(--c-accent); margin-bottom:4cqw;}
 .iv-row{
   display:flex; justify-content:space-between; gap:4cqw;
-  padding:2.4cqw 0; border-bottom:1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  padding:2.4cqw 0; border-bottom:1px solid rgba(var(--c-ink-rgb), 0.12);
   font-family:'Karla',sans-serif; font-size:2.2cqw; color:var(--c-soft);
 }
 .iv-row:has(> span:first-child:empty){display:none;}
@@ -368,7 +459,7 @@
   font-family:'Karla',sans-serif; font-size:2.2cqw; font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent);
   padding-bottom:1.4cqw; margin-bottom:2.4cqw;
-  border-bottom:1px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+  border-bottom:1px solid rgba(var(--c-accent-rgb), 0.35);
 }
 .mn-items{font-family:'Karla',sans-serif; font-size:2.3cqw; line-height:2.1; color:var(--c-soft);}
 .mn-foot{font-family:'Karla',sans-serif; font-size:1.9cqw; letter-spacing:.12em; color:var(--c-soft); margin-top:auto; padding-top:4cqw; text-align:center;}
@@ -393,7 +484,7 @@
 .lh-tag{font-family:'Karla',sans-serif; font-size:2.1cqw; letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent); margin-top:1.2cqw;}
 .lh-tag:empty{display:none;}
 .lh-meta{display:flex; gap:6cqw; margin-top:3.5cqw; font-family:'Karla',sans-serif; font-size:2cqw; line-height:1.7; color:var(--c-soft);}
-.lh-body{flex:1; border-top:1px solid color-mix(in srgb, var(--c-accent) 30%, transparent); margin:0 8cqw;}
+.lh-body{flex:1; border-top:1px solid rgba(var(--c-accent-rgb), 0.3); margin:0 8cqw;}
 .lh-foot{
   font-family:'Karla',sans-serif; font-size:1.8cqw; letter-spacing:.1em;
   color:var(--c-soft); padding:4cqw 8cqw 6cqw; text-align:center;

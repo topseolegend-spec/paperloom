@@ -228,10 +228,12 @@ $BizSubcats = @(
       @('Should a CV have a photo?','In Pakistan, the Gulf and much of Asia and Europe a photo is normal. In the UK, the US, Canada and Australia it is discouraged, because employers avoid documents that could expose them to discrimination claims. These templates leave it off, which is the safer default when you are applying in several countries.'),
       @('Will these templates work with applicant tracking systems?','They print as an image or PDF, which is right for emailing and for handing over in person. If an employer asks you to paste your CV into an online form, use the plain text from your boxes rather than the design - that is what those systems read.'))
     templates=@(
-      (New-Doc 'sidebar-slate' 'Sidebar Slate' 'Two column &middot; coloured sidebar' 'r-sidebar' 'f-tenor' '' '#ffffff' '#20262c' '#2f4858' '#5c666d' $BizBody.resume),
-      (New-Doc 'editorial-serif' 'Editorial Serif' 'Single column &middot; classic' 'r-serif' 'f-cormorant' '' '#fdfcf9' '#221f1c' '#8a6a3b' '#5f5850' $BizBody.resume),
-      (New-Doc 'accent-header' 'Accent Header' 'Header block &middot; modern' 'r-header' 'f-josefin' '' '#ffffff' '#1f2a23' '#2e5d4b' '#5a6660' $BizBody.resume),
-      (New-Doc 'quiet-grid' 'Quiet Grid' 'Label column &middot; minimal' 'r-grid' 'f-libre' '' '#fcfcfb' '#26262b' '#7b3f4e' '#63636b' $BizBody.resume)) },
+      # Two plain layouts for people who want a CV that survives any inbox, and
+      # two designed ones for people applying somewhere that rewards it.
+      (New-Doc 'clean-classic' 'Clean Classic' 'Simple &middot; single column' 'r-clean' 'f-tenor' '' '#ffffff' '#1d2228' '#2f4858' '#57606a' $BizBody.resume),
+      (New-Doc 'plain-serif' 'Plain Serif' 'Simple &middot; centred masthead' 'r-plain' 'f-cormorant' '' '#fdfcf9' '#211e1a' '#7b5e33' '#5d564d' $BizBody.resume),
+      (New-Doc 'studio-sidebar' 'Studio Sidebar' 'Designed &middot; sidebar and timeline' 'r-studio' 'f-josefin' '' '#ffffff' '#1b2430' '#22394f' '#59636e' $BizBody.resume),
+      (New-Doc 'split-header' 'Split Header' 'Designed &middot; header band, two columns' 'r-split' 'f-tenor' '' '#ffffff' '#1f2a23' '#2e5d4b' '#586159' $BizBody.resume)) },
 
  @{ slug='invoice-templates'; name='Invoice Templates'; nav='Invoices'
     kind='invoice'; size='sz-a4'; fields=$FieldsInvoice

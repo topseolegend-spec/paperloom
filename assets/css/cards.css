@@ -118,22 +118,34 @@
 .card-art .s{stroke:currentColor; fill:none; stroke-linecap:round; stroke-linejoin:round;}
 .card-art .f{fill:currentColor; stroke:none;}
 
-/* Metallic foil. An SVG gradient cannot be shared across cards here - it would
-   resolve --c-accent against its own ancestors, not each card's - so the line
-   work is lightened towards a warm highlight instead, and the gradient is spent
-   where it actually reads: the date and the rule. */
-.is-foil .card-art .s{stroke:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
-.is-foil .card-art .f{fill:color-mix(in srgb, var(--c-accent) 76%, #fff0c4);}
+/* Metallic foil. The line work is warmed with a filter rather than a mixed
+   colour, and the gradient is spent where it actually reads: the date and rule.
+
+   Two deliberate choices here keep PNG export working. The text keeps a real
+   `color` and is hidden with -webkit-text-fill-color, so an exporter that does
+   not understand background-clip renders solid accent text instead of nothing
+   at all. And the filter is decoration only, so losing it costs nothing. */
+.is-foil .card-art{filter:saturate(1.12) brightness(1.06);}
 .is-foil .c-date{
   background:linear-gradient(105deg,
-    color-mix(in srgb, var(--c-accent) 70%, #000 8%) 0%,
-    #fff6d8 38%, var(--c-accent) 55%,
-    color-mix(in srgb, var(--c-accent) 80%, #000 10%) 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
+    var(--c-accent) 0%, #fff6d8 38%, var(--c-accent) 62%, var(--c-accent) 100%);
+  -webkit-background-clip:text; background-clip:text;
+  color:var(--c-accent);
+  -webkit-text-fill-color:transparent;
 }
 .is-foil .c-rule{
   background:linear-gradient(90deg, transparent, var(--c-accent), #fff3cf, var(--c-accent), transparent);
   opacity:1;
+}
+
+/* Applied to the clone during PNG export. html2canvas paints a gradient
+   background but ignores background-clip:text, which turns foiled text into a
+   solid gold bar with the letters knocked out. Dropping back to flat accent
+   text for the export is the honest trade. */
+.is-exporting .c-date, .is-exporting .ct-award, .is-exporting .ct-date{
+  background:none !important;
+  color:var(--c-accent) !important;
+  -webkit-text-fill-color:var(--c-accent) !important;
 }
 
 /* ---------- background treatments ---------------------------------------- */
@@ -141,18 +153,18 @@
 .bg-grad::after{
   content:""; position:absolute; inset:0; pointer-events:none;
   background:radial-gradient(120% 85% at 50% 0%,
-    color-mix(in srgb, var(--c-accent) 13%, transparent) 0%, transparent 62%);
+    rgba(var(--c-accent-rgb), 0.13) 0%, transparent 62%);
 }
 .bg-wash::after{
   content:""; position:absolute; inset:0; pointer-events:none;
   background:
-    radial-gradient(38% 28% at 18% 12%, color-mix(in srgb, var(--c-accent) 22%, transparent) 0%, transparent 70%),
-    radial-gradient(42% 32% at 84% 88%, color-mix(in srgb, var(--c-accent) 17%, transparent) 0%, transparent 72%);
+    radial-gradient(38% 28% at 18% 12%, rgba(var(--c-accent-rgb), 0.22) 0%, transparent 70%),
+    radial-gradient(42% 32% at 84% 88%, rgba(var(--c-accent-rgb), 0.17) 0%, transparent 72%);
 }
 .bg-edge::after{
   content:""; position:absolute; inset:0; pointer-events:none;
   background:radial-gradient(78% 60% at 50% 50%,
-    transparent 45%, color-mix(in srgb, var(--c-accent) 15%, transparent) 100%);
+    transparent 45%, rgba(var(--c-accent-rgb), 0.15) 100%);
 }
 /* the wash sits under the ornament and text */
 .card-preview::after{z-index:0;}
@@ -179,7 +191,6 @@
   content:""; position:absolute; inset:5cqw; z-index:1;
   border:1px solid var(--c-accent); opacity:.55;
 }
-.is-foil.d-frame::before{border-color:color-mix(in srgb, var(--c-accent) 85%, #fff);}
 
 .d-band::before{
   content:""; position:absolute; top:0; left:0; right:0; height:16cqw; z-index:1;
@@ -210,8 +221,8 @@
 /* inner panel in a slightly different tone */
 .d-panel::before{
   content:""; position:absolute; inset:6cqw; z-index:0;
-  background:color-mix(in srgb, var(--c-accent) 8%, var(--c-bg));
-  border:1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
+  background:rgba(var(--c-accent-rgb), 0.08);
+  border:1px solid rgba(var(--c-accent-rgb), 0.4);
 }
 .d-panel .card-body{padding:15cqw 12cqw;}
 

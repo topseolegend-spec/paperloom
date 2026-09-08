@@ -13,6 +13,7 @@
   --line:#e4e2db;
   --line-soft:#efede7;
   --green:#2e5d4b;
+  --green-rgb:46,93,75;
   --green-deep:#1e4033;
   --gold:#a8823f;
   --gold-soft:#f3ecdd;
@@ -313,7 +314,10 @@ p{margin:0 0 1em;}
   body{background:#fff;}
   .detail-stage{border:0; background:#fff; padding:0;}
   .detail-grid{display:block;}
-  .card-preview{width:100% !important; box-shadow:none !important; page-break-inside:avoid;}
+  .card-preview,
+  .doc-preview{width:100% !important; box-shadow:none !important; page-break-inside:avoid;}
+  /* the page itself is the sheet - let it fill the paper with no browser margin */
+  @page{margin:0;}
 }
 
 @media (prefers-reduced-motion:reduce){

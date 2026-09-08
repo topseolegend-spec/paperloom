@@ -158,6 +158,12 @@
     card.style.setProperty('--c-ink', state.ink);
     card.style.setProperty('--c-accent', state.accent);
     card.style.setProperty('--c-soft', state.ink);
+    // The stylesheets build translucent tints with rgba(var(--x-rgb), a) rather
+    // than color-mix(), because html2canvas cannot parse color-mix and the PNG
+    // export fails outright on it. So the components have to travel too.
+    card.style.setProperty('--c-accent-rgb', hexToRgb(state.accent));
+    card.style.setProperty('--c-ink-rgb', hexToRgb(state.ink));
+    card.style.setProperty('--c-bg-rgb', hexToRgb(state.bg));
     card.style.setProperty('--name-scale', String(state.scale / 100));
 
     FONTS.forEach(function (c) { card.classList.toggle(c, c === state.font); });
@@ -182,6 +188,11 @@
     if (/^#[0-9a-f]{6}$/i.test(v)) return v;
     if (/^#[0-9a-f]{3}$/i.test(v)) return '#' + v[1] + v[1] + v[2] + v[2] + v[3] + v[3];
     return '#ffffff';
+  }
+
+  function hexToRgb(v) {
+    var h = toHex6(v).slice(1);
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)].join(',');
   }
 
   function press(selector, attr, value) {
@@ -386,12 +397,27 @@
       pngBtn.textContent = 'Rendering...';
       var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
       ready.then(function () {
-        // 1500px on the long edge = 300dpi at 5 inches
+        // 300dpi at each page's real physical width, so a print shop gets what
+        // it asks for whether this is a 3.5in card or a 297mm certificate.
+        var PX_300DPI = {
+          'sz-5x7': 1500, 'sz-a5': 1748, 'sz-square': 1500,
+          'sz-a4': 2480, 'sz-letter': 2550,
+          'sz-cert': 3508, 'sz-cert-letter': 3300,
+          'sz-bcard': 1050, 'sz-bcard-eu': 1004
+        };
+        var target = PX_300DPI[state.size] || 1500;
         return html2canvas(card, {
-          scale: 1500 / card.offsetWidth,
+          scale: target / card.offsetWidth,
           backgroundColor: null,
           logging: false,
-          useCORS: true
+          useCORS: true,
+          onclone: function (doc) {
+            // html2canvas paints gradient backgrounds but ignores
+            // background-clip:text, so foiled text would export as a solid bar.
+            // The clone falls back to flat accent text.
+            var el = doc.querySelector('.detail-stage .card-preview, .detail-stage .doc-preview');
+            if (el) el.classList.add('is-exporting');
+          }
         });
       }).then(function (canvas) {
         var link = document.createElement('a');
