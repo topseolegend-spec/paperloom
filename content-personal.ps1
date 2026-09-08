@@ -153,6 +153,7 @@ $PBody = @{
 
 $PCategory = @{
   slug  = 'personal-lifestyle'
+  accent = '#5c7a52'
   name  = 'Personal &amp; Lifestyle'
   short = 'Personal'
   panel = 'Document types'

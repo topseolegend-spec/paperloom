@@ -160,6 +160,7 @@ $EBody = @{
 
 $ECategory = @{
   slug  = 'education-school'
+  accent = '#3d6382'
   name  = 'Education &amp; School'
   short = 'Education'
   panel = 'Document types'

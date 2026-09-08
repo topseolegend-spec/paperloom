@@ -802,47 +802,86 @@ function Build-Home {
   # duniyaon ka namoona dikhe - card bhi, document bhi.
   $fan = ''
   $letters = @('a','b','c')
+  # All three portrait: a CV, an invitation and a poster. The old third pick was
+  # a landscape certificate, which at a shared height ran half again as wide as
+  # the other two and broke the fan.
   $picks = @(
     @{ s=$Categories[1].subs[0]; t=$Categories[1].subs[0].templates[0] },
     @{ s=$Categories[0].subs[0]; t=$Categories[0].subs[0].templates[1] },
-    @{ s=$Categories[1].subs[2]; t=$Categories[1].subs[2].templates[0] }
+    @{ s=$Categories[3].subs[0]; t=$Categories[3].subs[0].templates[3] }
   )
   for ($i = 0; $i -lt 3; $i++) {
     $fan += Get-Preview $picks[$i].s $picks[$i].t "fan-$($letters[$i])" $false
   }
 
+  # Each category gets its own band: its own accent, three real previews drawn
+  # from its own templates, and every subcategory as a link. Six identical grids
+  # of text tiles read as one long undifferentiated list - the previews are what
+  # tell a reader at a glance that school worksheets are not wedding cards.
+  $collectionCards = ''
   $catBlocks = ''
+  $ci = 0
   foreach ($cat in $Categories) {
     $m = $cat.meta
-    $tiles = ($cat.subs | ForEach-Object {
-      $count = $_.templates.Count
-@"
-<a class="cat-tile" href="$($m.slug)/$($_.slug)/">
-          <h3>$($_.name)</h3>
-          <p>$(($_.desc -split '\.')[0]).</p>
-          <span class="count">$count templates</span>
+    $ci++
+    $catTemplates = 0
+    foreach ($s in $cat.subs) { $catTemplates += $s.templates.Count }
+
+    $collectionCards += @"
+<a class="coll-card" href="$($m.slug)/" style="--coll:$($m.accent);">
+          <span class="coll-rule"></span>
+          <span class="coll-name">$($m.name)</span>
+          <span class="coll-blurb">$($m.blurb)</span>
+          <span class="coll-meta">$catTemplates templates &middot; $($cat.subs.Count) types</span>
         </a>
-"@ }) -join ''
+"@
+
+    # three previews, spread across the category rather than all from one
+    # subcategory, so the row shows the range instead of one design three times
+    $spread = @(0, [math]::Floor($cat.subs.Count / 3), [math]::Floor($cat.subs.Count * 2 / 3))
+    $shots = ''
+    for ($k = 0; $k -lt 3; $k++) {
+      $sub = $cat.subs[$spread[$k]]
+      $tpl = $sub.templates[[math]::Min($k, $sub.templates.Count - 1)]
+      $shots += @"
+<a class="shot" href="$($m.slug)/$($sub.slug)/$($tpl.slug)/">
+          <span class="shot-frame">$(Get-Preview $sub $tpl '' $false)</span>
+          <span class="shot-label">$($sub.nav)</span>
+        </a>
+"@
+    }
+
+    $chips = ($cat.subs | ForEach-Object {
+      "<a class=`"chip`" href=`"$($m.slug)/$($_.slug)/`">$($_.nav) <span>$($_.templates.Count)</span></a>" }) -join ''
+
+    $alt = if ($ci % 2 -eq 0) { ' cat-band-alt' } else { '' }
     $catBlocks += @"
-<section class="section">
+<section class="section cat-band$alt" style="--coll:$($m.accent);">
     <div class="wrap">
-      <div class="section-head">
-        <h2>$($m.name)</h2>
-        <p>$($m.blurb)</p>
+      <div class="cat-band-head">
+        <div>
+          <p class="eyebrow coll-eyebrow">$catTemplates templates &middot; $($cat.subs.Count) types</p>
+          <h2>$($m.name)</h2>
+          <p class="cat-band-blurb">$($m.blurb)</p>
+        </div>
+        <a class="cat-band-all" href="$($m.slug)/">All $($m.short.ToLower()) templates &rarr;</a>
       </div>
-      <div class="cat-grid">$tiles</div>
+      <div class="shot-row">$shots</div>
+      <div class="chip-row">$chips</div>
     </div>
   </section>
 
 "@
   }
 
+  # Guides are reading, not templates, so they get a different shape entirely -
+  # a dark band of titled rows rather than a fourth grid of pale cards, which is
+  # what made this section indistinguishable from the six above it.
   $guides = ($AllGuides | ForEach-Object {
 @"
-<a class="cat-tile" href="guides/$($_.slug)/">
-          <h3>$($_.h1)</h3>
-          <p>$($_.desc)</p>
-          <span class="count">$($_.read)</span>
+<a class="guide-row" href="guides/$($_.slug)/">
+          <span class="guide-title">$($_.h1)</span>
+          <span class="guide-read">$($_.read)</span>
         </a>
 "@ }) -join ''
 
@@ -855,12 +894,13 @@ function Build-Home {
       <div>
         <p class="eyebrow">Free editable templates</p>
         <h1>Type your details. Print it tonight.</h1>
-        <p class="lede">$totalTemplates designs - CVs, invoices, certificates and business cards
-          alongside wedding, nikah and party invitations. Fill in the boxes beside the page and it
-          updates as you type. No account, no watermark, no download queue.</p>
+        <p class="lede">$totalTemplates designs across six collections - CVs and invoices, wedding and
+          nikah invitations, greeting cards, posters and social posts, school worksheets and reports,
+          calendars and planners. Fill in the boxes beside the page and it updates as you type. No
+          account, no watermark, no download queue.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="$($Categories[1].meta.slug)/$($Categories[1].subs[0].slug)/">Start with a CV</a>
-          <a class="btn btn-ghost" href="$($Categories[0].meta.slug)/">Browse invitations</a>
+          <a class="btn btn-ghost" href="#collections">See all six collections</a>
         </div>
         <div class="pill-row">
           <span class="pill">Edit in your browser</span>
@@ -872,15 +912,31 @@ function Build-Home {
     </div>
   </section>
 
-  $catBlocks
-  <section class="section" style="background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <section class="section collections" id="collections">
     <div class="wrap">
       <div class="section-head">
-        <h2>Before you print</h2>
-        <p>Short guides on what belongs on a CV, how to word an invitation, and what makes an
-          invoice get paid.</p>
+        <p class="eyebrow">Six collections</p>
+        <h2>Start where your document lives</h2>
+        <p>Every collection is editable the same way. What changes is the paper it is set for -
+          a 5&times;7 card, an A4 sheet, or a 1080 pixel square.</p>
       </div>
-      <div class="cat-grid">$guides</div>
+      <div class="coll-grid">$collectionCards</div>
+    </div>
+  </section>
+
+  $catBlocks
+  <section class="section guides-band">
+    <div class="wrap">
+      <div class="guides-head">
+        <div>
+          <p class="eyebrow">Guides</p>
+          <h2>Before you print</h2>
+          <p>The wording is usually harder than the design. Fifteen short guides on what belongs on
+            a CV, how to word an invitation, and what makes an invoice get paid on time.</p>
+        </div>
+        <a class="guides-all" href="guides/">All guides &rarr;</a>
+      </div>
+      <div class="guide-list">$guides</div>
     </div>
   </section>
 

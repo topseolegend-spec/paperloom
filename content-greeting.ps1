@@ -63,6 +63,7 @@ $GBody = @{
 
 $GCategory = @{
   slug  = 'greeting-cards'
+  accent = '#8e4470'
   name  = 'Greeting Cards'
   short = 'Greetings'
   panel = 'Occasions'

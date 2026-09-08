@@ -168,17 +168,17 @@
   <div class="eyebrow"><span class="dot"></span>SEO Audit &middot; Live Build</div>
   <h1>Paperloom - Technical SEO Audit</h1>
   <p class="lede">Every number below was measured directly against the generated site, not estimated:
-    283 HTML pages were parsed, 23,023 internal links were followed, and every structured-data block
+    283 HTML pages were parsed, 23,119 internal links were followed, and every structured-data block
     was validated as real JSON. This is what that check found, what was fixed, and what was already
     correct.</p>
   <p class="meta-line">Site: <a href="https://paperloom-rho.vercel.app">paperloom-rho.vercel.app</a> &middot;
-    Audited 8 September 2026 &middot; 283 pages, 6 categories, 44 subcategories, 204 templates, 15 guides</p>
+    Audited 8-9 September 2026 &middot; 283 pages, 6 categories, 52 subcategories, 204 templates, 15 guides</p>
 
   <div class="stat-row">
-    <div class="stat"><span class="n">9</span><div class="l">issues found across on-page, structured data and internal linking</div></div>
-    <div class="stat"><span class="n">9</span><div class="l">fixed and verified in this pass</div></div>
-    <div class="stat"><span class="n">23,023</span><div class="l">internal links checked &middot; 0 broken</div></div>
-    <div class="stat"><span class="n">349</span><div class="l">structured-data blocks parsed &middot; 0 invalid</div></div>
+    <div class="stat"><span class="n">12</span><div class="l">issues found across on-page, structured data and internal linking</div></div>
+    <div class="stat"><span class="n">12</span><div class="l">fixed and verified in this pass</div></div>
+    <div class="stat"><span class="n">23,119</span><div class="l">internal links checked &middot; 0 broken</div></div>
+    <div class="stat"><span class="n">100</span><div class="l">contextual in-content links added &middot; 0 before</div></div>
   </div>
 
   <section>
@@ -189,7 +189,8 @@
     <ul class="method">
       <li>Every &lt;title&gt; and &lt;meta name="description"&gt; extracted and checked for length (Google's practical display limits: roughly 15-60 characters for a title, 70-160 for a description) and for duplicates across the whole site.</li>
       <li>Every &lt;h1&gt;-&lt;h6&gt; on every page collected in document order to check exactly one H1 per page, and that heading levels never jump (no H2 straight to H4).</li>
-      <li>Every internal &lt;a href&gt; resolved to a real file path and checked for a 200 - not sampled, all 23,023 of them.</li>
+      <li>Every internal &lt;a href&gt; resolved to a real file path and checked for a 200 - not sampled, all 23,119 of them.</li>
+      <li>Links counted by <em>where</em> they sit, not just how many there are: navigation (header, footer, related-item modules) separated from contextual links written inside the prose, because search engines weigh the second kind far more heavily.</li>
       <li>Every &lt;script type="application/ld+json"&gt; block parsed with a real JSON parser, not eyeballed.</li>
       <li>sitemap.xml parsed as XML and its URL count compared against the actual page count; robots.txt read directly.</li>
       <li>canonical, viewport, lang, favicon and og:image tags checked for presence on all 283 pages.</li>
@@ -247,9 +248,14 @@
         <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
         <tbody>
           <tr>
-            <td>Titles over ~60 characters, at risk of truncating in search results.</td>
+            <td>Titles over ~60 characters, at risk of truncating in search results. The last one
+              held at 61 because template titles are generated from the subcategory name, and
+              "Farewell &amp; Retirement Invitations" is long.
+              <div class="why">Fix: a subcategory can now name a shorter word to be titled by without
+                changing its own heading.</div>
+            </td>
             <td class="num before">23 pages</td><td class="arrow">&rarr;</td>
-            <td class="num after">1 page (61 chars)</td>
+            <td class="num after">0 pages</td>
             <td><span class="pill pill-fixed">Fixed</span></td>
           </tr>
           <tr>
@@ -314,10 +320,41 @@
         <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
         <tbody>
           <tr>
+            <td><strong>No contextual links inside any article body.</strong> Every internal link on a
+              guide sat either in the site navigation or in a call-to-action box after the article
+              ended. Links inside the prose - where the sentence itself gives the link its meaning -
+              are the kind search engines weigh most, and there were none.
+              <div class="why">Fix: 35 links written into sentences that already discussed the thing
+                being linked to, with the phrase in the sentence as the anchor text rather than a
+                bolted-on "click here". These form real topic clusters - the three wedding guides now
+                reference each other, as do the two CV guides, flyer and social sizes, budget and meal
+                planning.</div>
+            </td>
+            <td class="num before">0 across 15 guides</td><td class="arrow">&rarr;</td>
+            <td class="num after">35</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td><strong>Template listing pages had no contextual links either.</strong> 50 of the 52
+              subcategory pages linked out only through navigation modules, so the guide explaining
+              how to use a given document type and the page offering that document type were not
+              connected in either direction by anything a reader would follow mid-sentence.
+              <div class="why">Fix: every subcategory now closes its intro with a hand-written line
+                linking to the guide covering that document type - or, where no guide exists, to the
+                page a reader actually needs next: certificates to diplomas, recipe cards to meal
+                planners, vouchers to business cards. Written per page rather than generated, because
+                52 pages carrying one templated "read our guide" sentence reads as filler to a person
+                and as a footprint to a search engine.</div>
+            </td>
+            <td class="num before">2 of 52 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">52 of 52 &middot; 65 links</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
             <td>Guides could only link to one related template category each, even where the written
               content named several - the sizes guide discusses seven platforms but linked to one.
-              <div class="why">Fix: guides can now cite multiple related categories, collapsed into one
-                sentence rather than a repeated banner.</div>
+              <div class="why">Fix: the closing call-to-action can now cite several related categories
+                in one sentence rather than a repeated banner per mention.</div>
             </td>
             <td class="num before">1 link / guide</td><td class="arrow">&rarr;</td>
             <td class="num after">Up to 5, where earned</td>
@@ -357,7 +394,7 @@
       <div class="pass-item"><span class="k">Viewport meta present</span><span class="v">283 / 283</span></div>
       <div class="pass-item"><span class="k">lang="en" attribute</span><span class="v">283 / 283</span></div>
       <div class="pass-item"><span class="k">Favicon linked</span><span class="v">283 / 283</span></div>
-      <div class="pass-item"><span class="k">Broken internal links</span><span class="v">0 / 23,023</span></div>
+      <div class="pass-item"><span class="k">Broken internal links</span><span class="v">0 / 23,119</span></div>
       <div class="pass-item"><span class="k">Invalid JSON-LD</span><span class="v">0 / 349</span></div>
       <div class="pass-item"><span class="k">Orphan pages</span><span class="v">0 / 283</span></div>
       <div class="pass-item"><span class="k">sitemap.xml entries</span><span class="v">283, matches page count</span></div>
@@ -374,8 +411,12 @@
       to avoid a page rendering without a style it turns out to need. Real-world cost is small - the
       files are cached after a visitor's first page view, and Vercel compresses them in transit - so
       this is flagged as a low-priority future optimisation rather than fixed under time pressure.
-      One title sits at 61 characters against a 60-character guideline; Google's actual cutoff is
-      pixel-width based, not a hard character count, so this is not expected to truncate in practice.
+    </div>
+    <div class="note-block" style="border-left-color:var(--good); background:var(--good-soft);">
+      <b>Correction to the first version of this report</b> - it stated 44 subcategories. The site has
+      52. The figure was wrong when written, not changed since; every other count in that version was
+      checked against the build and stands. Flagged here rather than quietly amended, because a
+      report a client relies on has to say when it was wrong.
     </div>
   </section>
 
@@ -426,7 +467,7 @@
   </section>
 
   <footer>
-    Every figure in this report was measured against the build deployed on 8 September 2026.
+    Every figure in this report was measured against the build deployed on 9 September 2026.
     Re-running it against a later deploy may produce different numbers as new categories are added.
   </footer>
 

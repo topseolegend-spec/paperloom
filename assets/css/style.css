@@ -124,8 +124,15 @@ p{margin:0 0 1em;}
 .dropdown-panel a:hover{background:var(--surface-2); color:var(--green); text-decoration:none;}
 
 /* the categories panel: one card per category rather than a list of every
-   subcategory, which at six categories would be forty-four links */
-.dropdown-wide{min-width:340px;}
+   subcategory, which at six categories would be fifty-two links.
+   Two columns, not one: stacked, six cards ran about 660px tall, so on a laptop
+   viewport the sixth sat below the fold and the menu looked like it held five
+   categories. Three rows of two clears any screen the site is read on. */
+.dropdown-wide{
+  min-width:560px;
+  display:grid; grid-template-columns:1fr 1fr; gap:2px 6px;
+}
+.dropdown-wide .panel-head{grid-column:1 / -1;}
 .dd-cat{display:block; padding:11px 12px; border-radius:var(--radius);}
 .dd-cat-name{display:block; font-weight:600; font-size:14.5px; color:var(--ink);}
 .dd-cat:hover .dd-cat-name{color:var(--green);}
@@ -224,14 +231,25 @@ p{margin:0 0 1em;}
 .hero .lede{margin-bottom:26px;}
 .hero-actions{display:flex; gap:12px; flex-wrap:wrap;}
 .hero-fan{display:flex; gap:16px; justify-content:center; align-items:center;}
-.hero-fan .card-preview{width:180px;}
+/* .doc-preview as well as .card-preview: the fan holds a CV and a poster
+   alongside the invitation, and with only the card sized the other two took
+   the flex container's full width and pushed themselves out of the hero -
+   which is why it looked like one lonely card on an empty half-page. */
+.hero-fan .card-preview,.hero-fan .doc-preview{height:262px; width:auto; min-width:0;}
 .hero-fan .fan-a{transform:rotate(-6deg) translateY(10px);}
 .hero-fan .fan-b{transform:translateY(-8px); z-index:2;}
 .hero-fan .fan-c{transform:rotate(6deg) translateY(10px);}
 
 @media (max-width:880px){
   .hero-grid{grid-template-columns:1fr; gap:36px;}
-  .hero-fan .card-preview{width:140px;}
+  /* Width-driven on a phone, not height-driven: three previews sized from a
+     fixed height came to about 460px of fan on a 390px screen, and the whole
+     page scrolled sideways because of it. Sharing the row instead means the
+     fan always fits whatever the screen is. */
+  .hero-fan{gap:10px;}
+  .hero-fan .card-preview,.hero-fan .doc-preview{
+    height:auto; width:100%; min-width:0; flex:1 1 0;
+  }
 }
 
 /* ---------- buttons ---------- */
@@ -263,6 +281,140 @@ p{margin:0 0 1em;}
 .cat-tile h3{margin-bottom:6px;}
 .cat-tile p{font-size:14.5px; color:var(--ink-soft); margin:0 0 12px;}
 .cat-tile .count{font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--gold);}
+
+/* ---------- home: the six collections ----------
+   Each card carries its category's own accent through --coll, set inline on the
+   element. One shared rule, six identities - and the same variable drives the
+   category band further down the page, so a colour never has to be repeated in
+   two places and drift. */
+.collections{padding-top:52px;}
+.coll-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:16px;}
+.coll-card{
+  display:flex; flex-direction:column; gap:7px;
+  padding:20px 20px 18px; background:var(--surface);
+  border:1px solid var(--line); border-radius:8px;
+  color:var(--ink); box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.coll-card:hover{
+  box-shadow:var(--shadow-md); transform:translateY(-2px);
+  border-color:var(--coll); color:var(--ink); text-decoration:none;
+}
+.coll-rule{display:block; width:30px; height:3px; background:var(--coll); border-radius:2px;}
+.coll-name{font-family:var(--display); font-size:19px; line-height:1.25;}
+.coll-blurb{font-size:13.5px; color:var(--ink-soft); line-height:1.5; flex:1;}
+.coll-meta{
+  font-size:11.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--coll);
+}
+
+/* ---------- home: one band per category ---------- */
+.cat-band{padding:56px 0; border-top:1px solid var(--line-soft);}
+.cat-band-alt{background:var(--surface-2);}
+.cat-band-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px; margin-bottom:26px; flex-wrap:wrap;
+}
+.coll-eyebrow{color:var(--coll);}
+.cat-band-blurb{color:var(--ink-soft); margin:8px 0 0; max-width:60ch;}
+.cat-band-all{
+  font-size:14px; font-weight:600; white-space:nowrap;
+  color:var(--coll); border-bottom:1px solid transparent; padding-bottom:2px;
+}
+.cat-band-all:hover{color:var(--coll); border-bottom-color:var(--coll); text-decoration:none;}
+
+/* three real previews per band - the thing that stops six text grids reading
+   as one list. Sized by the row, not by the template's own aspect ratio. */
+/* minmax(0,1fr), not 1fr: a plain 1fr track keeps an automatic minimum equal to
+   its content, so the wide formats - a 7x3 voucher, a 5x3 flashcard - grew
+   their own column past the page and squeezed the other two. */
+.shot-row{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; margin-bottom:22px;}
+.shot{display:block; color:var(--ink);}
+.shot:hover{color:var(--ink); text-decoration:none;}
+/* Sized by height, not width: a 5x7 card, an A4 sheet and a landscape
+   certificate all set their own aspect-ratio, so three of them at width:100%
+   produced a row of wildly different heights with the short one adrift in a
+   gap. Fixing the frame height and letting the ratio decide the width lands
+   them on one baseline - and the previews scale their type from their own
+   width, so this costs nothing internally. */
+.shot-frame{
+  display:flex; align-items:flex-end; justify-content:center;
+  height:320px;
+}
+.shot-frame .card-preview,.shot-frame .doc-preview{
+  height:100%; width:auto; max-width:100%;
+  /* flex items default to min-width:auto, which lets a landscape certificate
+     ignore max-width and spill over its neighbours */
+  min-width:0;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow .2s ease, transform .2s ease;
+}
+/* Landscape formats size from the column width instead, and keep their real
+   proportions. Sized from height like the portraits, a 7x3 voucher would want
+   747px in a 355px column - clamping the width there would just squash it out
+   of shape. They sit on the same baseline, shorter, which is honest: a voucher
+   really is a strip and an A4 sheet really is a page. */
+.shot-frame .sz-voucher,.shot-frame .sz-voucher-a6,
+.shot-frame .sz-flash,.shot-frame .sz-flash-lg,
+.shot-frame .sz-cert,.shot-frame .sz-cert-letter,
+.shot-frame .sz-bcard,.shot-frame .sz-bcard-eu,
+.shot-frame .sz-yt,.shot-frame .sz-linkedin,.shot-frame .sz-fbcover,
+.shot-frame .sz-mrec,.shot-frame .sz-leaderboard,.shot-frame .sz-recipe{
+  height:auto; width:100%;
+}
+.shot:hover .card-preview,.shot:hover .doc-preview{
+  box-shadow:var(--shadow-lg); transform:translateY(-3px);
+}
+.shot-label{
+  display:block; margin-top:10px; font-size:12.5px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint);
+}
+.shot:hover .shot-label{color:var(--coll);}
+
+/* every subcategory stays a link, but as a chip rather than a card - same
+   internal linking, a fraction of the vertical space */
+.chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{
+  display:inline-flex; align-items:baseline; gap:7px;
+  padding:7px 13px; border-radius:999px;
+  background:var(--surface); border:1px solid var(--line);
+  font-size:13.5px; color:var(--ink);
+}
+.chip span{font-size:11.5px; color:var(--ink-faint);}
+.chip:hover{border-color:var(--coll); color:var(--coll); text-decoration:none;}
+.chip:hover span{color:var(--coll);}
+
+/* ---------- home: guides band ----------
+   Dark, and a list rather than cards, so the reading section cannot be mistaken
+   for a seventh collection of templates. */
+.guides-band{background:var(--green-deep); color:#f1f0e9; padding:58px 0;}
+.guides-band h2{color:#fff;}
+.guides-band .eyebrow{color:var(--gold);}
+.guides-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px; margin-bottom:26px; flex-wrap:wrap;
+}
+.guides-head p{color:rgba(241,240,233,.72); margin:8px 0 0; max-width:58ch;}
+.guides-all{color:#fff; font-size:14px; font-weight:600; white-space:nowrap; border-bottom:1px solid rgba(255,255,255,.4); padding-bottom:2px;}
+.guides-all:hover{color:#fff; border-bottom-color:#fff; text-decoration:none;}
+.guide-list{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  gap:0 34px;
+}
+.guide-row{
+  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:13px 0; border-bottom:1px solid rgba(255,255,255,.13);
+  color:#f1f0e9;
+}
+.guide-row:hover{color:#fff; text-decoration:none;}
+.guide-title{font-family:var(--display); font-size:16.5px; line-height:1.3;}
+.guide-row:hover .guide-title{text-decoration:underline; text-underline-offset:3px;}
+.guide-read{font-size:12px; color:rgba(241,240,233,.55); white-space:nowrap;}
+
+@media (max-width:720px){
+  .shot-row{grid-template-columns:1fr 1fr; gap:16px;}
+  .shot-row .shot:nth-child(3){display:none;}
+}
 
 /* ---------- feature list ---------- */
 .feature-grid{

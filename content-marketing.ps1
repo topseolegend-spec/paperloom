@@ -71,6 +71,7 @@ $MBody = @{
 
 $MCategory = @{
   slug  = 'marketing-social'
+  accent = '#b4472e'
   name  = 'Marketing &amp; Social'
   short = 'Marketing'
   panel = 'Formats'
