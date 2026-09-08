@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    In-browser card editor
    ========================================================================== */
 
@@ -153,24 +153,51 @@
 }
 .stage-hint svg{flex-shrink:0; color:var(--gold);}
 
-/* right-to-left card text (Urdu / Arabic) */
-.card-preview.is-rtl .card-body{direction:rtl;}
-.card-preview.is-rtl.d-rule .card-body{text-align:right; padding-right:16cqw; padding-left:9cqw;}
-.card-preview.is-rtl.d-rule::before{left:auto; right:7cqw;}
+/* ---------------------------------------------------------------------------
+   Mobile: keep the page in view while you type.
 
-.f-urdu .c-name{font-family:'Noto Nastaliq Urdu', 'Amiri', serif; font-size:7cqw; line-height:1.9;}
-.f-urdu .c-pre, .f-urdu .c-mid, .f-urdu .c-venue{
-  font-family:'Noto Nastaliq Urdu', 'Amiri', serif; letter-spacing:0; line-height:2;
-}
-.f-urdu .c-pre{text-transform:none; font-size:3.4cqw;}
-.f-urdu .c-date{font-family:'Amiri', serif; letter-spacing:.06em;}
-
-.f-amiri .c-name{font-family:'Amiri', serif; font-size:9cqw;}
-.f-amiri .c-pre, .f-amiri .c-mid, .f-amiri .c-venue{font-family:'Amiri', serif; letter-spacing:.02em;}
-.f-amiri .c-pre{text-transform:none;}
-
+   On a phone the preview sits above the form, so the moment you scroll down to
+   a field the thing you are editing is off screen - and a CV form is
+   twenty-two fields long. Once you scroll past it the stage sticks to the top
+   as a compact strip, small enough to leave room for the form and large enough
+   to read the line you are changing.
+   ------------------------------------------------------------------------- */
 @media (max-width:860px){
   .editor-panel{position:static;}
+
+  /* A sticky element only sticks within its own parent's box, and the stage's
+     wrapper is barely taller than the stage itself - so it scrolled away with
+     it. display:contents lifts the stage into the grid, whose height is the
+     whole page plus form, giving it something to stick through. */
+  .detail-grid > div:first-child{display:contents;}
+
+  .detail-stage{
+    position:sticky; top:64px; z-index:6;
+    transition:padding .18s ease, background-color .18s ease;
+  }
+  .detail-stage.is-mini{
+    padding:10px;
+    background:var(--paper);
+    border-color:var(--line);
+    box-shadow:0 6px 18px rgba(23,36,30,.13);
+  }
+  /* the aspect ratio is fixed, so setting the height gives the right width */
+  .detail-stage.is-mini .card-preview,
+  .detail-stage.is-mini .doc-preview{
+    height:32vh; width:auto !important; max-width:100%;
+  }
+  .detail-stage.is-mini .stage-peek{display:block;}
+}
+
+.stage-peek{
+  display:none; position:absolute; top:10px; right:12px;
+  font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-faint); background:none; border:0; cursor:pointer; padding:4px;
+}
+.stage-peek:hover{color:var(--green);}
+
+@media print{
+  .stage-peek{display:none !important;}
 }
 
 @media print{

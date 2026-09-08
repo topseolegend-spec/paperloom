@@ -22,8 +22,18 @@
 <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How should prices be written on a menu?","acceptedAnswer":{"@type":"Answer","text":"Without currency symbols and without trailing zeros where you can - 950 rather than PKR 950.00. Restaurants have measured this repeatedly: the more a price looks like a price, the more attention it takes from the dish."}},{"@type":"Question","name":"How many dishes should a section have?","acceptedAnswer":{"@type":"Answer","text":"Four to seven. Longer sections slow people down and push the kitchen towards ingredients it cannot keep fresh."}},{"@type":"Question","name":"What paper should a menu be printed on?","acceptedAnswer":{"@type":"Answer","text":"Something you can wipe. 250gsm or heavier with a matt laminate survives a service; plain paper does not last a week."}}]}</script>
 </head>
-<body>
+<body data-root="../../">
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="search-overlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search templates">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input type="search" id="search-input" placeholder="Search templates - CV, invoice, nikah, poster..." autocomplete="off">
+      <button type="button" class="search-close" aria-label="Close search">Esc</button>
+    </div>
+    <div class="search-results" role="listbox" aria-label="Results"></div>
+  </div>
+</div>
 <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="../../">
@@ -33,6 +43,9 @@
         </svg>
         <span class="brand-name">Paperloom</span>
       </a>
+      <button class="search-open" type="button" aria-label="Search templates">
+        <svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
       <button class="nav-toggle" aria-expanded="false" aria-label="Menu">
         <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.6"/></svg>
       </button>
@@ -149,6 +162,7 @@
     </div>
   </footer>
 <script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/search.js" defer></script>
 
 </body>
 </html>

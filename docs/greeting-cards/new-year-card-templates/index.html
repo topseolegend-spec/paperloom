@@ -22,8 +22,18 @@
 <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When should New Year cards be sent?","acceptedAnswer":{"@type":"Answer","text":"Late December, or the first week of January if you missed the Christmas post. A card arriving in the first week of the year gets more attention than one lost in the December pile."}},{"@type":"Question","name":"What do you write in a New Year card for a client?","acceptedAnswer":{"@type":"Answer","text":"Thank them for the year's work in one line and wish them well in the next. Keep it short - a client card that reads like marketing gets binned."}},{"@type":"Question","name":"Can I put the year on the card?","acceptedAnswer":{"@type":"Answer","text":"Yes, and on a New Year card it usually helps. Set it in the greeting line and it becomes the largest thing on the card."}}]}</script>
 </head>
-<body>
+<body data-root="../../">
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="search-overlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search templates">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input type="search" id="search-input" placeholder="Search templates - CV, invoice, nikah, poster..." autocomplete="off">
+      <button type="button" class="search-close" aria-label="Close search">Esc</button>
+    </div>
+    <div class="search-results" role="listbox" aria-label="Results"></div>
+  </div>
+</div>
 <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="../../">
@@ -33,6 +43,9 @@
         </svg>
         <span class="brand-name">Paperloom</span>
       </a>
+      <button class="search-open" type="button" aria-label="Search templates">
+        <svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
       <button class="nav-toggle" aria-expanded="false" aria-label="Menu">
         <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.6"/></svg>
       </button>
@@ -197,6 +210,7 @@
     </div>
   </footer>
 <script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/search.js" defer></script>
 
 </body>
 </html>

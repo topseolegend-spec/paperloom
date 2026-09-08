@@ -116,6 +116,9 @@ function Get-Header($depth, $current) {
         </svg>
         <span class="brand-name">$($Site.Name)</span>
       </a>
+      <button class="search-open" type="button" aria-label="Search templates">
+        <svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
       <button class="nav-toggle" aria-expanded="false" aria-label="Menu">
         <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.6"/></svg>
       </button>
@@ -214,14 +217,25 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
-<body>
+<body data-root="$r">
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="search-overlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search templates">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11.5 11.5L16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input type="search" id="search-input" placeholder="Search templates - CV, invoice, nikah, poster..." autocomplete="off">
+      <button type="button" class="search-close" aria-label="Close search">Esc</button>
+    </div>
+    <div class="search-results" role="listbox" aria-label="Results"></div>
+  </div>
+</div>
 $header
 <main id="main">
 $body
 </main>
 $footer
 <script src="${r}assets/js/main.js"></script>
+<script src="${r}assets/js/search.js" defer></script>
 $extraScripts
 </body>
 </html>
@@ -1337,6 +1351,33 @@ function Build-Favicon {
   Write-File (Join-Path $Out 'assets\favicon.svg') $svg
 }
 
+# Search index. 172 templates across 44 subcategories with no way to search
+# them was the biggest thing missing; this is small enough (a few tens of KB)
+# to fetch once and filter in the browser, and needs no server.
+function Build-SearchIndex {
+  $rows = New-Object System.Collections.ArrayList
+  foreach ($cat in $Categories) {
+    $m = $cat.meta
+    foreach ($s in $cat.subs) {
+      [void]$rows.Add([ordered]@{
+        t = 'c'; n = $s.name; c = $m.name; u = "$($m.slug)/$($s.slug)/"
+      })
+      foreach ($tpl in $s.templates) {
+        [void]$rows.Add([ordered]@{
+          t = 't'; n = $tpl.name; c = $s.name; u = "$($m.slug)/$($s.slug)/$($tpl.slug)/"
+          s = ($tpl.style -replace '&middot;', '-')
+        })
+      }
+    }
+  }
+  foreach ($g in $AllGuides) {
+    [void]$rows.Add([ordered]@{ t = 'g'; n = $g.h1; c = 'Guide'; u = "guides/$($g.slug)/" })
+  }
+  # ConvertTo-Json escapes what needs escaping; -Compress keeps the file small.
+  Write-File (Join-Path $Out 'search.json') ($rows | ConvertTo-Json -Compress -Depth 3)
+  Write-Output "  search index: $($rows.Count) entries"
+}
+
 function Build-Sitemap {
   $entries = ($Urls | ForEach-Object { "<url><loc>$_</loc><lastmod>$Today</lastmod></url>" }) -join ''
   $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + $entries + '</urlset>'
@@ -1367,6 +1408,7 @@ Build-Privacy
 Build-Terms
 Build-404
 Build-Favicon
+Build-SearchIndex
 Build-Sitemap
 
 Write-Output "Built $($Urls.Count) pages into $Out"

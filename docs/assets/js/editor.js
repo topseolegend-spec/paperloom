@@ -407,6 +407,30 @@
   var printBtn = document.querySelector('[data-print]');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 
+  // ---- mobile: shrink the stage once it is scrolled past --------------------
+  // A sentinel above the stage tells us when the full-size preview has left the
+  // top of the screen; from then on it sticks as a compact strip so the page
+  // stays visible while the form below it is filled in.
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    var sentinel = document.createElement('div');
+    sentinel.style.cssText = 'height:1px;margin:0;padding:0;';
+    stage.parentNode.insertBefore(sentinel, stage);
+
+    var peek = document.createElement('button');
+    peek.type = 'button';
+    peek.className = 'stage-peek';
+    peek.textContent = 'Expand';
+    peek.addEventListener('click', function () {
+      sentinel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    stage.appendChild(peek);
+
+    new IntersectionObserver(function (entries) {
+      stage.classList.toggle('is-mini', !entries[0].isIntersecting);
+    }, { rootMargin: '-70px 0px 0px 0px' }).observe(sentinel);
+  })();
+
   // ---- PNG download -------------------------------------------------------
 
   var pngBtn = document.querySelector('[data-png]');
