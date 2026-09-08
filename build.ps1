@@ -12,6 +12,7 @@ $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content-greeting.ps1')
 . (Join-Path $Root 'content-marketing.ps1')
 . (Join-Path $Root 'content-education.ps1')
+. (Join-Path $Root 'content-personal.ps1')
 . (Join-Path $Root 'ornaments.ps1')
 
 # Weddings ke subcategories purane format mein hain - unhein wahi defaults de dein
@@ -27,9 +28,10 @@ $Categories = @(
   @{ meta = $BizCategory; subs = $BizSubcats },
   @{ meta = $GCategory;   subs = $GSubcats },
   @{ meta = $MCategory;   subs = $MSubcats },
-  @{ meta = $ECategory;   subs = $ESubcats }
+  @{ meta = $ECategory;   subs = $ESubcats },
+  @{ meta = $PCategory;   subs = $PSubcats }
 )
-$AllGuides = @($Guides) + @($BizGuides) + @($GGuides) + @($MGuides) + @($EGuides)
+$AllGuides = @($Guides) + @($BizGuides) + @($GGuides) + @($MGuides) + @($EGuides) + @($PGuides)
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -71,32 +73,35 @@ function Get-Nav($depth, $current) {
   $cAbout   = if ($current -eq 'about')   { ' aria-current="page"' } else { '' }
   $cContact = if ($current -eq 'contact') { ' aria-current="page"' } else { '' }
 
-  $drops = ''
-  $n = 0
+  # One dropdown listing the categories, rather than one dropdown each. At six
+  # categories a per-category header no longer fits on a line, and search now
+  # covers getting to a specific template quickly.
+  $cards = ''
   foreach ($cat in $Categories) {
-    $n++
     $m = $cat.meta
-    $items = ($cat.subs | ForEach-Object { "<a href=`"${r}$($m.slug)/$($_.slug)/`">$($_.nav)</a>" }) -join ''
-    # Header ek line par rehna chahiye; poora naam dropdown aur footer mein hai.
-    $label = if ($m.short) { $m.short } else { $m.name }
-    $drops += @"
-<div class="has-dropdown">
-          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="$n">$label
-            <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
-          <div class="dropdown-panel" data-dd-panel="$n" hidden>
-            <p class="panel-head">$($m.panel)</p>
-            <a href="${r}$($m.slug)/">All $($m.name.ToLower()) templates</a>
-            $items
-          </div>
-        </div>
-
+    $count = 0
+    foreach ($s in $cat.subs) { $count += $s.templates.Count }
+    $cards += @"
+<a class="dd-cat" href="${r}$($m.slug)/">
+              <span class="dd-cat-name">$($m.name)</span>
+              <span class="dd-cat-blurb">$($m.blurb)</span>
+              <span class="dd-cat-count">$count templates</span>
+            </a>
 "@
   }
 @"
 <nav class="nav" aria-label="Main">
         <a class="nav-link" href="$r"$cHome>Home</a>
-        $drops<a class="nav-link" href="${r}guides/"$cGuides>Guides</a>
+        <div class="has-dropdown">
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="1">Templates
+            <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <div class="dropdown-panel dropdown-wide" data-dd-panel="1" hidden>
+            <p class="panel-head">Browse by category</p>
+            $cards
+          </div>
+        </div>
+        <a class="nav-link" href="${r}guides/"$cGuides>Guides</a>
         <a class="nav-link" href="${r}about/"$cAbout>About</a>
         <a class="nav-link" href="${r}contact/"$cContact>Contact</a>
       </nav>
@@ -214,6 +219,7 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="stylesheet" href="${r}assets/css/docs.css">
 <link rel="stylesheet" href="${r}assets/css/promo.css">
 <link rel="stylesheet" href="${r}assets/css/school.css">
+<link rel="stylesheet" href="${r}assets/css/personal.css">
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
@@ -533,6 +539,123 @@ function Get-Diploma($s, $t, $ec, $aa) {
   Doc-Shell $s $t $ec $aa $inner
 }
 
+# =============================================================================
+#  Personal &amp; lifestyle documents.
+# =============================================================================
+
+function Get-Calendar($s, $t, $ec, $aa) {
+  $b = $t.body
+  # Din ke numbers yahan nahi likhe jate - editor.js unhein month aur year se
+  # nikaalta hai. Yahan sirf khali grid banti hai: 7 columns, 6 rows.
+  $heads = ''
+  foreach ($d in @('Mon','Tue','Wed','Thu','Fri','Sat','Sun')) { $heads += "<span class=`"cal-h`">$d</span>" }
+  $cells = ''
+  foreach ($i in 1..42) { $cells += '<span class="cal-cell"></span>' }
+  $inner = '<div class="school cal">' +
+    '<header class="cal-head">' + (Fld $b 'title' 'cal-title' 'p') +
+      '<p class="cal-when">' + (Fld $b 'month' 'cal-month' 'span') + (Fld $b 'year' 'cal-year' 'span') + '</p>' +
+    '</header>' +
+    "<div class=`"cal-grid`" data-calendar>$heads$cells</div>" +
+    (Fld $b 'note' 'sc-foot' 'div') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Planner($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school">' + (Get-SchoolHead $b 'title' 'meta') +
+    '<section class="sc-block"><p class="sc-sec" data-field="secTop">' + $b['secTop'] + '</p>' +
+      '<div class="pl-top" data-field="top">' + $b['top'] + '</div></section>' +
+    '<section class="sc-block pl-day">' + (Fld $b 'secPlan' 'sc-sec' 'p') +
+      '<div class="pl-grid">' +
+        '<div class="pl-col pl-times">' + (Fld $b 'times' 'pl-cells' 'div') + '</div>' +
+        '<div class="pl-col">' + (Fld $b 'slots' 'pl-cells' 'div') + '</div>' +
+      '</div></section>' +
+    '<section class="sc-block">' + (Fld $b 'secNotes' 'sc-sec' 'p') +
+      (Fld $b 'notes' 'pl-notes' 'div') + '</section></div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Todo($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school">' + (Get-SchoolHead $b 'title' 'meta') +
+    '<div class="td-items">' + (Fld $b 'items' 'td-list' 'div') + '</div>' +
+    (Fld $b 'footer' 'sc-foot' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+# Income and spending are the same two-column block twice over.
+function Get-BudgetBlock($b, $sec, $names, $amounts) {
+  '<section class="bd-block">' + (Fld $b $sec 'sc-sec' 'p') +
+    '<div class="bd-table">' +
+      '<div class="bd-col">' + (Fld $b $names 'bd-cells' 'div') + '</div>' +
+      '<div class="bd-col bd-num">' + (Fld $b $amounts 'bd-cells' 'div') + '</div>' +
+    '</div></section>'
+}
+
+function Get-Budget($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school">' + (Get-SchoolHead $b 'title' 'meta') +
+    (Get-BudgetBlock $b 'secIn' 'inNames' 'inAmounts') +
+    (Get-BudgetBlock $b 'secOut' 'outNames' 'outAmounts') +
+    '<div class="bd-total">' + (Fld $b 'totalLabel' 'bd-tl' 'span') + (Fld $b 'total' 'bd-tv' 'span') + '</div>' +
+    (Fld $b 'notes' 'sc-foot' 'div') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Recipe($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school rp">' +
+    '<header class="rp-head">' + (Fld $b 'title' 'rp-title' 'p') + (Fld $b 'meta' 'rp-meta' 'p') + '</header>' +
+    '<div class="rp-body">' +
+      '<section class="rp-ing">' + (Fld $b 'secIng' 'sc-sec' 'p') + (Fld $b 'ingredients' 'rp-list' 'div') + '</section>' +
+      '<section class="rp-method">' + (Fld $b 'secMethod' 'sc-sec' 'p') + (Fld $b 'method' 'rp-steps' 'div') + '</section>' +
+    '</div>' + (Fld $b 'note' 'rp-note' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Voucher($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="vc">' +
+    (Fld $b 'business' 'vc-biz' 'p') +
+    (Fld $b 'title' 'vc-title' 'p') +
+    (Fld $b 'value' 'vc-value' 'p') +
+    '<div class="vc-rows">' +
+      '<p class="vc-row">' + (Fld $b 'to' 'vc-v' 'span') + '</p>' +
+      '<p class="vc-row">' + (Fld $b 'from' 'vc-v' 'span') + '</p>' +
+      '<p class="vc-row"><span class="vc-k">Valid until</span>' + (Fld $b 'expiry' 'vc-v' 'span') + '</p>' +
+      '<p class="vc-row vc-code"><span class="vc-k">Code</span>' + (Fld $b 'code' 'vc-v' 'span') + '</p>' +
+    '</div>' +
+    (Fld $b 'terms' 'vc-terms' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Habit($s, $t, $ec, $aa) {
+  $b = $t.body
+  $days = ''
+  foreach ($n in 1..31) { $days += "<span>$n</span>" }
+  $inner = '<div class="school">' + (Get-SchoolHead $b 'title' 'meta') +
+    '<div class="at-grid">' +
+      '<div class="at-names"><span class="at-h">Habit</span><div class="at-body">' +
+        (Fld $b 'habits' 'at-cells' 'div') + '</div></div>' +
+      "<div class=`"at-days`"><div class=`"at-nums`">$days</div><div class=`"at-ticks`"></div></div>" +
+    '</div>' + (Fld $b 'footer' 'sc-foot' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Meal($s, $t, $ec, $aa) {
+  $b = $t.body
+  $cols = '<div class="tt-col tt-times"><span class="tt-h">Meal</span>' + (Fld $b 'meals' 'tt-cells' 'div') + '</div>'
+  foreach ($d in @(@('mon','Mon'), @('tue','Tue'), @('wed','Wed'), @('thu','Thu'),
+                   @('fri','Fri'), @('sat','Sat'), @('sun','Sun'))) {
+    $cols += "<div class=`"tt-col`"><span class=`"tt-h`">$($d[1])</span>" + (Fld $b $d[0] 'tt-cells' 'div') + '</div>'
+  }
+  $inner = '<div class="school ml">' + (Get-SchoolHead $b 'title' 'meta') +
+    "<div class=`"tt-grid ml-grid`">$cols</div>" +
+    '<section class="ml-list"><span class="rc-h">Shopping list</span>' +
+      (Fld $b 'list' 'sc-text' 'div') + '</section></div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
 # Marketing graphics doc-preview par chalte hain: ratio, fit-to-page, ornaments
 # aur background treatments sab wahan pehle se hain - sirf sizes naye hain.
 function Get-Promo($s, $t, $ec, $aa) {
@@ -615,6 +738,14 @@ function Get-Preview($s, $t, $extraClass, $allArt) {
     'flashcard'  { Get-Flashcard $s $t $extraClass $allArt }
     'idcard'     { Get-IdCard $s $t $extraClass $allArt }
     'diploma'    { Get-Diploma $s $t $extraClass $allArt }
+    'calendar'   { Get-Calendar $s $t $extraClass $allArt }
+    'planner'    { Get-Planner $s $t $extraClass $allArt }
+    'todo'       { Get-Todo $s $t $extraClass $allArt }
+    'budget'     { Get-Budget $s $t $extraClass $allArt }
+    'recipe'     { Get-Recipe $s $t $extraClass $allArt }
+    'voucher'    { Get-Voucher $s $t $extraClass $allArt }
+    'habit'      { Get-Habit $s $t $extraClass $allArt }
+    'meal'       { Get-Meal $s $t $extraClass $allArt }
     default      { Get-Card $t $extraClass $allArt }
   }
 }
@@ -1147,9 +1278,10 @@ $crumb
           landscape, and business cards are 3.5&times;2 inches. Downloads come out at 300dpi, which
           is what a print shop asks for.</p>
         <h2>What we are working on</h2>
-        <p>Five categories so far, in the order they were drawn: weddings and events, business and
-          office, greeting cards, marketing and social, and school documents. Each one is added
-          whole rather than a few designs at a time, so a category is either finished or not there.</p>
+        <p>Six categories so far, in the order they were drawn: weddings and events, business and
+          office, greeting cards, marketing and social, school documents, and the personal
+          paperwork of an ordinary week. Each one is added whole rather than a few designs at a
+          time, so a category is either finished or not there.</p>
         <h2>Get in touch</h2>
         <p>If a design does not print the way you expected, or you want an occasion added, the
           <a href="../contact/">contact page</a> is the fastest way to reach us.</p>

@@ -128,6 +128,14 @@ $SizeSets = @{
   idcard = @(
     @{ cls='sz-idcard';   label='85 x 54 mm'; note='Card size, fits a laminating pouch' },
     @{ cls='sz-idcard-p'; label='Portrait';   note='For lanyards' })
+
+  # Personal formats
+  recipe = @(
+    @{ cls='sz-recipe';    label='4 x 6 in'; note='Standard recipe box card' },
+    @{ cls='sz-recipe-a5'; label='A5';       note='For longer recipes' })
+  voucher = @(
+    @{ cls='sz-voucher';   label='7 x 3 in'; note='Voucher strip' },
+    @{ cls='sz-voucher-a6'; label='A6';      note='Postcard size' })
 }
 
 # kind -> konsa size set milega (subcategory "sizeset" is se pehle aati hai)
@@ -138,6 +146,8 @@ $SizeSetFor = @{
   promo='poster'; logo='logo'
   worksheet='doc'; lesson='doc'; timetable='doc'; report='doc'; attendance='doc'
   flashcard='flash'; idcard='idcard'; diploma='cert'
+  calendar='doc'; planner='doc'; todo='doc'; budget='doc'; habit='doc'; meal='doc'
+  recipe='recipe'; voucher='voucher'
 }
 
 # --- editor form fields -------------------------------------------------------

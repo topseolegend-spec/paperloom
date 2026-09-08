@@ -123,6 +123,18 @@ p{margin:0 0 1em;}
 }
 .dropdown-panel a:hover{background:var(--surface-2); color:var(--green); text-decoration:none;}
 
+/* the categories panel: one card per category rather than a list of every
+   subcategory, which at six categories would be forty-four links */
+.dropdown-wide{min-width:340px;}
+.dd-cat{display:block; padding:11px 12px; border-radius:var(--radius);}
+.dd-cat-name{display:block; font-weight:600; font-size:14.5px; color:var(--ink);}
+.dd-cat:hover .dd-cat-name{color:var(--green);}
+.dd-cat-blurb{display:block; font-size:13px; color:var(--ink-soft); margin-top:2px; line-height:1.45;}
+.dd-cat-count{
+  display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--gold); margin-top:5px;
+}
+
 .nav-toggle{
   display:none; margin-left:auto;
   background:none; border:1px solid var(--line); border-radius:var(--radius);

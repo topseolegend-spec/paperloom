@@ -407,6 +407,51 @@
   var printBtn = document.querySelector('[data-print]');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 
+  // ---- calendar: fill the dates from the month and year --------------------
+  // The date cells are not fields - nobody wants to type thirty-one numbers.
+  // They are worked out from whatever month and year are in the boxes, so leap
+  // years and the weekday the month starts on are handled for you.
+  var calGrid = card.querySelector('[data-calendar]');
+  if (calGrid) {
+    var MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july',
+                  'august', 'september', 'october', 'november', 'december'];
+
+    var fillCalendar = function () {
+      var cells = calGrid.querySelectorAll('.cal-cell');
+      if (!cells.length) return;
+
+      var mRaw = (htmlToText(state.texts.month || '')).trim().toLowerCase();
+      var yRaw = parseInt((htmlToText(state.texts.year || '')).replace(/\D/g, ''), 10);
+
+      var mi = -1;
+      for (var i = 0; i < 12; i++) {
+        if (mRaw && MONTHS[i].indexOf(mRaw.slice(0, 3)) === 0) { mi = i; break; }
+      }
+      if (mi < 0 || !yRaw || yRaw < 1000 || yRaw > 9999) {
+        // Not a month we recognise - leave the grid blank rather than guessing.
+        cells.forEach(function (c) { c.textContent = ''; c.classList.add('is-blank'); });
+        return;
+      }
+
+      var first = new Date(yRaw, mi, 1);
+      // Date.getDay() is Sunday-first; the grid starts on Monday.
+      var offset = (first.getDay() + 6) % 7;
+      var days = new Date(yRaw, mi + 1, 0).getDate();
+
+      cells.forEach(function (c, idx) {
+        var day = idx - offset + 1;
+        var inMonth = day >= 1 && day <= days;
+        c.textContent = inMonth ? String(day) : '';
+        c.classList.toggle('is-blank', !inMonth);
+      });
+    };
+
+    // refit runs on every change - both apply() and the debounced text path go
+    // through it - so hooking it once covers everything.
+    var baseRefit = refit;
+    refit = function () { fillCalendar(); baseRefit(); };
+  }
+
   // ---- mobile: shrink the stage once it is scrolled past --------------------
   // A sentinel above the stage tells us when the full-size preview has left the
   // top of the screen; from then on it sticks as a compact strip so the page

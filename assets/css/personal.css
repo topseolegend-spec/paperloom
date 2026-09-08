@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Personal documents - calendars, planners, to-do lists, budgets, recipe
+   cards, gift vouchers, habit trackers and meal planners.
+
+   Sits on the same .doc-preview shell as the CVs and school documents, and
+   reuses their grid machinery: the timetable columns for the meal planner, the
+   attendance register for the habit tracker.
+
+   Most of these are printed and then filled in by hand, so rows are sized for
+   a pen rather than for the screen.
+   ========================================================================== */
+
+.doc-preview.sz-recipe{aspect-ratio:6/4;}
+.doc-preview.sz-recipe-a5{aspect-ratio:210/148;}
+.doc-preview.sz-voucher{aspect-ratio:7/3;}
+.doc-preview.sz-voucher-a6{aspect-ratio:148/105;}
+
+/* ---------- calendar ------------------------------------------------------ */
+/* The date cells are filled in by editor.js from the month and year, so the
+   markup here is just an empty seven by six grid. */
+
+.cal{padding:7cqw;}
+.cal-head{display:flex; align-items:baseline; justify-content:space-between; gap:4cqw; margin-bottom:4cqw;}
+.cal-title{
+  font-family:'Karla', sans-serif; font-size:2.2cqw;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--c-soft);
+}
+.cal-title:empty{display:none;}
+.cal-when{display:flex; align-items:baseline; gap:2cqw;}
+.cal-month{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(7cqw * var(--name-scale)); line-height:1; color:var(--c-ink);
+}
+.cal-year{
+  font-family:'Karla', sans-serif; font-size:3cqw;
+  letter-spacing:.16em; color:var(--c-accent);
+}
+.f-cormorant .cal-month{font-family:'Cormorant Garamond', serif; font-size:calc(9cqw * var(--name-scale));}
+.f-josefin .cal-month{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.06em;}
+.f-marcellus .cal-month{font-family:'Marcellus', serif;}
+
+.cal-grid{
+  flex:1; display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  grid-auto-rows:1fr;
+  border-top:1.5px solid var(--c-accent);
+  border-left:1px solid rgba(var(--c-ink-rgb), 0.12);
+}
+.cal-h{
+  font-family:'Karla', sans-serif; font-size:1.6cqw; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);
+  text-align:center; padding:1.4cqw 0;
+  border-right:1px solid rgba(var(--c-ink-rgb), 0.12);
+  border-bottom:1px solid rgba(var(--c-ink-rgb), 0.2);
+}
+.cal-cell{
+  border-right:1px solid rgba(var(--c-ink-rgb), 0.12);
+  border-bottom:1px solid rgba(var(--c-ink-rgb), 0.12);
+  padding:1.2cqw;
+  font-family:'Karla', sans-serif; font-size:2cqw; color:var(--c-ink);
+  font-variant-numeric:tabular-nums;
+}
+/* days outside the month keep the grid square but read as empty */
+.cal-cell.is-blank{background:rgba(var(--c-ink-rgb), 0.03); color:transparent;}
+
+.cal-bold .cal-h{background:var(--c-accent); color:#fff; border-bottom-color:var(--c-accent);}
+.cal-bold .cal-cell:nth-child(7n+6),
+.cal-bold .cal-cell:nth-child(7n){background:rgba(var(--c-accent-rgb), 0.05);}
+.cal-warm .cal-cell:nth-child(7n+6),
+.cal-warm .cal-cell:nth-child(7n){background:rgba(var(--c-accent-rgb), 0.08);}
+.cal-warm .cal-h{border-bottom-width:2px;}
+
+/* ---------- daily planner ------------------------------------------------- */
+
+.pl-top{
+  font-family:'Karla', sans-serif; font-size:2.1cqw; color:var(--c-ink);
+  line-height:calc(var(--row) * 1.5);
+  background:repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--row) * 1.5 - 1px),
+    rgba(var(--c-ink-rgb), 0.18) calc(var(--row) * 1.5 - 1px),
+    rgba(var(--c-ink-rgb), 0.18) calc(var(--row) * 1.5));
+}
+.pl-day{flex:1; display:flex; flex-direction:column;}
+.pl-grid{display:grid; grid-template-columns:18% 1fr; border-top:1px solid rgba(var(--c-ink-rgb), 0.18); flex:1;}
+.pl-col{border-right:1px solid rgba(var(--c-ink-rgb), 0.12);}
+.pl-col:last-child{border-right:0;}
+.pl-cells{
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-ink);
+  line-height:calc(var(--row) * 1.4); padding:0 1.4cqw;
+  background:repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--row) * 1.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) * 1.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) * 1.4));
+}
+.pl-times .pl-cells{color:var(--c-accent); font-variant-numeric:tabular-nums;}
+.pl-notes{
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-soft);
+  line-height:calc(var(--row) * 1.4);
+  background:repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--row) * 1.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) * 1.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) * 1.4));
+}
+.pl-boxed .pl-cells{
+  background:repeating-linear-gradient(to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) calc(var(--row) * 1.4),
+    transparent calc(var(--row) * 1.4), transparent calc(var(--row) * 2.8));
+}
+.pl-panel .sc-block{
+  background:rgba(var(--c-accent-rgb), 0.06);
+  padding:2.6cqw 3cqw; border-left:2px solid var(--c-accent);
+}
+.pl-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw; border-bottom:0;
+}
+.pl-band .sc-title{color:#fff;}
+.pl-band .sc-meta{color:rgba(255,255,255,.85);}
+
+/* ---------- to-do list ---------------------------------------------------- */
+/* A tick box per line, drawn as a repeating background so it works however
+   many tasks are typed - and draws an empty sheet when none are. */
+
+/* Tasks are lines inside one field, so there is no element per row to hang a
+   tick box on. Both the box and the rule are drawn as backgrounds repeating at
+   exactly the line height - which means they work for any number of tasks, and
+   an empty list still prints as a sheet of ruled boxes. */
+.td-items{flex:1;}
+.td-list{
+  --td-row:calc(var(--row) * 1.7);
+  font-family:'Karla', sans-serif; font-size:2.2cqw; color:var(--c-ink);
+  line-height:var(--td-row);
+  padding-left:7cqw;
+  min-height:calc(var(--row) * 1.7 * 14);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Crect x='3.5' y='3.5' width='17' height='17' fill='none' stroke='%2399a0a6' stroke-width='1.6' rx='2'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent calc(var(--td-row) - 1px),
+      rgba(var(--c-ink-rgb), 0.14) calc(var(--td-row) - 1px),
+      rgba(var(--c-ink-rgb), 0.14) var(--td-row));
+  background-repeat:repeat-y, repeat;
+  background-position:0 0, 0 0;
+  background-size:4.4cqw var(--td-row), auto;
+}
+.td-boxed .td-list{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Crect x='3.5' y='3.5' width='17' height='17' fill='none' stroke='%2399a0a6' stroke-width='1.6' rx='2'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(to bottom,
+      rgba(var(--c-accent-rgb), 0.05) 0, rgba(var(--c-accent-rgb), 0.05) var(--td-row),
+      transparent var(--td-row), transparent calc(var(--td-row) * 2));
+}
+.td-panel .td-items{
+  background:rgba(var(--c-accent-rgb), 0.05);
+  padding:1.4cqw 1.6cqw 1.4cqw 0; border-left:2px solid var(--c-accent);
+}
+.td-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw; border-bottom:0;
+}
+.td-band .sc-title{color:#fff;}
+.td-band .sc-meta{color:rgba(255,255,255,.85);}
+
+/* ---------- budget -------------------------------------------------------- */
+
+.bd-block{margin-bottom:3.4cqw;}
+.bd-table{display:grid; grid-template-columns:1fr auto; gap:0 4cqw; border-top:1px solid rgba(var(--c-accent-rgb), 0.45);}
+.bd-cells{
+  font-family:'Karla', sans-serif; font-size:1.95cqw; color:var(--c-ink);
+  line-height:var(--row);
+  background:repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--row) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) var(--row));
+}
+.bd-num{text-align:right; font-variant-numeric:tabular-nums;}
+.bd-total{
+  display:flex; justify-content:space-between; align-items:baseline; gap:4cqw;
+  margin-top:auto; padding:3cqw 0; border-top:2px solid var(--c-accent);
+  font-family:'Karla', sans-serif;
+}
+.bd-tl{font-size:2.4cqw; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);}
+.bd-tv{font-size:4.2cqw; font-weight:700; color:var(--c-ink); font-variant-numeric:tabular-nums;}
+.bd-boxed .bd-cells{
+  background:repeating-linear-gradient(to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) var(--row),
+    transparent var(--row), transparent calc(var(--row) * 2));
+}
+.bd-panel .bd-block{background:rgba(var(--c-accent-rgb), 0.06); padding:2.4cqw 3cqw;}
+.bd-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw; border-bottom:0;
+}
+.bd-band .sc-title{color:#fff;}
+.bd-band .sc-meta{color:rgba(255,255,255,.85);}
+
+/* ---------- recipe card --------------------------------------------------- */
+
+.rp{padding:6cqw;}
+.rp-head{padding-bottom:2.4cqw; border-bottom:1.5px solid var(--c-accent); margin-bottom:3cqw;}
+.rp-title{
+  font-family:'Cormorant Garamond', serif;
+  font-size:calc(6.4cqw * var(--name-scale)); line-height:1.1; color:var(--c-ink);
+}
+.f-tenor .rp-title{font-family:'Tenor Sans', sans-serif; font-size:calc(5.4cqw * var(--name-scale));}
+.f-josefin .rp-title{font-family:'Josefin Sans', sans-serif; font-weight:300; font-size:calc(5.2cqw * var(--name-scale)); letter-spacing:.05em;}
+.f-marcellus .rp-title{font-family:'Marcellus', serif; font-size:calc(5.6cqw * var(--name-scale));}
+.rp-meta{
+  font-family:'Karla', sans-serif; font-size:1.9cqw;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--c-accent); margin-top:1cqw;
+}
+.rp-body{display:grid; grid-template-columns:38% 1fr; gap:4cqw; flex:1; min-height:0;}
+.rp-list, .rp-steps{
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-soft);
+}
+.rp-list{line-height:1.85;}
+.rp-steps{line-height:1.7; counter-reset:step;}
+.rp-note{
+  font-family:'Karla', sans-serif; font-size:1.7cqw; font-style:italic;
+  color:var(--c-soft); margin-top:2.4cqw; padding-top:2cqw;
+  border-top:1px solid rgba(var(--c-ink-rgb), 0.14);
+}
+.rp-note:empty{display:none;}
+.rp-band .rp-head{
+  background:var(--c-accent); color:#fff;
+  margin:-6cqw -6cqw 3cqw; padding:4.5cqw 6cqw 3.5cqw; border-bottom:0;
+}
+.rp-band .rp-title{color:#fff;}
+.rp-band .rp-meta{color:rgba(255,255,255,.85);}
+.rp-panel .rp-ing{background:rgba(var(--c-accent-rgb), 0.07); padding:2.6cqw; margin:-1cqw 0 0 -1cqw;}
+.rp-framed .rp{margin:2.4cqw; border:1px solid var(--c-accent); padding:4cqw;}
+
+/* ---------- gift voucher -------------------------------------------------- */
+
+.vc{
+  flex:1; display:flex; flex-direction:column; justify-content:center;
+  padding:6cqw 7cqw;
+}
+.vc p{margin:0;}
+.vc-biz{
+  font-family:'Karla', sans-serif; font-size:2.4cqw; font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--c-accent);
+}
+.vc-title{
+  font-family:'Karla', sans-serif; font-size:2.2cqw;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--c-soft); margin-top:1.6cqw;
+}
+.vc-value{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(9cqw * var(--name-scale)); line-height:1.05; color:var(--c-ink);
+  margin-top:1cqw;
+}
+.f-cormorant .vc-value{font-family:'Cormorant Garamond', serif; font-size:calc(11cqw * var(--name-scale));}
+.f-cinzel .vc-value{font-family:'Cinzel', serif; font-size:calc(7cqw * var(--name-scale));}
+.f-josefin .vc-value{font-family:'Josefin Sans', sans-serif; font-weight:300;}
+.vc-rows{display:flex; flex-wrap:wrap; gap:1cqw 5cqw; margin-top:3cqw;}
+.vc-row{font-family:'Karla', sans-serif; font-size:2cqw; color:var(--c-soft);}
+.vc-k{letter-spacing:.12em; text-transform:uppercase; font-size:1.7cqw; margin-right:1.2cqw; color:var(--c-accent);}
+.vc-v{color:var(--c-ink);}
+.vc-row:has(> .vc-v:empty){display:none;}
+.vc-terms{
+  font-family:'Karla', sans-serif; font-size:1.6cqw; letter-spacing:.06em;
+  color:var(--c-soft); margin-top:auto; padding-top:2.4cqw;
+}
+.vc-terms:empty{display:none;}
+
+.vc-band .vc{padding-left:12cqw; padding-top:4.5cqw; padding-bottom:4.5cqw;}
+.vc-band::before{
+  content:""; position:absolute; top:0; bottom:0; left:0; width:4cqw;
+  background:var(--c-accent); z-index:2;
+}
+.vc-panel .vc{background:rgba(var(--c-accent-rgb), 0.06); margin:3cqw; padding:5cqw;}
+.vc-framed .vc{margin:3.5cqw; border:1px solid var(--c-accent); padding:5cqw;}
+
+/* ---------- meal planner -------------------------------------------------- */
+/* Reuses the timetable grid, on a taller row because a meal is a few words. */
+
+.ml-grid{grid-template-columns:1fr repeat(7, 1fr);}
+.ml .tt-cells{line-height:calc(var(--row) * 2.4); font-size:1.6cqw;}
+.ml .tt-cells{
+  background:repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--row) * 2.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.1) calc(var(--row) * 2.4 - 1px),
+    rgba(var(--c-ink-rgb), 0.1) calc(var(--row) * 2.4));
+}
+.ml-boxed .tt-cells{
+  background:repeating-linear-gradient(to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) calc(var(--row) * 2.4),
+    transparent calc(var(--row) * 2.4), transparent calc(var(--row) * 4.8));
+}
+.ml-list{margin-top:3.4cqw; padding-top:2.4cqw; border-top:1.5px solid var(--c-accent);}
+.ml-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw; border-bottom:0;
+}
+.ml-band .sc-title{color:#fff;}
+.ml-band .sc-meta{color:rgba(255,255,255,.85);}
+.ml-panel .tt-col:nth-child(even){background:rgba(var(--c-accent-rgb), 0.05);}
+
+/* ---------- habit tracker ------------------------------------------------- */
+/* Uses the attendance register grid; only the row height differs, because a
+   habit sheet holds five or six rows rather than twenty-five. */
+
+.hb-plain, .hb-boxed, .hb-band, .hb-panel{--row-at:8cqw;}
+.hb-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw; border-bottom:0;
+}
+.hb-band .sc-title{color:#fff;}
+.hb-band .sc-meta{color:rgba(255,255,255,.85);}
+.hb-panel .at-h, .hb-panel .at-nums{background:rgba(var(--c-accent-rgb), 0.07);}
+.hb-boxed .at-body{
+  background-image:repeating-linear-gradient(to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) var(--row-at),
+    transparent var(--row-at), transparent calc(var(--row-at) * 2));
+}
