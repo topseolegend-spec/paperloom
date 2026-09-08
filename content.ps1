@@ -94,7 +94,8 @@ $SizeSets = @{
 
 # kind -> konsa size set milega
 $SizeSetFor = @{
-  card='card'; resume='doc'; letter='doc'; invoice='doc'; menu='doc'; letterhead='doc'
+  card='card'; greeting='card'
+  resume='doc'; letter='doc'; invoice='doc'; menu='doc'; letterhead='doc'
   cert='cert'; bcard='bcard'
 }
 

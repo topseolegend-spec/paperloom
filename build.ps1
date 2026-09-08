@@ -9,6 +9,7 @@ $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content.ps1')
 . (Join-Path $Root 'content-business.ps1')
+. (Join-Path $Root 'content-greeting.ps1')
 . (Join-Path $Root 'ornaments.ps1')
 
 # Weddings ke subcategories purane format mein hain - unhein wahi defaults de dein
@@ -21,9 +22,10 @@ foreach ($s in $Subcats) {
 
 $Categories = @(
   @{ meta = $Category;    subs = $Subcats },
-  @{ meta = $BizCategory; subs = $BizSubcats }
+  @{ meta = $BizCategory; subs = $BizSubcats },
+  @{ meta = $GCategory;   subs = $GSubcats }
 )
-$AllGuides = @($Guides) + @($BizGuides)
+$AllGuides = @($Guides) + @($BizGuides) + @($GGuides)
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -356,6 +358,33 @@ function Get-Menu($s, $t, $ec, $aa) {
   Doc-Shell $s $t $ec $aa $inner
 }
 
+# Greeting cards card-preview par chalte hain (documents nahi), magar fields
+# alag hain: bara greeting, message, aur To/From - date/venue nahi.
+function Get-Greeting($s, $t, $ec, $aa) {
+  $b = $t.body
+  $art = Get-ArtLayer $t $aa
+  $bgs  = if ($t.bgstyle) { $t.bgstyle } else { 'bg-plain' }
+  $foil = if ($t.foil) { ' is-foil' } else { '' }
+  $size = if ($s.size) { $s.size } else { 'sz-5x7' }
+  if (-not $ec) { $ec = '' }
+  $style = CardVars $t
+@"
+<div class="card-preview is-greeting $($t.design) $($t.font) $bgs $size$foil $ec" style="$style" data-art="$($t.art)">
+        <div class="card-art">$art</div>
+        <div class="card-body">
+          $(Fld $b 'pre' 'g-pre' 'p')
+          $(Fld $b 'title' 'g-title' 'p')
+          <span class="c-rule"></span>
+          $(Fld $b 'mid' 'g-msg' 'div')
+          <div class="g-sign">
+            $(Fld $b 'to' 'g-to' 'p')
+            $(Fld $b 'from' 'g-from' 'p')
+          </div>
+        </div>
+      </div>
+"@
+}
+
 function Get-Letterhead($s, $t, $ec, $aa) {
   $b = $t.body
   $inner = '<header class="lh-head"><div>' + (Fld $b 'company' 'lh-co' 'p') + (Fld $b 'tagline' 'lh-tag' 'p') + '</div>' +
@@ -375,6 +404,7 @@ function Get-Preview($s, $t, $extraClass, $allArt) {
     'invoice'    { Get-Invoice $s $t $extraClass $allArt }
     'menu'       { Get-Menu $s $t $extraClass $allArt }
     'letterhead' { Get-Letterhead $s $t $extraClass $allArt }
+    'greeting'   { Get-Greeting $s $t $extraClass $allArt }
     default      { Get-Card $t $extraClass $allArt }
   }
 }
@@ -902,8 +932,8 @@ $crumb
           landscape, and business cards are 3.5&times;2 inches. Downloads come out at 300dpi, which
           is what a print shop asks for.</p>
         <h2>What we are working on</h2>
-        <p>Weddings and events came first, then business and office. Greeting cards, social media
-          layouts and school worksheets are being drawn next, in that order.</p>
+        <p>Weddings and events came first, then business and office, then greeting cards. Social
+          media layouts and school worksheets are being drawn next, in that order.</p>
         <h2>Get in touch</h2>
         <p>If a design does not print the way you expected, or you want an occasion added, the
           <a href="../contact/">contact page</a> is the fastest way to reach us.</p>

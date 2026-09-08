@@ -234,6 +234,110 @@
 
 .d-arch .card-body{padding-top:19cqw; padding-bottom:15cqw;}
 
+/* ==========================================================================
+   GREETING CARDS
+   Same 5x7 card, different job: one big greeting, a short message, and a
+   signature line. Four directions per occasion, because a card for a colleague
+   and a card for your mother should not look the same.
+   ========================================================================== */
+
+.is-greeting .card-body{justify-content:center; gap:0;}
+
+.g-pre{
+  font-family:'Karla', sans-serif;
+  font-size:3cqw; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--c-soft); margin:0 0 3cqw;
+}
+.g-pre:empty{display:none;}
+.g-title{
+  font-family:'Cormorant Garamond', serif;
+  font-size:calc(12cqw * var(--name-scale) * var(--name-fit,1));
+  line-height:1.05; color:var(--c-ink); margin:0;
+}
+.g-msg{
+  font-family:'Karla', sans-serif;
+  font-size:3.1cqw; line-height:1.75; color:var(--c-soft);
+  margin:3.5cqw 0 0; max-width:78%;
+}
+.g-msg:empty{display:none;}
+.g-sign{margin-top:auto; padding-top:5cqw;}
+.g-to, .g-from{
+  font-family:'Karla', sans-serif;
+  font-size:2.7cqw; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--c-soft); margin:0;
+}
+.g-to{color:var(--c-accent); margin-bottom:1cqw;}
+.g-to:empty, .g-from:empty{display:none;}
+
+/* the greeting takes whichever face is chosen, at a size that suits it */
+.is-greeting.f-script .g-title{font-family:'Great Vibes', cursive; font-size:calc(14cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.2;}
+.is-greeting.f-parisienne .g-title{font-family:'Parisienne', cursive; font-size:calc(13cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.25;}
+.is-greeting.f-sacramento .g-title{font-family:'Sacramento', cursive; font-size:calc(14cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.2;}
+.is-greeting.f-cinzel .g-title{font-family:'Cinzel', serif; font-size:calc(8cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.05em;}
+.is-greeting.f-cinzel-dec .g-title{font-family:'Cinzel Decorative', serif; font-size:calc(7.6cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.03em;}
+.is-greeting.f-josefin .g-title{font-family:'Josefin Sans', sans-serif; font-size:calc(9cqw * var(--name-scale) * var(--name-fit,1)); font-weight:300; letter-spacing:.08em; text-transform:uppercase;}
+.is-greeting.f-tenor .g-title{font-family:'Tenor Sans', sans-serif; font-size:calc(9cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.04em;}
+.is-greeting.f-marcellus .g-title{font-family:'Marcellus', serif; font-size:calc(9.5cqw * var(--name-scale) * var(--name-fit,1));}
+.is-greeting.f-italiana .g-title{font-family:'Italiana', serif; font-size:calc(11cqw * var(--name-scale) * var(--name-fit,1)); letter-spacing:.04em;}
+.is-greeting.f-libre .g-title{font-family:'Libre Baskerville', serif; font-size:calc(7.6cqw * var(--name-scale) * var(--name-fit,1));}
+.is-greeting.f-playfair .g-title{font-family:'Playfair Display', serif; font-size:calc(9.5cqw * var(--name-scale) * var(--name-fit,1));}
+.is-greeting.f-bodoni .g-title{font-family:'Bodoni Moda', serif; font-size:calc(9.5cqw * var(--name-scale) * var(--name-fit,1));}
+.is-greeting.f-urdu .g-title{font-family:'Noto Nastaliq Urdu','Amiri',serif; font-size:calc(7.5cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.9;}
+.is-greeting.f-amiri .g-title{font-family:'Amiri', serif; font-size:calc(10cqw * var(--name-scale) * var(--name-fit,1));}
+.is-greeting.f-naskh .g-title{font-family:'Noto Naskh Arabic','Amiri',serif; font-size:calc(8.5cqw * var(--name-scale) * var(--name-fit,1)); line-height:1.7;}
+
+.is-greeting.f-urdu .g-pre, .is-greeting.f-urdu .g-msg,
+.is-greeting.f-amiri .g-pre, .is-greeting.f-amiri .g-msg,
+.is-greeting.f-naskh .g-pre, .is-greeting.f-naskh .g-msg{
+  text-transform:none; letter-spacing:0; line-height:2;
+}
+
+/* --- plain: nothing but type, and room around it ------------------------- */
+.g-plain .card-body{padding:14cqw 11cqw;}
+.g-plain .c-rule{width:11cqw; margin:3.5cqw 0 0;}
+
+/* --- modern: greeting hard left, a colour band along the foot ------------- */
+.g-modern .card-body{
+  align-items:flex-start; text-align:left;
+  padding:13cqw 10cqw 17cqw;
+}
+.g-modern .g-msg{max-width:92%;}
+.g-modern .c-rule{width:14cqw; height:3px; margin:3.5cqw 0 0; opacity:1;}
+.g-modern::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:6cqw;
+  background:var(--c-accent); z-index:1;
+}
+.g-modern .g-sign{padding-bottom:2cqw;}
+
+/* --- soft: a little decoration, script greeting -------------------------- */
+.g-soft .card-body{padding:16cqw 13cqw;}
+.g-soft .g-msg{max-width:74%;}
+.g-soft .c-rule{width:13cqw; margin:3cqw 0 0;}
+
+/* --- rich: framed, decorated, and usually foiled ------------------------- */
+.g-rich .card-body{padding:17cqw 13cqw;}
+.g-rich::before{
+  content:""; position:absolute; inset:5cqw; z-index:1;
+  border:1px solid var(--c-accent); opacity:.5;
+}
+.g-rich::after{
+  content:""; position:absolute; inset:6.4cqw; z-index:1;
+  border:1px solid var(--c-accent); opacity:.28;
+}
+.g-rich .g-msg{max-width:72%;}
+.g-rich .g-pre{font-size:2.7cqw;}
+
+/* ring ornaments need the wording pulled in, greeting cards included */
+.card-preview.is-greeting[data-art="wreath"] .card-body,
+.card-preview.is-greeting[data-art="mandala"] .card-body{padding:15cqw 19cqw;}
+
+/* Ornaments that sit at the foot of the card would otherwise run through the
+   To / From lines, which are pinned to the bottom. Keyed off data-art so the
+   clearance follows whatever ornament the reader picks. */
+.card-preview.is-greeting[data-art="botanical"] .card-body,
+.card-preview.is-greeting[data-art="flourish"] .card-body,
+.card-preview.is-greeting[data-art="bouquet"] .card-body{padding-bottom:21cqw;}
+
 /* ---------- print -------------------------------------------------------- */
 
 @media print{
