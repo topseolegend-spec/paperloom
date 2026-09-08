@@ -205,8 +205,8 @@ $BizCategory = @{
   panel = 'Document types'
   blurb = 'CVs first, then the paperwork a small business actually sends out.'
   h1    = 'Business and Office Templates'
-  title = 'Business &amp; Office Templates - Free CV, Invoice &amp; Certificate Designs'
-  desc  = 'Free editable business templates: CV and resume layouts, invoices, certificates, business cards, cover letters, menus and letterheads. Edit in your browser, no account needed.'
+  title = 'Business Templates - Free CV, Invoice &amp; Certificate Designs'
+  desc  = 'Free editable business templates: CVs, invoices, certificates, business cards, cover letters, menus and letterheads. Edit in your browser, no account needed.'
   intro = @(
     'Seven document types, twenty-four designs, every one of them editable in the browser. Type into the boxes beside the page, change the colours and lettering, then print or download - there is no account step and nothing is watermarked.',
     'The CV designs come first because they are what most people arrive looking for. Each one is a genuine A4 layout rather than a card: real section spacing, a proper type hierarchy, and room for three roles without the page turning cramped.'
@@ -219,7 +219,7 @@ $BizSubcats = @(
     kind='resume'; size='sz-a4'; fields=$FieldsResume
     h1='CV and Resume Templates'
     title='Resume Template - Free Editable CV Designs You Can Print'
-    desc='Free professional resume and CV templates in modern, classic and sidebar layouts. Edit in your browser, download as PNG or print to PDF - no account, no watermark.'
+    desc='Free professional resume and CV templates, modern and classic. Edit in your browser, download as PNG or print to PDF - no account, no watermark.'
     intro=@(
       'A CV is read in about seven seconds before anyone decides to keep reading, and almost all of that time goes on the top third of the page. Each of these four layouts puts the name, the role and the profile line in that space, and keeps the rest of the page quiet enough to scan.',
       'All four are A4 by default and switch to US Letter in the editor. They hold three roles and two qualifications comfortably; any field you leave empty disappears rather than leaving a gap, so a shorter CV still looks deliberate rather than unfinished.')
@@ -256,7 +256,7 @@ $BizSubcats = @(
  @{ slug='certificate-templates'; name='Certificate Templates'; nav='Certificates'
     kind='cert'; size='sz-cert'; fields=$FieldsCert; ornaments=$true
     h1='Certificate Templates'
-    title='Certificate Template - Free Printable Award &amp; Completion Designs'
+    title='Certificate Template - Free Printable Award Designs'
     desc='Free printable certificate templates for achievement, completion, appreciation and training awards. Landscape A4, editable in your browser.'
     intro=@(
       'Certificates are printed landscape and read from across a room, which changes what matters: the recipient''s name has to be the largest thing on the page, and the border has to frame it without crowding it. These four use the same ornament library as our invitation cards, drawn as vector line work so they stay crisp at any size.',
@@ -278,7 +278,8 @@ $BizSubcats = @(
     desc='Free editable business card templates at the standard 3.5 x 2 inch size. Change the wording, colours and lettering in your browser, then print or download.'
     intro=@(
       'These are drawn at 3.5 &times; 2 inches, the size every print shop and card holder expects. What separates a card that works from one that does not is restraint: a name, what you do, and two ways to reach you. Anything more and none of it gets read.',
-      'Leave the tagline or address empty and those lines disappear rather than leaving a gap. If you are printing a batch, set the card up here, download the PNG at 300dpi and hand that file to the printer.')
+      'Leave the tagline or address empty and those lines disappear rather than leaving a gap. If you are printing a batch, set the card up here, download the PNG at 300dpi and hand that file to the printer.',
+      'Setting up a business from nothing, the two usually go together: pick a mark from the <a href="../../marketing-social/logo-templates/">logo templates</a> first, then match its colours and typeface here.')
     faq=@(
       @('What size is a standard business card?','3.5 &times; 2 inches in Pakistan, the US and most of Asia. Europe more often uses 85 &times; 55mm, which is close enough that either fits a standard card holder.'),
       @('What should go on a business card?','Name, role, company, and the two contact routes you actually answer - usually phone and email. A physical address only earns its place if customers visit you.'),
@@ -292,7 +293,7 @@ $BizSubcats = @(
  @{ slug='cover-letter-templates'; name='Cover Letter Templates'; nav='Cover Letters'
     kind='letter'; size='sz-a4'; fields=$FieldsLetter
     h1='Cover Letter Templates'
-    title='Cover Letter Template - Free Editable Designs That Match Your CV'
+    title='Cover Letter Template - Free Editable Designs'
     desc='Free cover letter templates in matching styles to our CV designs. Edit the wording in your browser, then print or save as PDF.'
     intro=@(
       'A cover letter is read after the CV, not before it, and its job is narrow: explain why this role and not another. Three short paragraphs do that better than a full page of prose, which is what these layouts are spaced for.',
@@ -309,7 +310,7 @@ $BizSubcats = @(
  @{ slug='menu-templates'; name='Menu Templates'; nav='Menus'
     kind='menu'; size='sz-a4'; fields=$FieldsMenu
     h1='Restaurant Menu Templates'
-    title='Restaurant Menu Template - Free Printable Cafe &amp; Bistro Designs'
+    title='Restaurant Menu Template - Free Printable Designs'
     desc='Free editable restaurant and cafe menu templates. Type your dishes and prices in the browser, then print or save as PDF.'
     intro=@(
       'A menu is a price list people read while hungry and slightly rushed, so the two things that matter are that dish names are easy to scan and that prices do not dominate them. These layouts set prices in the same weight as the dish rather than in bold, which is what stops a menu reading like a receipt.',
@@ -369,7 +370,8 @@ $BizGuides = @(
       @('p','If you are applying in more than one of those markets, keep two versions. Our templates leave the photo off, which is the safer default of the two.'),
       @('h2','Length'),
       @('p','One page under ten years of experience, two beyond it. If you are fighting the page, cut your oldest roles to a single line each before you shrink the type - a CV set in seven point tells a reader you had more to say than you could edit.'),
-      @('cta','cv-resume-templates')) },
+      @('cta','cv-resume-templates'),
+      @('cta','cover-letter-templates')) },
 
  @{ slug='cv-vs-resume'
     title='CV or Resume - Which One Are You Being Asked For?'
@@ -392,7 +394,8 @@ $BizGuides = @(
       @('p','Send the one to two page document unless you are applying for an academic post. If you genuinely cannot tell and the role is in North America, the short version is the safer choice: no employer has ever rejected a resume for being too readable.'),
       @('h2','A note on file names'),
       @('p','Whatever the document is called, name the file after yourself rather than the document type - "Amara Sheikh CV.pdf" rather than "cv-final-v3.pdf". It is the name a recruiter sees in a folder of two hundred attachments.'),
-      @('cta','cv-resume-templates')) },
+      @('cta','cv-resume-templates'),
+      @('cta','cover-letter-templates')) },
 
  @{ slug='how-to-write-an-invoice'
     title='How to Write an Invoice That Gets Paid on Time'

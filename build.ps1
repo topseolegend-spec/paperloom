@@ -140,7 +140,7 @@ function Get-Footer($depth) {
     $m = $cat.meta
     $links = ($cat.subs | Select-Object -First 5 | ForEach-Object {
       "<li><a href=`"${r}$($m.slug)/$($_.slug)/`">$($_.nav)</a></li>" }) -join ''
-    $cols += "<div><h4>$($m.name)</h4><ul>$links<li><a href=`"${r}$($m.slug)/`">See all</a></li></ul></div>"
+    $cols += "<div><h3>$($m.name)</h3><ul>$links<li><a href=`"${r}$($m.slug)/`">See all</a></li></ul></div>"
   }
   $gds = ($AllGuides | ForEach-Object { "<li><a href=`"${r}guides/$($_.slug)/`">$($_.h1)</a></li>" }) -join ''
 @"
@@ -154,11 +154,11 @@ function Get-Footer($depth) {
         </div>
         $cols
         <div>
-          <h4>Guides</h4>
+          <h3>Guides</h3>
           <ul>$gds</ul>
         </div>
         <div>
-          <h4>Site</h4>
+          <h3>Site</h3>
           <ul>
             <li><a href="${r}about/">About</a></li>
             <li><a href="${r}contact/">Contact</a></li>
@@ -211,6 +211,13 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <meta property="og:description" content="$desc">
 <meta property="og:url" content="$canonical">
 <meta property="og:site_name" content="$($Site.Name)">
+<meta property="og:image" content="$($Site.Url)/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="$title">
+<meta name="twitter:description" content="$desc">
+<meta name="twitter:image" content="$($Site.Url)/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="$Fonts">
@@ -757,7 +764,22 @@ function Get-Crumbs($depth, $trail) {
     $parts += "<a href=`"$r$($trail[$i][1])`">$($trail[$i][0])</a>"
   }
   $parts += "<span aria-current=`"page`">$($trail[$trail.Count-1][0])</span>"
-  '<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb">' + ($parts -join '<span>/</span>') + '</nav></div>'
+  $nav = '<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb">' + ($parts -join '<span>/</span>') + '</nav></div>'
+
+  # BreadcrumbList JSON-LD from the same trail, so the path shown on the page and
+  # the one Google can render under the search result never drift apart. Hrefs in
+  # $trail are already root-relative, so they only need the site origin.
+  $items = @(); $pos = 1
+  $items += "{`"@type`":`"ListItem`",`"position`":$pos,`"name`":`"Home`",`"item`":`"$($Site.Url)/`"}"
+  for ($i = 0; $i -lt $trail.Count - 1; $i++) {
+    $pos++
+    $items += "{`"@type`":`"ListItem`",`"position`":$pos,`"name`":$(ConvertTo-JsonString $trail[$i][0]),`"item`":`"$($Site.Url)/$($trail[$i][1])`"}"
+  }
+  $pos++
+  $items += "{`"@type`":`"ListItem`",`"position`":$pos,`"name`":$(ConvertTo-JsonString $trail[$trail.Count-1][0])}"
+  $schema = '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[' + ($items -join ',') + ']}</script>'
+
+  $nav + $schema
 }
 
 function ConvertTo-JsonString($s) {
@@ -904,9 +926,20 @@ function Build-Home {
     </div>
   </section>
 "@
+  # Organization + WebSite on the homepage only - schema.org asks for one
+  # canonical declaration of "what this site is" per site, not one per page.
+  # SearchAction points at the real on-site search, which is accurate now that
+  # search.js exists - this is what makes Google's sitelinks search box
+  # possible, not just decorative markup.
+  $orgSchema = '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[' +
+    '{"@type":"Organization","@id":"' + $Site.Url + '/#org","name":"' + $Site.Name + '","url":"' + $Site.Url + '/","logo":"' + $Site.Url + '/assets/og-image.png"},' +
+    '{"@type":"WebSite","@id":"' + $Site.Url + '/#site","name":"' + $Site.Name + '","url":"' + $Site.Url + '/","publisher":{"@id":"' + $Site.Url + '/#org"},' +
+    '"potentialAction":{"@type":"SearchAction","target":"' + $Site.Url + '/?q={search_term_string}","query-input":"required name=search_term_string"}}' +
+    ']}</script>'
+
   Save-Page 0 '' "$($Site.Name) - Free Editable CV, Invoice &amp; Invitation Templates" `
-    'Free editable templates you can fill in and print: CVs and resumes, invoices, certificates, business cards, and wedding, nikah and party invitations. No account, no watermark.' `
-    $body 'home' '' ''
+    'Free editable templates: CVs, invoices, invitations, greeting cards and posters. Fill in, print or download - no account, no watermark.' `
+    $body 'home' $orgSchema ''
 }
 
 function Build-Category($cat) {
@@ -1083,8 +1116,13 @@ function Build-Template($cat, $s, $t) {
   if ($singular -match '\s+Templates?$') { $singular = $singular -replace '\s+Templates?$', '' }
   else { $singular = $singular -replace 's$', '' }
   $title = "$($t.name) - $singular Template"
-  $descStyle = ($t.style -replace '&middot;', 'and').ToLower()
-  $desc = "$($t.name): an editable $($singular.ToLower()) template in a $descStyle style. Fill it in online, then print or download - free, no account."
+  # Was "an editable {x} template in a {y} style. Fill it in online, then print or
+  # download - free, no account." - on a subcategory with a long name (like
+  # Farewell & Retirement Invitations) that pushed several descriptions past
+  # Google's ~160 character display limit. Shorter fixed wording buys back the
+  # room the variable parts need.
+  $descStyle = ($t.style -replace '&middot;', ',').ToLower()
+  $desc = "$($t.name): $descStyle $($singular.ToLower()) template - fill in online, print or download free."
   $crumb = Get-Crumbs 3 @(@($m.name, "$($m.slug)/"), @($s.name, "$($m.slug)/$($s.slug)/"), @($t.name, ''))
 
   $body = @"
@@ -1200,7 +1238,8 @@ $crumb
       <p class="lede" style="margin-top:14px;">Practical answers to the questions that come up while
         you are filling a template in - what belongs on a CV, how to word an invitation, and what
         makes an invoice get paid on time.</p>
-      <div class="cat-grid" style="margin-top:32px;">$tiles</div>
+      <div class="section-head" style="margin-top:32px;"><h2>All guides</h2></div>
+      <div class="cat-grid">$tiles</div>
     </div>
   </section>
 "@
@@ -1211,6 +1250,10 @@ $crumb
 
 function Build-Guide($g) {
   $parts = ''
+  # Collected rather than rendered inline, so a guide naming several relevant
+  # subcategories (social-media-image-sizes covers seven platforms) links to
+  # all of them in one line instead of one repetitive banner per mention.
+  $ctaSlugs = New-Object System.Collections.ArrayList
   foreach ($blk in $g.body) {
     $kind = $blk[0]; $val = $blk[1]
     switch ($kind) {
@@ -1219,14 +1262,23 @@ function Build-Guide($g) {
       'ul' { $parts += '<ul>' + (($val | ForEach-Object { "<li>$_</li>" }) -join '') + '</ul>' }
       'ol' { $parts += '<ol>' + (($val | ForEach-Object { "<li>$_</li>" }) -join '') + '</ol>' }
       'blockquote' { $parts += "<blockquote><p>$val</p></blockquote>" }
-      'cta' {
-        foreach ($cat in $Categories) {
-          $sub = $cat.subs | Where-Object { $_.slug -eq $val }
-          if ($sub) {
-            $parts += "<div class=`"note-band`" style=`"margin-top:34px;`">Ready to make one? Open the <a href=`"../../$($cat.meta.slug)/$($sub.slug)/`">$($sub.name.ToLower())</a> - $($sub.templates.Count) editable designs, free to use.</div>"
-          }
-        }
+      'cta' { [void]$ctaSlugs.Add($val) }
+    }
+  }
+  if ($ctaSlugs.Count -gt 0) {
+    $links = New-Object System.Collections.ArrayList
+    foreach ($slug in $ctaSlugs) {
+      foreach ($cat in $Categories) {
+        $sub = $cat.subs | Where-Object { $_.slug -eq $slug }
+        if ($sub) { [void]$links.Add("<a href=`"../../$($cat.meta.slug)/$($sub.slug)/`">$($sub.name.ToLower())</a> ($($sub.templates.Count) designs)") }
       }
+    }
+    if ($links.Count -eq 1) {
+      $parts += "<div class=`"note-band`" style=`"margin-top:34px;`">Ready to make one? Open the $($links[0]) - free to use.</div>"
+    } elseif ($links.Count -gt 1) {
+      $last = $links[$links.Count - 1]
+      $rest = $links[0..($links.Count - 2)] -join ', '
+      $parts += "<div class=`"note-band`" style=`"margin-top:34px;`">Ready to make one? This applies across $rest and $last - all free to use.</div>"
     }
   }
   $schema = '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":' +
@@ -1309,7 +1361,8 @@ $crumb
       <div class="note-band" style="margin:22px 0 30px;">
         Email us directly at <a href="mailto:$($Site.Email)">$($Site.Email)</a>
       </div>
-      <form action="mailto:$($Site.Email)" method="post" enctype="text/plain">
+      <div class="section-head"><h2>Send a message</h2></div>
+      <form action="mailto:$($Site.Email)" method="post" enctype="text/plain" style="margin-top:16px;">
         <div class="form-field">
           <label for="name">Your name</label>
           <input id="name" name="name" type="text" autocomplete="name" required>

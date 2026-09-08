@@ -121,4 +121,17 @@
     var typing = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
     if (e.key === '/' && !typing && overlay.hidden) { e.preventDefault(); open(); }
   });
+
+  // The homepage declares a SearchAction pointing at ?q= (what makes a Google
+  // sitelinks search box possible), so a visit with that parameter has to
+  // actually run the search rather than silently loading the plain homepage.
+  var params = new URLSearchParams(location.search);
+  var q = params.get('q');
+  if (q) {
+    // open() itself awaits load() before rendering, and JS runs this
+    // assignment before that promise can resolve - so the render inside
+    // open() already sees the query typed in below, with nothing to duplicate.
+    input.value = q;
+    open();
+  }
 })();

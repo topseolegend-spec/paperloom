@@ -309,7 +309,7 @@ $Subcats = @(
 
  @{ slug='baby-shower-invitations'; name='Baby Shower Invitations'; nav='Baby Shower Invitations'
     h1='Baby Shower Invitation Templates'
-    title='Baby Shower Invitation Template - Free Printable Boy &amp; Girl Cards'
+    title='Baby Shower Invitation Template - Free Printable Cards'
     desc='Printable baby shower invitation templates for boys, girls and gender-neutral showers. 5x7 inch cards, editable in your browser.'
     intro=@(
       'These baby shower templates come in four colour directions - powder blue, blush, sage and warm yellow - so you can match a boy, girl or gender-neutral shower without redesigning anything. Every palette on the site can be swapped onto any of them in the editor.',
@@ -326,7 +326,7 @@ $Subcats = @(
 
  @{ slug='graduation-invitations'; name='Graduation Invitations'; nav='Graduation Invitations'
     h1='Graduation Invitation Templates'
-    title='Graduation Invitation Template - Free Printable Party &amp; Ceremony Cards'
+    title='Graduation Invitation Template - Free Printable Cards'
     desc='Printable graduation invitation and announcement templates for ceremonies and parties. 5x7 inch cards in navy, black-gold and modern styles.'
     intro=@(
       'A graduation card does two different jobs depending on how you use it: announcing the achievement, or inviting people to the party afterwards. These templates handle both - the degree line sits directly under the name, and the venue block below it can be cleared entirely if you are only announcing.',
@@ -343,7 +343,7 @@ $Subcats = @(
 
  @{ slug='housewarming-invitations'; name='Housewarming Invitations'; nav='Housewarming Invitations'
     h1='Housewarming Invitation Templates'
-    title='Housewarming Invitation Card Template - Free Printable Designs'
+    title='Housewarming Invitation Template - Free Printable Designs'
     desc='Printable housewarming party invitation templates with the new address set clearly. 5x7 inch cards, editable in your browser.'
     intro=@(
       'The address is the most important line on a housewarming invitation, and it is the line most designs bury. Each of these templates gives the new address its own block with generous spacing around it, so guests can read it at a glance or photograph it for their maps app.',
@@ -360,7 +360,7 @@ $Subcats = @(
 
  @{ slug='farewell-retirement-invitations'; name='Farewell &amp; Retirement Invitations'; nav='Farewell &amp; Retirement'
     h1='Farewell and Retirement Party Invitation Templates'
-    title='Farewell Party Invitation Template - Free Printable Retirement Cards'
+    title='Farewell &amp; Retirement Invitation Templates'
     desc='Printable farewell and retirement party invitation templates for offices and colleagues. 5x7 inch cards in slate, teal and classic styles.'
     intro=@(
       'Farewell and retirement invitations are usually sent by colleagues rather than family, which changes the tone: the card should be warm but still appropriate to pin on an office notice board. These four designs stay on the right side of that line.',
@@ -408,7 +408,7 @@ $Guides = @(
       @('cta','wedding-invitations')) },
 
  @{ slug='what-to-include-in-a-wedding-invitation'
-    title='What to Include in a Wedding Invitation - Every Line Explained'
+    title='What to Include in a Wedding Invitation'
     h1='What Should Be Included in a Wedding Invitation'
     desc='The six elements every wedding invitation needs, what belongs on a separate details card, and the mistakes that cause guests to call and ask.'
     read='7 min read'
@@ -440,7 +440,7 @@ $Guides = @(
       @('cta','wedding-invitations')) },
 
  @{ slug='wedding-invitation-wording'
-    title='Wedding Invitation Wording - Formal, Modern and Nikah Examples'
+    title='Wedding Invitation Wording - Formal and Modern Examples'
     h1='Wedding Card Invitation Wording Examples'
     desc='Copy-and-paste wedding invitation wording for formal, casual, bride-hosted and nikah invitations, with notes on when each one fits.'
     read='8 min read'

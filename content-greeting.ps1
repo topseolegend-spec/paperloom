@@ -68,7 +68,7 @@ $GCategory = @{
   panel = 'Occasions'
   blurb = 'Twelve occasions, four designs each - plain, modern, and two with more on them.'
   h1    = 'Greeting Card Templates'
-  title = 'Greeting Card Templates - Free Editable Designs You Can Print'
+  title = 'Greeting Card Templates - Free Editable Designs'
   desc  = 'Free editable greeting cards for birthdays, Eid, Christmas, thank you notes, sympathy and more. Write your own message in the browser, then print or download.'
   intro = @(
     'Forty-eight cards across twelve occasions, and every one of them takes your own words. Type the greeting, the message and who it is from into the boxes beside the card, and it updates as you write - there is no account step and nothing is watermarked.',
@@ -106,7 +106,7 @@ $GSubcats = @(
  @{ slug='thank-you-card-templates'; name='Thank You Cards'; nav='Thank You'
     kind='greeting'; size='sz-5x7'; fields=$FieldsGreeting; ornaments=$true
     h1='Thank You Card Templates'
-    title='Thank You Card Template - Free Printable Designs You Can Edit'
+    title='Thank You Card Template - Free Printable Designs'
     desc='Free thank you card templates for gifts, weddings, interviews and favours. Write the note in your browser, then print or save as PDF.'
     intro=@(
       'A thank you card works on timing more than wording - sent within a week it means something, sent after a month it reads as an apology. These four are quick to fill in for exactly that reason.',
@@ -196,7 +196,7 @@ $GSubcats = @(
  @{ slug='congratulations-card-templates'; name='Congratulations Cards'; nav='Congratulations'
     kind='greeting'; size='sz-5x7'; fields=$FieldsGreeting; ornaments=$true
     h1='Congratulations Card Templates'
-    title='Congratulations Card Template - Free Printable Designs to Edit'
+    title='Congratulations Card Template - Free Printable Designs'
     desc='Free congratulations card templates for new jobs, exams, promotions and new homes. Write your own message, then print or download.'
     intro=@(
       'Congratulations cards cover a wide range - a new job, an exam result, a promotion, a first house - so these keep the greeting broad and put the weight on the message, which is the part that has to fit the occasion.',
@@ -232,7 +232,7 @@ $GSubcats = @(
  @{ slug='valentines-card-templates'; name='Valentine''s Day Cards'; nav='Valentine''s Day'
     kind='greeting'; size='sz-5x7'; fields=$FieldsGreeting; ornaments=$true
     h1='Valentine''s Day Card Templates'
-    title='Valentines Card Template - Free Printable Designs You Can Edit'
+    title='Valentines Card Template - Free Printable Designs'
     desc='Free Valentine''s Day card templates from plain to romantic. Write your own message in the browser, then print or send as an image.'
     intro=@(
       'The best Valentine''s cards are specific and slightly understated, which is the opposite of what most templates offer. These four leave the decoration restrained and give the message the middle of the card.',
@@ -360,7 +360,7 @@ $GGuides = @(
       @('cta','sympathy-card-templates')) },
 
  @{ slug='eid-card-messages'
-    title='Eid Card Messages - What to Write for Family, Friends and Colleagues'
+    title='Eid Card Messages for Family, Friends and Colleagues'
     h1='What to Write in an Eid Card'
     desc='Eid Mubarak wording for family, friends, colleagues and clients, plus notes on writing the card in Urdu or Arabic.'
     read='5 min read'

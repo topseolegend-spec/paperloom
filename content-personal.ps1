@@ -158,7 +158,7 @@ $PCategory = @{
   panel = 'Document types'
   blurb = 'Calendars, planners and trackers for the paperwork of an ordinary week.'
   h1    = 'Personal and Lifestyle Templates'
-  title = 'Printable Planner Templates - Free Calendars, Budgets and Trackers'
+  title = 'Printable Planner Templates - Calendars and Trackers'
   desc  = 'Free editable calendars, daily planners, to-do lists, budget sheets, recipe cards, gift vouchers, habit trackers and meal planners. Fill them in and print.'
   intro = @(
     'Eight things worth printing rather than keeping in an app, and thirty-two designs across them. Type into the boxes beside the page and it updates as you write.',
@@ -177,7 +177,7 @@ $PSubcats = @(
  @{ slug='calendar-templates'; name='Calendar Templates'; nav='Calendars'
     kind='calendar'; size='sz-a4'; fields=$FieldsCalendar
     h1='Calendar Templates'
-    title='Calendar Template - Free Printable Monthly Calendars You Can Edit'
+    title='Calendar Template - Free Printable Monthly Calendars'
     desc='Free printable monthly calendar templates. Type the month and year and the dates fill themselves in, then print for the wall or a planner.'
     intro=@(
       'Type a month and a year and the dates work themselves out - the grid knows which weekday the first falls on and how many days the month has, including February in a leap year. You are not filling in thirty-one numbers by hand.',
@@ -195,7 +195,7 @@ $PSubcats = @(
  @{ slug='planner-templates'; name='Planner Templates'; nav='Planners'
     kind='planner'; size='sz-a4'; fields=$FieldsPlanner
     h1='Daily Planner Templates'
-    title='Daily Planner Template - Free Printable Planners You Can Edit'
+    title='Daily Planner Template - Free Printable Planners'
     desc='Free printable daily planner templates with priorities, an hourly schedule and notes. Fill them in online or print blank.'
     intro=@(
       'A planner earns its place by making you choose. These four put three priorities at the top - not ten - and give the rest of the day an hourly column beside them, because a list without times is a wish list.',

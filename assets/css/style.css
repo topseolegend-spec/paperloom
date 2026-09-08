@@ -352,7 +352,10 @@ p{margin:0 0 1em;}
   background:var(--green-deep); color:#dfe7e1;
 }
 .footer-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:36px;}
-.site-footer h4{color:#fff; font-size:14px; font-family:var(--body); font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px;}
+/* h3, not h4: footer sections follow the main content, which mostly tops out
+   at h2 - h4 here would skip a level, which trips up screen-reader heading
+   navigation. Kept visually identical via the class name, just the tag changed. */
+.site-footer h3{color:#fff; font-size:14px; font-family:var(--body); font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px;}
 .site-footer a{color:#dfe7e1; font-size:14.5px;}
 .site-footer a:hover{color:#fff;}
 .site-footer ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px;}

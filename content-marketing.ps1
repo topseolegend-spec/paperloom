@@ -76,7 +76,7 @@ $MCategory = @{
   panel = 'Formats'
   blurb = 'Posters and flyers for print, and social graphics at the sizes each platform actually wants.'
   h1    = 'Marketing and Social Media Templates'
-  title = 'Social Media &amp; Marketing Templates - Free Editable Posters, Flyers and Posts'
+  title = 'Marketing &amp; Social Media Templates - Free Editable Designs'
   desc  = 'Free editable poster, flyer, Instagram, YouTube thumbnail, Facebook and LinkedIn templates at the correct sizes. Type your own words, then download the image.'
   intro = @(
     'Nine formats, thirty-six designs, each one built at the size its platform expects rather than a square you have to crop afterwards. Type your words into the boxes beside the artwork and it updates as you write.',
@@ -113,7 +113,7 @@ $MSubcats = @(
  @{ slug='flyer-templates'; name='Flyer Templates'; nav='Flyers'
     kind='promo'; sizeset='flyer'; size='sz-a5'; fields=$FieldsPromo; ornaments=$true
     h1='Flyer Templates'
-    title='Flyer Template - Free Editable A5 Designs for Business and Events'
+    title='Flyer Template - Free Editable Designs for Business'
     desc='Free editable flyer templates for shops, cafes, services and events. Add your own offer and contact details, then print at A5 or A4.'
     intro=@(
       'A flyer is handed over or pushed through a door, and it gets about two seconds before someone decides whether to keep it. That makes the offer the headline - not the business name, which is what most flyers lead with and why most flyers get binned.',
@@ -243,7 +243,7 @@ $MSubcats = @(
     desc='Free editable logo templates - wordmarks, monograms and badges. Type your business name, choose a typeface, and download at full resolution.'
     intro=@(
       'These are logo layouts rather than a logo service, and the difference is worth stating plainly: a real identity is drawn for one business and belongs to it. What these give you is a well-set wordmark, monogram or badge - which is genuinely enough for a small business, a market stall or a side project, and better than most cheap logo generators produce.',
-      'Four arrangements, sixteen typefaces and every palette on the site. Download at 1500 pixels square on a transparent-looking ground, or print it onto stationery from the letterhead templates.')
+      'Four arrangements, sixteen typefaces and every palette on the site. Download at 1500 pixels square on a transparent-looking ground, or print it onto stationery from the <a href="../../business-office/letterhead-templates/">letterhead templates</a>, and carry the same mark onto a <a href="../../business-office/business-card-templates/">business card</a>.')
     faq=@(
       @('Is a template logo good enough for a real business?','For a small or new business, yes. A clearly set name in a good typeface beats a cluttered custom mark, and you can commission something bespoke later once you know what the business actually is.'),
       @('Can I trademark a logo made from a template?','Take advice locally. Broadly, a wordmark of your own business name is usually registrable; the arrangement and typeface are not exclusively yours, so a distinctive name matters more than the layout.'),
@@ -282,7 +282,11 @@ $MGuides = @(
       @('p','The single most useful habit: shrink your design on screen until it is about the width of your thumb, then look at it. That is the size a feed shows it at. If the headline is not readable there, the answer is fewer words rather than bigger type - bigger type in a small space just wraps.'),
       @('h2','One design, several sizes'),
       @('p','Every template on this site switches size in the editor and re-flows rather than cropping, so a post can become a story without a redesign. The wording almost always needs shortening as the canvas gets narrower, which is a content decision rather than a design one.'),
-      @('cta','instagram-post-templates')) },
+      @('cta','instagram-post-templates'),
+      @('cta','instagram-story-templates'),
+      @('cta','youtube-thumbnail-templates'),
+      @('cta','facebook-cover-templates'),
+      @('cta','linkedin-banner-templates')) },
 
  @{ slug='how-to-design-a-flyer'
     title='How to Design a Flyer People Actually Read'

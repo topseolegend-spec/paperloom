@@ -165,8 +165,8 @@ $ECategory = @{
   panel = 'Document types'
   blurb = 'The paperwork a classroom runs on - worksheets, plans, registers and reports.'
   h1    = 'Education and School Templates'
-  title = 'School Templates - Free Editable Worksheets, Lesson Plans and Report Cards'
-  desc  = 'Free editable school templates: worksheets, lesson plans, timetables, report cards, attendance registers, flashcards, student ID cards and diplomas. Fill them in and print.'
+  title = 'School Templates - Free Worksheets, Lesson Plans and Reports'
+  desc  = 'Free editable school templates: worksheets, lesson plans, timetables, report cards, attendance registers, flashcards, ID cards and diplomas.'
   intro = @(
     'Eight document types, thirty-two designs, all of them editable in the browser and built to print on ordinary school paper. Type into the boxes beside the page and it updates as you write.',
     'Everything here is set to A4 and prints cleanly in black and white, because most school printers are not colour and most schools are counting pages. The registers and timetables are laid out to be filled in by hand after printing, which is how they are actually used.'
@@ -238,7 +238,7 @@ $ESubcats = @(
  @{ slug='report-card-templates'; name='Report Card Templates'; nav='Report Cards'
     kind='report'; size='sz-a4'; fields=$FieldsReport
     h1='Report Card Templates'
-    title='Report Card Template - Free Editable Student Progress Reports'
+    title='Report Card Template - Free Student Progress Reports'
     desc='Free editable report card and progress report templates for schools. Enter subjects, marks and remarks, then print or save as PDF.'
     intro=@(
       'A report card is read by a parent in about a minute, and the part they remember is the remark rather than the marks. These four give the remark real space instead of a two-line box at the bottom.',
@@ -317,7 +317,7 @@ $ESubcats = @(
     desc='Free printable diploma templates for schools and colleges. Add the institution, student name and course, then print at A4 landscape.'
     intro=@(
       'A diploma is framed and kept, which is the whole design brief: the institution at the top, the name large in the middle, and enough space around both that it does not look crowded behind glass.',
-      'These are landscape A4, the size that fits ready-made frames. If you want an award or completion certificate rather than a diploma, the certificate designs in Business &amp; Office cover that - they are shorter on institutional detail and quicker to fill in.')
+      'These are landscape A4, the size that fits ready-made frames. If you want an award or completion certificate rather than a diploma, the <a href="../../business-office/certificate-templates/">certificate designs in Business &amp; Office</a> cover that - they are shorter on institutional detail and quicker to fill in.')
     faq=@(
       @('What is the difference between a diploma and a certificate?','A diploma records completion of a course of study and names the institution awarding it. A certificate marks an achievement, an award, or attendance - shorter, and usually issued in greater numbers.'),
       @('What should a diploma say?','The institution, the award, the recipient, what was completed, the date, and at least one signature with a title. Anything more and the type has to shrink.'),
