@@ -24,7 +24,11 @@ Phir browser mein `http://localhost:8080` kholein. Band karne ke liye us window 
 |---|---|
 | `content.ps1` | Shared config (site, palettes, fonts, sizes) + Weddings & Events category |
 | `content-business.ps1` | Business & Office category — CV, invoice, certificate, business card, cover letter, menu, letterhead |
-| `content-greeting.ps1` | Greeting Cards category — 12 occasions, 4 designs each |
+| `content-greeting.ps1` | Greeting Cards — 12 occasions, 4 designs each |
+| `content-marketing.ps1` | Marketing & Social — posters, flyers, social formats, logos |
+| `content-education.ps1` | Education & School — worksheets, plans, registers, reports |
+| `assets/css/promo.css` | Marketing layouts and their per-platform sizes |
+| `assets/css/school.css` | School document layouts and grids |
 | `ornaments.ps1` | Saare SVG ornaments (wreath, bouquet, deco, mandala, vine, flourish…) |
 | `build.ps1` | HTML generate karta hai (header, footer, SEO tags, sitemap) |
 | `assets/css/style.css` | Site ka design |
