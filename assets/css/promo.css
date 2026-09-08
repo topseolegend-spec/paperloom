@@ -142,12 +142,14 @@
 
 /* Modern: the headline sits against a block of colour running off one edge. */
 .p-modern .promo{position:relative;}
+/* The stripe has to be narrower than the padding that clears it, or the
+   headline starts on top of it. */
 .p-modern .promo::before{
   content:""; position:absolute; top:0; left:0;
-  width:calc(16cqw * var(--promo-scale)); height:100%;
+  width:calc(6cqw * var(--promo-scale)); height:100%;
   background:var(--c-accent); z-index:-1;
 }
-.p-modern .promo{padding-left:calc(13cqw * var(--promo-scale));}
+.p-modern .promo{padding-left:calc(14cqw * var(--promo-scale));}
 .p-modern .pm-kicker{color:var(--c-soft);}
 .p-modern .pm-title{margin-top:calc(1cqw * var(--promo-scale));}
 .p-modern .pm-cta{
