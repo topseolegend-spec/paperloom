@@ -223,6 +223,7 @@ function New-Tpl($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent,
 $Category = @{
   slug  = 'wedding-events'
   accent = '#a8823f'
+  homePicks = @('wedding-invitations','nikah-invitations','engagement-invitations')
   name  = 'Weddings &amp; Events'
   short = 'Weddings'
   panel = 'Occasions'

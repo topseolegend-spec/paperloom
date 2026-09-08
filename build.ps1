@@ -836,17 +836,32 @@ function Build-Home {
         </a>
 "@
 
-    # three previews, spread across the category rather than all from one
-    # subcategory, so the row shows the range instead of one design three times
-    $spread = @(0, [math]::Floor($cat.subs.Count / 3), [math]::Floor($cat.subs.Count * 2 / 3))
+    # Three previews per category, named in content rather than picked by
+    # position. A mechanical spread landed on whatever sat at one third and two
+    # thirds of the list, which is how a 1584x396 LinkedIn banner ended up
+    # beside a poster - 90 pixels tall next to 320, and the row read as broken
+    # rather than varied. Each category now names three of similar proportion.
     $shots = ''
+    $tplIdx = @(1, 3, 2)   # modern, richest, decorated - range without opening on the plainest
     for ($k = 0; $k -lt 3; $k++) {
-      $sub = $cat.subs[$spread[$k]]
-      $tpl = $sub.templates[[math]::Min($k, $sub.templates.Count - 1)]
+      $sub = $cat.subs | Where-Object { $_.slug -eq $m.homePicks[$k] } | Select-Object -First 1
+      if (-not $sub) { $sub = $cat.subs[$k] }
+      $tpl = $sub.templates[[math]::Min($tplIdx[$k], $sub.templates.Count - 1)]
+
+      # the real print or pixel size, straight from the size set the editor
+      # offers - the kind of detail only a site set for paper would bother with
+      $setName = if ($sub.sizeset) { $sub.sizeset } else { $SizeSetFor[$sub.kind] }
+      $sizeLabel = ''
+      if ($setName -and $SizeSets[$setName]) {
+        $match = $SizeSets[$setName] | Where-Object { $_.cls -eq $sub.size } | Select-Object -First 1
+        if (-not $match) { $match = $SizeSets[$setName][0] }
+        $sizeLabel = $match.label
+      }
+
       $shots += @"
 <a class="shot" href="$($m.slug)/$($sub.slug)/$($tpl.slug)/">
           <span class="shot-frame">$(Get-Preview $sub $tpl '' $false)</span>
-          <span class="shot-label">$($sub.nav)</span>
+          <span class="shot-label">$($sub.nav)<span class="shot-size">$sizeLabel</span></span>
         </a>
 "@
     }

@@ -131,6 +131,30 @@
 .doc-preview.sz-bcard .card-art svg{width:57.14cqw;}         /* 3.5:2   */
 .doc-preview.sz-bcard-eu .card-art svg{width:64.71cqw;}      /* 85:55   */
 
+/* The quarter turn above only works for artwork that reads the same whichever
+   way up it is - a wreath, a corner motif, scattered confetti. The laurel is
+   two branches down the left and right margins, and the arch stands on its
+   feet: rotated, the laurel's branches lay themselves straight across the
+   middle of the certificate, through the title and the recipient's name.
+   Those two cover the page unrotated instead. :has() reads whichever ornament
+   is currently switched on, so this holds when the reader changes it in the
+   editor as well as at build time. */
+.doc-preview .card-art:has(.art.is-on[data-art="laurel"]) svg,
+.doc-preview .card-art:has(.art.is-on[data-art="arch"]) svg{
+  inset:0; top:auto; left:auto;
+  width:100%; height:100%; transform:none;
+}
+/* The branches sit about a third in from each edge, which is the margin on a
+   portrait page and the middle of the sentence on a landscape one. Drawing the
+   artwork wider than the sheet and centring it walks them back out to the
+   margins where they belong. */
+.doc-preview.sz-cert .card-art:has(.art.is-on[data-art="laurel"]) svg,
+.doc-preview.sz-cert-letter .card-art:has(.art.is-on[data-art="laurel"]) svg,
+.doc-preview.sz-bcard .card-art:has(.art.is-on[data-art="laurel"]) svg,
+.doc-preview.sz-bcard-eu .card-art:has(.art.is-on[data-art="laurel"]) svg{
+  left:50%; width:152%; transform:translateX(-50%);
+}
+
 /* background treatments (same names as the cards) */
 .doc-preview.bg-grad::after,
 .doc-preview.bg-wash::after,

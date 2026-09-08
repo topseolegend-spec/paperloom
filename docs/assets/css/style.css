@@ -337,10 +337,20 @@ p{margin:0 0 1em;}
    gap. Fixing the frame height and letting the ratio decide the width lands
    them on one baseline - and the previews scale their type from their own
    width, so this costs nothing internally. */
+/* One frame size for all three, contents fitted inside and centred. Sitting
+   loose on the page, a portrait sheet stood 320px tall next to a landscape
+   certificate at 220 and the row felt like a mistake rather than a set. The
+   frame is the constant; what varies inside it is the paper, which is the
+   honest difference. Ground flips with the band so the frame reads on both. */
 .shot-frame{
-  display:flex; align-items:flex-end; justify-content:center;
-  height:320px;
+  display:flex; align-items:center; justify-content:center;
+  height:330px; padding:22px;
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:10px;
+  transition:border-color .2s ease;
 }
+.cat-band-alt .shot-frame{background:var(--paper);}
+.shot:hover .shot-frame{border-color:var(--coll);}
 .shot-frame .card-preview,.shot-frame .doc-preview{
   height:100%; width:auto; max-width:100%;
   /* flex items default to min-width:auto, which lets a landscape certificate
@@ -366,9 +376,13 @@ p{margin:0 0 1em;}
   box-shadow:var(--shadow-lg); transform:translateY(-3px);
 }
 .shot-label{
-  display:block; margin-top:10px; font-size:12.5px;
-  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint);
+  display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  margin-top:11px; font-size:12.5px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);
 }
+/* the real sheet size - 5 x 7 in, A4, 1080 square. Only a site set for paper
+   and for particular platforms has this to say, so it is worth saying. */
+.shot-size{letter-spacing:.04em; color:var(--ink-faint); text-transform:none; white-space:nowrap;}
 .shot:hover .shot-label{color:var(--coll);}
 
 /* every subcategory stays a link, but as a chip rather than a card - same

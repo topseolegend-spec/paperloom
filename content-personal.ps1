@@ -154,6 +154,7 @@ $PBody = @{
 $PCategory = @{
   slug  = 'personal-lifestyle'
   accent = '#5c7a52'
+  homePicks = @('calendar-templates','planner-templates','recipe-card-templates')
   name  = 'Personal &amp; Lifestyle'
   short = 'Personal'
   panel = 'Document types'

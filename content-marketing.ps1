@@ -72,6 +72,7 @@ $MBody = @{
 $MCategory = @{
   slug  = 'marketing-social'
   accent = '#b4472e'
+  homePicks = @('poster-templates','instagram-post-templates','instagram-story-templates')
   name  = 'Marketing &amp; Social'
   short = 'Marketing'
   panel = 'Formats'

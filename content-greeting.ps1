@@ -64,6 +64,7 @@ $GBody = @{
 $GCategory = @{
   slug  = 'greeting-cards'
   accent = '#8e4470'
+  homePicks = @('birthday-card-templates','eid-card-templates','anniversary-card-templates')
   name  = 'Greeting Cards'
   short = 'Greetings'
   panel = 'Occasions'

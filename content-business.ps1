@@ -201,6 +201,7 @@ function New-Doc($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent,
 $BizCategory = @{
   slug  = 'business-office'
   accent = '#2e5d4b'
+  homePicks = @('cv-resume-templates','invoice-templates','certificate-templates')
   name  = 'Business &amp; Office'
   short = 'Business'
   panel = 'Document types'
