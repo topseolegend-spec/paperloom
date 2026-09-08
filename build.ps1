@@ -11,6 +11,7 @@ $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content-business.ps1')
 . (Join-Path $Root 'content-greeting.ps1')
 . (Join-Path $Root 'content-marketing.ps1')
+. (Join-Path $Root 'content-education.ps1')
 . (Join-Path $Root 'ornaments.ps1')
 
 # Weddings ke subcategories purane format mein hain - unhein wahi defaults de dein
@@ -25,9 +26,10 @@ $Categories = @(
   @{ meta = $Category;    subs = $Subcats },
   @{ meta = $BizCategory; subs = $BizSubcats },
   @{ meta = $GCategory;   subs = $GSubcats },
-  @{ meta = $MCategory;   subs = $MSubcats }
+  @{ meta = $MCategory;   subs = $MSubcats },
+  @{ meta = $ECategory;   subs = $ESubcats }
 )
-$AllGuides = @($Guides) + @($BizGuides) + @($GGuides) + @($MGuides)
+$AllGuides = @($Guides) + @($BizGuides) + @($GGuides) + @($MGuides) + @($EGuides)
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -208,6 +210,7 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="stylesheet" href="${r}assets/css/cards.css">
 <link rel="stylesheet" href="${r}assets/css/docs.css">
 <link rel="stylesheet" href="${r}assets/css/promo.css">
+<link rel="stylesheet" href="${r}assets/css/school.css">
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
@@ -386,6 +389,136 @@ function Get-Menu($s, $t, $ec, $aa) {
   Doc-Shell $s $t $ec $aa $inner
 }
 
+# =============================================================================
+#  School documents. Teen mein grid chahiye (timetable, report card,
+#  attendance). Har column ek alag area field hai aur sab ka line-height ek -
+#  is liye lines aapas mein align ho jati hain, bina har cell ko apna field
+#  banaye (jo timetable par chalees fields ban jate).
+# =============================================================================
+
+function Get-SchoolHead($b, $titleField, $metaField) {
+  '<header class="sc-head">' + (Fld $b $titleField 'sc-title' 'p') +
+  (Fld $b $metaField 'sc-meta' 'p') + '</header>'
+}
+
+function Get-Worksheet($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school">' +
+    (Get-SchoolHead $b 'title' 'meta') +
+    (Fld $b 'nameline' 'sc-nameline' 'p') +
+    (Fld $b 'instructions' 'sc-instr' 'div') +
+    '<div class="ws-items">' + (Fld $b 'items' 'ws-list' 'div') + '</div>' +
+    (Fld $b 'footer' 'sc-foot' 'p') +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Lesson($s, $t, $ec, $aa) {
+  $b = $t.body
+  $blocks = ''
+  foreach ($pair in @(@('secObj','objectives'), @('secMat','materials'),
+                      @('secAct','activities'), @('secAss','assessment'))) {
+    $blocks += '<section class="sc-block">' + (Fld $b $pair[0] 'sc-sec' 'p') +
+               (Fld $b $pair[1] 'sc-text' 'div') + '</section>'
+  }
+  $inner = '<div class="school">' +
+    (Get-SchoolHead $b 'title' 'meta') +
+    '<div class="lp-meta">' + (Fld $b 'date' '' 'span') + (Fld $b 'duration' '' 'span') + '</div>' +
+    $blocks + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Timetable($s, $t, $ec, $aa) {
+  $b = $t.body
+  $cols = '<div class="tt-col tt-times"><span class="tt-h">Time</span>' + (Fld $b 'periods' 'tt-cells' 'div') + '</div>'
+  foreach ($d in @(@('mon','Monday'), @('tue','Tuesday'), @('wed','Wednesday'),
+                   @('thu','Thursday'), @('fri','Friday'))) {
+    $cols += "<div class=`"tt-col`"><span class=`"tt-h`">$($d[1])</span>" + (Fld $b $d[0] 'tt-cells' 'div') + '</div>'
+  }
+  $inner = '<div class="school">' +
+    (Get-SchoolHead $b 'school' 'meta') +
+    "<div class=`"tt-grid`">$cols</div>" +
+    (Fld $b 'footer' 'sc-foot' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Report($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="school">' +
+    (Get-SchoolHead $b 'school' 'title') +
+    '<div class="rc-student">' + (Fld $b 'student' 'rc-name' 'p') +
+      '<div class="rc-sub">' + (Fld $b 'cls' '' 'span') + (Fld $b 'term' '' 'span') + '</div></div>' +
+    '<div class="rc-table">' +
+      '<div class="rc-col"><span class="rc-h">Subject</span>' + (Fld $b 'subjects' 'rc-cells' 'div') + '</div>' +
+      '<div class="rc-col rc-num"><span class="rc-h">Marks</span>' + (Fld $b 'marks' 'rc-cells' 'div') + '</div>' +
+      '<div class="rc-col rc-num"><span class="rc-h">Grade</span>' + (Fld $b 'grades' 'rc-cells' 'div') + '</div>' +
+    '</div>' +
+    '<section class="rc-remarks"><span class="rc-h">Remarks</span>' + (Fld $b 'remarks' 'sc-text' 'div') + '</section>' +
+    '<div class="rc-sign"><span class="rc-line"></span>' + (Fld $b 'sign1' 'rc-signname' 'p') +
+      (Fld $b 'sign1role' 'rc-signrole' 'p') + '</div>' +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Attendance($s, $t, $ec, $aa) {
+  $b = $t.body
+  # Din ke numbers static hain - inhein field banane ka koi faida nahi.
+  $days = ''
+  foreach ($n in 1..31) { $days += "<span>$n</span>" }
+  $inner = '<div class="school">' +
+    (Get-SchoolHead $b 'school' 'meta') +
+    '<div class="at-grid">' +
+      '<div class="at-names"><span class="at-h">Name</span><div class="at-body">' +
+        (Fld $b 'names' 'at-cells' 'div') + '</div></div>' +
+      "<div class=`"at-days`"><div class=`"at-nums`">$days</div><div class=`"at-ticks`"></div></div>" +
+    '</div>' +
+    (Fld $b 'footer' 'sc-foot' 'p') + '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Flashcard($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="flash">' +
+    (Fld $b 'tag' 'fc-tag' 'p') +
+    (Fld $b 'title' 'fc-term' 'p') +
+    (Fld $b 'pron' 'fc-pron' 'p') +
+    '<span class="c-rule"></span>' +
+    (Fld $b 'definition' 'fc-def' 'div') +
+    (Fld $b 'example' 'fc-eg' 'p') +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-IdCard($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="idc">' +
+    (Fld $b 'school' 'id-school' 'p') +
+    '<div class="id-body">' +
+      '<span class="id-photo">Photo</span>' +
+      '<div class="id-detail">' + (Fld $b 'title' 'id-name' 'p') +
+        '<p class="id-row"><span class="id-k">Class</span>' + (Fld $b 'cls' 'id-v' 'span') + '</p>' +
+        '<p class="id-row"><span class="id-k">Roll no</span>' + (Fld $b 'roll' 'id-v' 'span') + '</p>' +
+        '<p class="id-row"><span class="id-k">Valid to</span>' + (Fld $b 'valid' 'id-v' 'span') + '</p>' +
+      '</div></div>' +
+    (Fld $b 'contact' 'id-foot' 'p') +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Diploma($s, $t, $ec, $aa) {
+  $b = $t.body
+  $signs = ''
+  foreach ($n in 1..2) {
+    $signs += '<div class="ct-sign"><span class="ct-line"></span>' +
+              (Fld $b "sign$n" '' 'p') + (Fld $b "sign${n}role" 'ct-role' 'p') + '</div>'
+  }
+  $inner = (Fld $b 'school' 'ct-school' 'p') + (Fld $b 'award' 'ct-award' 'p') +
+    (Fld $b 'pre' 'ct-pre' 'p') + (Fld $b 'name' 'ct-name' 'p') +
+    (Fld $b 'reason' 'ct-reason' 'div') + (Fld $b 'date' 'ct-date' 'p') +
+    "<div class=`"ct-signs`">$signs</div>"
+  Doc-Shell $s $t $ec $aa $inner
+}
+
 # Marketing graphics doc-preview par chalte hain: ratio, fit-to-page, ornaments
 # aur background treatments sab wahan pehle se hain - sirf sizes naye hain.
 function Get-Promo($s, $t, $ec, $aa) {
@@ -460,6 +593,14 @@ function Get-Preview($s, $t, $extraClass, $allArt) {
     'greeting'   { Get-Greeting $s $t $extraClass $allArt }
     'promo'      { Get-Promo $s $t $extraClass $allArt }
     'logo'       { Get-Logo $s $t $extraClass $allArt }
+    'worksheet'  { Get-Worksheet $s $t $extraClass $allArt }
+    'lesson'     { Get-Lesson $s $t $extraClass $allArt }
+    'timetable'  { Get-Timetable $s $t $extraClass $allArt }
+    'report'     { Get-Report $s $t $extraClass $allArt }
+    'attendance' { Get-Attendance $s $t $extraClass $allArt }
+    'flashcard'  { Get-Flashcard $s $t $extraClass $allArt }
+    'idcard'     { Get-IdCard $s $t $extraClass $allArt }
+    'diploma'    { Get-Diploma $s $t $extraClass $allArt }
     default      { Get-Card $t $extraClass $allArt }
   }
 }
@@ -992,8 +1133,9 @@ $crumb
           landscape, and business cards are 3.5&times;2 inches. Downloads come out at 300dpi, which
           is what a print shop asks for.</p>
         <h2>What we are working on</h2>
-        <p>Weddings and events came first, then business and office, then greeting cards. Social
-          media layouts and school worksheets are being drawn next, in that order.</p>
+        <p>Five categories so far, in the order they were drawn: weddings and events, business and
+          office, greeting cards, marketing and social, and school documents. Each one is added
+          whole rather than a few designs at a time, so a category is either finished or not there.</p>
         <h2>Get in touch</h2>
         <p>If a design does not print the way you expected, or you want an occasion added, the
           <a href="../contact/">contact page</a> is the fastest way to reach us.</p>

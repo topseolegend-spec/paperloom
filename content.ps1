@@ -120,6 +120,14 @@ $SizeSets = @{
   logo = @(
     @{ cls='sz-logo';    label='3 : 2';  note='Wordmarks and stacked marks' },
     @{ cls='sz-logo-sq'; label='Square'; note='Avatars and app icons' })
+
+  # School formats
+  flash = @(
+    @{ cls='sz-flash';    label='5 x 3 in'; note='Index card - four to an A4 sheet' },
+    @{ cls='sz-flash-lg'; label='6 x 4 in'; note='Larger, for a class to see' })
+  idcard = @(
+    @{ cls='sz-idcard';   label='85 x 54 mm'; note='Card size, fits a laminating pouch' },
+    @{ cls='sz-idcard-p'; label='Portrait';   note='For lanyards' })
 }
 
 # kind -> konsa size set milega (subcategory "sizeset" is se pehle aati hai)
@@ -128,6 +136,8 @@ $SizeSetFor = @{
   resume='doc'; letter='doc'; invoice='doc'; menu='doc'; letterhead='doc'
   cert='cert'; bcard='bcard'
   promo='poster'; logo='logo'
+  worksheet='doc'; lesson='doc'; timetable='doc'; report='doc'; attendance='doc'
+  flashcard='flash'; idcard='idcard'; diploma='cert'
 }
 
 # --- editor form fields -------------------------------------------------------

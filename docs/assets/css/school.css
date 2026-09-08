@@ -1,0 +1,353 @@
+/* ==========================================================================
+   School documents - worksheets, lesson plans, timetables, report cards,
+   attendance registers, flashcards, student ID cards and diplomas.
+
+   These sit on the .doc-preview shell (ratio, fit-to-page, ornaments,
+   backgrounds) exactly as the CV and invoice layouts do.
+
+   Grids here are built from parallel columns rather than table cells: each
+   column is one editable field whose lines share a line-height, so the rows
+   align without every cell needing its own field. A timetable would otherwise
+   need forty of them.
+   ========================================================================== */
+
+/* one row height, shared by every grid so columns line up */
+.doc-preview{--row:4.4cqw;}
+
+.doc-preview.sz-flash{aspect-ratio:5/3;}
+.doc-preview.sz-flash-lg{aspect-ratio:3/2;}
+.doc-preview.sz-idcard{aspect-ratio:85/54;}
+.doc-preview.sz-idcard-p{aspect-ratio:54/85;}
+
+.school{flex:1; display:flex; flex-direction:column; padding:7cqw 7cqw 6cqw;}
+.school p{margin:0;}
+
+/* ---------- shared school chrome ----------------------------------------- */
+
+.sc-head{padding-bottom:2.4cqw; border-bottom:2px solid var(--c-accent); margin-bottom:3.4cqw;}
+.sc-title{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(4.6cqw * var(--name-scale)); line-height:1.15; color:var(--c-ink);
+}
+.sc-meta{
+  font-family:'Karla', sans-serif; font-size:1.9cqw;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--c-accent); margin-top:1cqw;
+}
+.sc-nameline{
+  font-family:'Karla', sans-serif; font-size:2cqw; color:var(--c-soft);
+  margin-bottom:3cqw; letter-spacing:.02em;
+}
+.sc-instr{
+  font-family:'Karla', sans-serif; font-size:1.9cqw; line-height:1.6; color:var(--c-soft);
+  margin-bottom:3.4cqw;
+}
+.sc-sec{
+  font-family:'Karla', sans-serif; font-size:1.8cqw; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--c-accent); margin-bottom:1.2cqw;
+}
+.sc-text{font-family:'Karla', sans-serif; font-size:1.85cqw; line-height:1.7; color:var(--c-soft);}
+.sc-block{margin-bottom:3.2cqw;}
+.sc-foot{
+  font-family:'Karla', sans-serif; font-size:1.6cqw; letter-spacing:.1em;
+  color:var(--c-soft); margin-top:auto; padding-top:3cqw;
+}
+.sc-title:empty, .sc-meta:empty, .sc-nameline:empty,
+.sc-instr:empty, .sc-foot:empty{display:none;}
+.sc-block:has(> .sc-sec:empty){display:none;}
+
+.f-cormorant .sc-title{font-family:'Cormorant Garamond', serif; font-size:calc(5.8cqw * var(--name-scale));}
+.f-libre .sc-title{font-family:'Libre Baskerville', serif; font-size:calc(4cqw * var(--name-scale));}
+.f-josefin .sc-title{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.04em;}
+.f-tenor .sc-title{font-family:'Tenor Sans', sans-serif;}
+
+/* ---------- the four school looks ---------------------------------------- */
+
+/* s-plain: rules only. The default, and the one that photocopies best. */
+
+/* s-boxed: alternating bands down the grids, boxed questions */
+.s-boxed .sc-head{border-bottom-width:1px;}
+.s-boxed .ws-list > *{}
+
+/* s-band: a colour bar across the header */
+.s-band .sc-head{
+  background:var(--c-accent); color:#fff;
+  margin:-7cqw -7cqw 3.4cqw; padding:5cqw 7cqw 4cqw;
+  border-bottom:0;
+}
+.s-band .sc-title{color:#fff;}
+.s-band .sc-meta{color:rgba(255,255,255,.85);}
+
+/* s-panel: tinted blocks */
+.s-panel .sc-block{
+  background:rgba(var(--c-accent-rgb), 0.07);
+  padding:2.6cqw 3cqw; border-left:2px solid var(--c-accent);
+}
+.s-panel .sc-head{border-bottom-color:rgba(var(--c-accent-rgb), 0.5);}
+
+/* s-grid: section headings in a narrow left column */
+.s-grid .sc-block{display:grid; grid-template-columns:24% 1fr; gap:3cqw; align-items:start;}
+.s-grid .sc-sec{margin:0; text-align:right; padding-top:.3cqw;}
+
+/* s-formal: framed, serif, for report cards that get filed */
+.s-formal .school{padding:9cqw;}
+.s-formal .sc-head{text-align:center; border-bottom:1px solid var(--c-accent);}
+
+/* ---------- worksheet ---------------------------------------------------- */
+
+/* Each typed question sits on a ruled line with answer space beneath it. The
+   rule is drawn as a repeating gradient at exactly the line-height, so it works
+   however many questions are typed. */
+.ws-items{flex:1;}
+.ws-list{
+  font-family:'Karla', sans-serif; font-size:2cqw; color:var(--c-ink);
+  line-height:calc(var(--row) * 2.2);
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--row) * 2.2 - 1px),
+    rgba(var(--c-ink-rgb), 0.22) calc(var(--row) * 2.2 - 1px),
+    rgba(var(--c-ink-rgb), 0.22) calc(var(--row) * 2.2)
+  );
+}
+.s-boxed .ws-list{
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(var(--c-accent-rgb), 0.05) 0,
+    rgba(var(--c-accent-rgb), 0.05) calc(var(--row) * 2.2),
+    transparent calc(var(--row) * 2.2),
+    transparent calc(var(--row) * 4.4)
+  );
+}
+
+/* ---------- lesson plan -------------------------------------------------- */
+
+.lp-meta{
+  display:flex; gap:5cqw; margin-bottom:3.4cqw;
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-soft);
+}
+.lp-meta span:empty{display:none;}
+
+/* ---------- timetable ---------------------------------------------------- */
+
+/* Periods are set on a taller row than the other grids - a timetable on a wall
+   is read from a few feet away, and seven periods on a 4.4cqw row left two
+   thirds of the sheet empty. */
+.doc-preview{--row-tt:8.4cqw;}
+
+.tt-grid{display:grid; grid-template-columns:1.1fr 1fr 1fr 1fr 1fr 1fr; border-top:1.5px solid var(--c-accent);}
+.tt-col{border-right:1px solid rgba(var(--c-ink-rgb), 0.14);}
+.tt-col:last-child{border-right:0;}
+.tt-h{
+  display:block; font-family:'Karla', sans-serif; font-size:1.7cqw; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--c-accent);
+  padding:1.6cqw 1.4cqw; border-bottom:1px solid rgba(var(--c-ink-rgb), 0.14);
+  text-align:center;
+}
+.tt-cells{
+  font-family:'Karla', sans-serif; font-size:1.85cqw; color:var(--c-ink);
+  line-height:var(--row-tt); text-align:center; padding:0 .8cqw;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent calc(var(--row-tt) - 1px),
+    rgba(var(--c-ink-rgb), 0.1) calc(var(--row-tt) - 1px),
+    rgba(var(--c-ink-rgb), 0.1) var(--row-tt));
+}
+.tt-times .tt-cells{color:var(--c-accent); font-variant-numeric:tabular-nums;}
+.s-boxed .tt-cells{
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) var(--row-tt),
+    transparent var(--row-tt), transparent calc(var(--row-tt) * 2));
+}
+
+/* ---------- report card -------------------------------------------------- */
+
+.rc-student{margin-bottom:3.4cqw;}
+.rc-name{font-family:'Tenor Sans', sans-serif; font-size:calc(3.6cqw * var(--name-scale)); color:var(--c-ink);}
+.rc-sub{display:flex; gap:4cqw; margin-top:.8cqw; font-family:'Karla', sans-serif; font-size:1.8cqw; color:var(--c-accent);}
+.rc-table{display:grid; grid-template-columns:1fr auto auto; gap:0 4cqw; border-top:1.5px solid var(--c-accent); margin-bottom:3.4cqw;}
+.rc-h{
+  display:block; font-family:'Karla', sans-serif; font-size:1.6cqw; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);
+  padding:1.4cqw 0 1cqw;
+}
+.rc-cells{
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-ink);
+  line-height:var(--row);
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent calc(var(--row) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) var(--row));
+}
+.rc-num{text-align:right; font-variant-numeric:tabular-nums;}
+.rc-remarks{margin-bottom:auto;}
+.rc-sign{margin-top:4cqw; width:36%;}
+.rc-line{display:block; height:1px; background:var(--c-accent); opacity:.6; margin-bottom:1.2cqw;}
+.rc-signname{font-family:'Karla', sans-serif; font-size:1.9cqw; font-weight:600; color:var(--c-ink);}
+.rc-signrole{font-family:'Karla', sans-serif; font-size:1.6cqw; letter-spacing:.12em; text-transform:uppercase; color:var(--c-soft); margin-top:.4cqw;}
+.s-boxed .rc-cells{
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) var(--row),
+    transparent var(--row), transparent calc(var(--row) * 2));
+}
+
+/* ---------- attendance register ------------------------------------------ */
+
+/* The names and the tick grid are two separate columns whose rows have to line
+   up, so both headers are given the same fixed height and both bodies draw
+   their rules from their own top with the same row height. Any difference in
+   header height and every row below is out by that amount. */
+.doc-preview{--row-at:5.4cqw; --at-head:5.4cqw;}
+
+.at-grid{display:grid; grid-template-columns:30% 1fr; border-top:1.5px solid var(--c-accent); flex:1;}
+.at-names, .at-days{display:flex; flex-direction:column; min-height:0;}
+.at-names{border-right:1px solid rgba(var(--c-ink-rgb), 0.2);}
+
+.at-h, .at-nums{
+  height:var(--at-head); box-sizing:border-box; flex:0 0 auto;
+  border-bottom:1px solid rgba(var(--c-ink-rgb), 0.2);
+}
+.at-h{
+  display:flex; align-items:center; padding:0 1cqw;
+  font-family:'Karla', sans-serif; font-size:1.6cqw; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-accent);
+}
+.at-nums{display:grid; grid-template-columns:repeat(31, 1fr);}
+.at-nums span{
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Karla', sans-serif; font-size:1.45cqw; color:var(--c-accent);
+  font-variant-numeric:tabular-nums;
+}
+
+/* rules run to the foot of the sheet, as a printed register does */
+.at-body, .at-ticks{
+  flex:1;
+  background-repeat:repeat;
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent calc(var(--row-at) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) calc(var(--row-at) - 1px),
+    rgba(var(--c-ink-rgb), 0.12) var(--row-at));
+}
+.at-cells{
+  font-family:'Karla', sans-serif; font-size:1.75cqw; color:var(--c-ink);
+  line-height:var(--row-at); padding:0 1cqw;
+}
+.at-ticks{
+  background-image:
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent calc(var(--row-at) - 1px),
+      rgba(var(--c-ink-rgb), 0.12) calc(var(--row-at) - 1px),
+      rgba(var(--c-ink-rgb), 0.12) var(--row-at)),
+    repeating-linear-gradient(to right,
+      transparent 0, transparent calc((100% / 31) - 1px),
+      rgba(var(--c-ink-rgb), 0.1) calc((100% / 31) - 1px),
+      rgba(var(--c-ink-rgb), 0.1) calc(100% / 31));
+}
+.s-boxed .at-body{
+  background-image:repeating-linear-gradient(
+    to bottom,
+    rgba(var(--c-accent-rgb), 0.06) 0, rgba(var(--c-accent-rgb), 0.06) var(--row-at),
+    transparent var(--row-at), transparent calc(var(--row-at) * 2));
+}
+
+/* ---------- flashcard ---------------------------------------------------- */
+
+.flash{
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  padding:8cqw 9cqw;
+}
+.flash p{margin:0;}
+.fc-tag{
+  font-family:'Karla', sans-serif; font-size:2.4cqw;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent); margin-bottom:2cqw;
+}
+.fc-term{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(9cqw * var(--name-scale)); line-height:1.1; color:var(--c-ink);
+}
+.fc-pron{
+  font-family:'Karla', sans-serif; font-size:2.4cqw; font-style:italic;
+  color:var(--c-soft); margin-top:1cqw;
+}
+.fc-def{
+  font-family:'Karla', sans-serif; font-size:2.8cqw; line-height:1.55;
+  color:var(--c-soft); max-width:88%;
+}
+.fc-eg{
+  font-family:'Karla', sans-serif; font-size:2.3cqw; font-style:italic;
+  color:var(--c-soft); margin-top:2cqw; max-width:88%;
+}
+.fc-tag:empty, .fc-pron:empty, .fc-eg:empty, .fc-def:empty{display:none;}
+.flash .c-rule{width:14cqw; height:1px; background:var(--c-accent); opacity:.7; margin:2.4cqw 0;}
+
+.f-cormorant .fc-term{font-family:'Cormorant Garamond', serif; font-size:calc(11cqw * var(--name-scale));}
+.f-libre .fc-term{font-family:'Libre Baskerville', serif; font-size:calc(7cqw * var(--name-scale));}
+.f-josefin .fc-term{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.04em;}
+
+.fc-label .flash{align-items:flex-start; text-align:left; padding-top:10cqw;}
+.fc-label .fc-tag{
+  position:absolute; top:0; left:0;
+  background:var(--c-accent); color:var(--c-bg);
+  padding:1.4cqw 3cqw; margin:0;
+}
+.fc-panel .flash{background:rgba(var(--c-accent-rgb), 0.06); margin:4cqw; padding:6cqw;}
+.fc-bordered .flash{margin:4cqw; border:1px solid var(--c-accent); padding:6cqw;}
+
+/* ---------- student ID card ---------------------------------------------- */
+
+.idc{flex:1; display:flex; flex-direction:column; padding:5cqw 5cqw 4cqw;}
+.idc p{margin:0;}
+.id-school{
+  font-family:'Karla', sans-serif; font-size:3.2cqw; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-accent);
+  padding-bottom:2cqw; border-bottom:1px solid rgba(var(--c-accent-rgb), 0.4);
+}
+.id-body{display:flex; gap:4cqw; align-items:flex-start; padding-top:3cqw;}
+.id-photo{
+  flex:0 0 auto; width:19cqw; aspect-ratio:3/4;
+  border:1px dashed rgba(var(--c-ink-rgb), 0.35);
+  display:grid; place-items:center;
+  font-family:'Karla', sans-serif; font-size:1.9cqw; color:var(--c-soft);
+}
+.id-detail{flex:1; min-width:0;}
+.id-name{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(5.4cqw * var(--name-scale)); line-height:1.15; color:var(--c-ink);
+  margin-bottom:1.6cqw;
+}
+.id-row{display:flex; gap:2cqw; font-family:'Karla', sans-serif; font-size:2.3cqw; line-height:1.8;}
+.id-k{color:var(--c-soft); min-width:14cqw; letter-spacing:.06em;}
+.id-v{color:var(--c-ink); font-weight:600;}
+.id-foot{
+  font-family:'Karla', sans-serif; font-size:2cqw; color:var(--c-soft);
+  margin-top:auto; padding-top:2cqw; letter-spacing:.06em;
+}
+.id-foot:empty{display:none;}
+
+.id-band .id-school{
+  background:var(--c-accent); color:#fff;
+  margin:-5cqw -5cqw 0; padding:3.4cqw 5cqw; border:0;
+}
+.id-crest .id-school{text-align:center; border-bottom-width:2px;}
+.id-formal .idc{margin:3cqw; border:1px solid var(--c-accent); padding:4cqw;}
+.id-formal .id-photo{border-color:rgba(255,255,255,.4);}
+
+/* portrait cards stack the photo above the detail */
+.sz-idcard-p .id-body{flex-direction:column; align-items:center; text-align:center;}
+.sz-idcard-p .id-photo{width:34cqw;}
+.sz-idcard-p .id-row{justify-content:center;}
+.sz-idcard-p .id-k{min-width:0;}
+
+/* ---------- diploma ------------------------------------------------------ */
+/* Reuses the certificate layout; a diploma just names its institution first. */
+
+.ct-school{
+  font-family:'Karla', sans-serif; font-size:2cqw; font-weight:700;
+  letter-spacing:.28em; text-transform:uppercase; color:var(--c-soft);
+  margin-bottom:2.4cqw;
+}
+.ct-school:empty{display:none;}
