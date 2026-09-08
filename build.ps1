@@ -10,6 +10,7 @@ $Out  = Join-Path $Root 'docs'
 . (Join-Path $Root 'content.ps1')
 . (Join-Path $Root 'content-business.ps1')
 . (Join-Path $Root 'content-greeting.ps1')
+. (Join-Path $Root 'content-marketing.ps1')
 . (Join-Path $Root 'ornaments.ps1')
 
 # Weddings ke subcategories purane format mein hain - unhein wahi defaults de dein
@@ -23,9 +24,10 @@ foreach ($s in $Subcats) {
 $Categories = @(
   @{ meta = $Category;    subs = $Subcats },
   @{ meta = $BizCategory; subs = $BizSubcats },
-  @{ meta = $GCategory;   subs = $GSubcats }
+  @{ meta = $GCategory;   subs = $GSubcats },
+  @{ meta = $MCategory;   subs = $MSubcats }
 )
-$AllGuides = @($Guides) + @($BizGuides) + @($GGuides)
+$AllGuides = @($Guides) + @($BizGuides) + @($GGuides) + @($MGuides)
 
 $Today = (Get-Date).ToString('yyyy-MM-dd')
 $Year  = (Get-Date).Year
@@ -73,9 +75,11 @@ function Get-Nav($depth, $current) {
     $n++
     $m = $cat.meta
     $items = ($cat.subs | ForEach-Object { "<a href=`"${r}$($m.slug)/$($_.slug)/`">$($_.nav)</a>" }) -join ''
+    # Header ek line par rehna chahiye; poora naam dropdown aur footer mein hai.
+    $label = if ($m.short) { $m.short } else { $m.name }
     $drops += @"
 <div class="has-dropdown">
-          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="$n">$($m.name)
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" data-dd="$n">$label
             <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           </button>
           <div class="dropdown-panel" data-dd-panel="$n" hidden>
@@ -162,11 +166,25 @@ function Get-Footer($depth) {
 "@
 }
 
+# Header aur footer sirf depth (aur header ke liye current page) par depend karte
+# hain, magar har page ke liye dobara bante the - aur har baar saari categories
+# aur subcategories par loop karte the. Do sau pages par ye build ka sabse bara
+# hissa ban gaya tha, is liye cache kar diya.
+$ChromeCache = @{}
+
+function Get-Chrome($kind, $depth, $current) {
+  $key = "$kind|$depth|$current"
+  if (-not $ChromeCache.ContainsKey($key)) {
+    $ChromeCache[$key] = if ($kind -eq 'header') { Get-Header $depth $current } else { Get-Footer $depth }
+  }
+  $ChromeCache[$key]
+}
+
 function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $extraScripts) {
   $r = Get-Rel $depth
   $canonical = if ($path) { "$($Site.Url)/$path/" } else { "$($Site.Url)/" }
-  $header = Get-Header $depth $current
-  $footer = Get-Footer $depth
+  $header = Get-Chrome 'header' $depth $current
+  $footer = Get-Chrome 'footer' $depth ''
   if (-not $extraHead) { $extraHead = '' }
   if (-not $extraScripts) { $extraScripts = '' }
   $html = @"
@@ -189,6 +207,7 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="stylesheet" href="${r}assets/css/style.css">
 <link rel="stylesheet" href="${r}assets/css/cards.css">
 <link rel="stylesheet" href="${r}assets/css/docs.css">
+<link rel="stylesheet" href="${r}assets/css/promo.css">
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
@@ -249,12 +268,21 @@ function Fld($b, $id, $cls, $tag) {
   "<$tag class=`"$cls`" data-field=`"$id`">$v</$tag>"
 }
 
+$ArtLayerCache = @{}
+
 function Get-ArtLayer($t, $allArt) {
   if ($allArt) {
-    return ($ArtKinds | Where-Object { $_.id -ne 'none' } | ForEach-Object {
-      $on = if ($_.id -eq $t.art) { ' is-on' } else { '' }
-      "<span class=`"art$on`" data-art=`"$($_.id)`">" + (Get-Art $_.id) + '</span>'
-    }) -join ''
+    # Editor pages carry every ornament so the switcher can swap them with no
+    # round trip. The markup only varies by which one is active, so it is built
+    # once per active ornament rather than once per page.
+    $key = "all|$($t.art)"
+    if (-not $ArtLayerCache.ContainsKey($key)) {
+      $ArtLayerCache[$key] = ($ArtKinds | Where-Object { $_.id -ne 'none' } | ForEach-Object {
+        $on = if ($_.id -eq $t.art) { ' is-on' } else { '' }
+        "<span class=`"art$on`" data-art=`"$($_.id)`">" + (Get-Art $_.id) + '</span>'
+      }) -join ''
+    }
+    return $ArtLayerCache[$key]
   }
   if ($t.art) { return "<span class=`"art is-on`" data-art=`"$($t.art)`">" + (Get-Art $t.art) + '</span>' }
   ''
@@ -358,6 +386,31 @@ function Get-Menu($s, $t, $ec, $aa) {
   Doc-Shell $s $t $ec $aa $inner
 }
 
+# Marketing graphics doc-preview par chalte hain: ratio, fit-to-page, ornaments
+# aur background treatments sab wahan pehle se hain - sirf sizes naye hain.
+function Get-Promo($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="promo">' +
+    (Fld $b 'kicker' 'pm-kicker' 'p') +
+    (Fld $b 'title'  'pm-title'  'p') +
+    (Fld $b 'sub'    'pm-sub'    'p') +
+    (Fld $b 'body'   'pm-body'   'div') +
+    '<div class="pm-foot">' + (Fld $b 'cta' 'pm-cta' 'p') + (Fld $b 'brand' 'pm-brand' 'p') + '</div>' +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
+function Get-Logo($s, $t, $ec, $aa) {
+  $b = $t.body
+  $inner = '<div class="logo">' +
+    '<span class="lg-mark-wrap">' + (Fld $b 'mark' 'lg-mark' 'span') + '</span>' +
+    (Fld $b 'title'   'lg-name' 'p') +
+    (Fld $b 'tagline' 'lg-tag'  'p') +
+    (Fld $b 'est'     'lg-est'  'p') +
+    '</div>'
+  Doc-Shell $s $t $ec $aa $inner
+}
+
 # Greeting cards card-preview par chalte hain (documents nahi), magar fields
 # alag hain: bara greeting, message, aur To/From - date/venue nahi.
 function Get-Greeting($s, $t, $ec, $aa) {
@@ -405,6 +458,8 @@ function Get-Preview($s, $t, $extraClass, $allArt) {
     'menu'       { Get-Menu $s $t $extraClass $allArt }
     'letterhead' { Get-Letterhead $s $t $extraClass $allArt }
     'greeting'   { Get-Greeting $s $t $extraClass $allArt }
+    'promo'      { Get-Promo $s $t $extraClass $allArt }
+    'logo'       { Get-Logo $s $t $extraClass $allArt }
     default      { Get-Card $t $extraClass $allArt }
   }
 }
@@ -712,7 +767,10 @@ function Build-Template($cat, $s, $t) {
     "<button class=`"ed-chip`" type=`"button`" aria-pressed=`"false`" data-bg=`"$($_.cls)`">$($_.label)</button>"
   }) -join ''
 
-  $sizes = $SizeSets[$SizeSetFor[$kind]]
+  # Marketing formats ke sizes kind se nahi, subcategory se aate hain - ek
+  # poster ko 1584x396 LinkedIn banner offer karna bemani hoga.
+  $setName = if ($s.sizeset) { $s.sizeset } else { $SizeSetFor[$kind] }
+  $sizes = $SizeSets[$setName]
   $sizeChips = ($sizes | ForEach-Object {
     "<button class=`"ed-chip ed-chip-wide`" type=`"button`" aria-pressed=`"false`" data-size=`"$($_.cls)`">$($_.label)<span class=`"sub`">$($_.note)</span></button>"
   }) -join ''
@@ -729,7 +787,9 @@ function Build-Template($cat, $s, $t) {
 
   $noun = if ($kind -eq 'card') { 'card' } elseif ($kind -eq 'bcard') { 'card' } else { 'page' }
   $form = Get-EditorForm $s
-  $preview = Get-Preview $s $t '' $true
+  # Only ship the whole ornament set when there is a switcher to use it - on a
+  # LinkedIn banner those eleven hidden SVGs were half the page weight.
+  $preview = Get-Preview $s $t '' $showArt
 
   # "CV &amp; Resume Templates" -> "CV &amp; Resume", "Wedding Invitations" -> "Wedding Invitation".
   # Without the first case the title reads "... Template Template".

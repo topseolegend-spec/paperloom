@@ -90,13 +90,42 @@ $SizeSets = @{
   bcard = @(
     @{ cls='sz-bcard';    label='3.5 x 2 in';  note='Pakistan, US and most of Asia' },
     @{ cls='sz-bcard-eu'; label='85 x 55 mm';  note='Europe' })
+
+  # Marketing formats - har platform ka apna size, is liye har subcategory apna
+  # set chunti hai (subcategory par "sizeset" key).
+  poster = @(
+    @{ cls='sz-a3';        label='A3';          note='Noticeboards and shop windows' },
+    @{ cls='sz-a2';        label='A2';          note='Where people stand back from it' },
+    @{ cls='sz-poster-us'; label='18 x 24 in';  note='North America' })
+  flyer = @(
+    @{ cls='sz-a5'; label='A5'; note='Handouts and letterbox drops' },
+    @{ cls='sz-a4'; label='A4'; note='Noticeboards and windows' })
+  igpost = @(
+    @{ cls='sz-ig';   label='1080 square';   note='Standard feed post' },
+    @{ cls='sz-ig45'; label='1080 x 1350';   note='Portrait - takes more of the feed' })
+  story = @(
+    @{ cls='sz-story'; label='1080 x 1920'; note='Stories, Reels and TikTok' })
+  yt = @(
+    @{ cls='sz-yt'; label='1280 x 720'; note='YouTube thumbnail' })
+  fbcover = @(
+    @{ cls='sz-fbcover'; label='820 x 312'; note='Facebook page cover' })
+  linkedin = @(
+    @{ cls='sz-linkedin'; label='1584 x 396'; note='LinkedIn profile banner' })
+  webad = @(
+    @{ cls='sz-mrec';        label='300 x 250'; note='Medium rectangle' },
+    @{ cls='sz-leaderboard'; label='728 x 90';  note='Leaderboard' },
+    @{ cls='sz-halfpage';    label='300 x 600'; note='Half page' })
+  logo = @(
+    @{ cls='sz-logo';    label='3 : 2';  note='Wordmarks and stacked marks' },
+    @{ cls='sz-logo-sq'; label='Square'; note='Avatars and app icons' })
 }
 
-# kind -> konsa size set milega
+# kind -> konsa size set milega (subcategory "sizeset" is se pehle aati hai)
 $SizeSetFor = @{
   card='card'; greeting='card'
   resume='doc'; letter='doc'; invoice='doc'; menu='doc'; letterhead='doc'
   cert='cert'; bcard='bcard'
+  promo='poster'; logo='logo'
 }
 
 # --- editor form fields -------------------------------------------------------
@@ -172,6 +201,7 @@ function New-Tpl($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent,
 $Category = @{
   slug  = 'wedding-events'
   name  = 'Weddings &amp; Events'
+  short = 'Weddings'
   panel = 'Occasions'
   blurb = 'Eight occasions, four designs each, every one editable in the browser.'
   h1    = 'Wedding and Event Invitation Templates'

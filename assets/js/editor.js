@@ -421,15 +421,24 @@
       pngBtn.textContent = 'Rendering...';
       var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
       ready.then(function () {
-        // 300dpi at each page's real physical width, so a print shop gets what
-        // it asks for whether this is a 3.5in card or a 297mm certificate.
-        var PX_300DPI = {
+        // Export width per size. Print formats get 300dpi at their real
+        // physical width; screen formats get the exact pixel size the platform
+        // asks for, because uploading larger only means the platform
+        // recompresses it and it comes back looking worse.
+        var PX_TARGET = {
+          // print
           'sz-5x7': 1500, 'sz-a5': 1748, 'sz-square': 1500,
           'sz-a4': 2480, 'sz-letter': 2550,
           'sz-cert': 3508, 'sz-cert-letter': 3300,
-          'sz-bcard': 1050, 'sz-bcard-eu': 1004
+          'sz-bcard': 1050, 'sz-bcard-eu': 1004,
+          'sz-a3': 3508, 'sz-a2': 4961, 'sz-poster-us': 5400,
+          // screen
+          'sz-ig': 1080, 'sz-ig45': 1080, 'sz-story': 1080,
+          'sz-yt': 1280, 'sz-fbcover': 820, 'sz-linkedin': 1584,
+          'sz-mrec': 600, 'sz-leaderboard': 1456, 'sz-halfpage': 600,
+          'sz-logo': 1500, 'sz-logo-sq': 1500
         };
-        var target = PX_300DPI[state.size] || 1500;
+        var target = PX_TARGET[state.size] || 1500;
         return html2canvas(card, {
           scale: target / card.offsetWidth,
           backgroundColor: null,

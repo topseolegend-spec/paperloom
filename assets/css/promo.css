@@ -1,0 +1,278 @@
+/* ==========================================================================
+   Marketing graphics - posters, flyers, social posts, thumbnails, covers,
+   banners and logo layouts.
+
+   These sit on the .doc-preview shell, which already carries the aspect ratio,
+   the fit-to-page scaler, the ornament layer and the background treatments.
+   Only the sizes and the inner layouts are new.
+
+   The hard part here is that one design has to work from 1:1 to 8:1. Type is
+   sized in cqw, which is a fraction of the WIDTH - so on a wide, short banner
+   the same value is enormous relative to the height available. Each size
+   therefore sets --promo-scale, and every type size is multiplied by it.
+   ========================================================================== */
+
+/* ---------- sizes -------------------------------------------------------- */
+
+.doc-preview.sz-a3{aspect-ratio:297/420;}
+.doc-preview.sz-a2{aspect-ratio:420/594;}
+.doc-preview.sz-poster-us{aspect-ratio:3/4;}
+.doc-preview.sz-a5{aspect-ratio:148/210;}
+.doc-preview.sz-ig{aspect-ratio:1/1;}
+.doc-preview.sz-ig45{aspect-ratio:4/5;}
+.doc-preview.sz-story{aspect-ratio:9/16;}
+.doc-preview.sz-yt{aspect-ratio:16/9;}
+.doc-preview.sz-fbcover{aspect-ratio:820/312;}
+.doc-preview.sz-linkedin{aspect-ratio:1584/396;}
+.doc-preview.sz-mrec{aspect-ratio:300/250;}
+.doc-preview.sz-leaderboard{aspect-ratio:728/90;}
+.doc-preview.sz-halfpage{aspect-ratio:300/600;}
+.doc-preview.sz-logo{aspect-ratio:3/2;}
+.doc-preview.sz-logo-sq{aspect-ratio:1/1;}
+
+/* how much height each canvas has, expressed as a type multiplier */
+.doc-preview{--promo-scale:1;}
+.doc-preview.sz-a3, .doc-preview.sz-a2, .doc-preview.sz-poster-us,
+.doc-preview.sz-a5, .doc-preview.sz-a4{--promo-scale:0.92;}
+.doc-preview.sz-ig{--promo-scale:1;}
+.doc-preview.sz-ig45{--promo-scale:1.05;}
+.doc-preview.sz-story{--promo-scale:1.2;}
+.doc-preview.sz-halfpage{--promo-scale:1.25;}
+.doc-preview.sz-mrec{--promo-scale:0.88;}
+.doc-preview.sz-logo{--promo-scale:0.78;}
+.doc-preview.sz-logo-sq{--promo-scale:0.95;}
+.doc-preview.sz-yt{--promo-scale:0.66;}
+.doc-preview.sz-fbcover{--promo-scale:0.4;}
+.doc-preview.sz-linkedin{--promo-scale:0.27;}
+.doc-preview.sz-leaderboard{--promo-scale:0.14;}
+
+/* Border ornaments are drawn in a portrait box and stretched to the canvas.
+   That is invisible up to about 2:1, but on a LinkedIn banner or a leaderboard
+   it turns a diamond into a lozenge - and a border ornament has no business on
+   a strip that thin anyway. Hidden by size, so switching size in the editor
+   does the right thing on its own. */
+.doc-preview.sz-linkedin .card-art,
+.doc-preview.sz-leaderboard .card-art,
+.doc-preview.sz-fbcover .card-art{display:none;}
+
+/* ---------- shared promo type -------------------------------------------- */
+
+.promo{
+  flex:1; display:flex; flex-direction:column;
+  padding:calc(9cqw * var(--promo-scale)) calc(8cqw * var(--promo-scale));
+  gap:calc(2.4cqw * var(--promo-scale));
+}
+.promo p{margin:0;}
+
+.pm-kicker{
+  font-family:'Karla', sans-serif;
+  font-size:calc(3cqw * var(--promo-scale));
+  letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent);
+}
+.pm-title{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(11cqw * var(--promo-scale) * var(--name-scale));
+  line-height:1.04; color:var(--c-ink); text-wrap:balance;
+}
+.pm-sub{
+  font-family:'Karla', sans-serif;
+  font-size:calc(3.9cqw * var(--promo-scale));
+  line-height:1.4; color:var(--c-soft);
+}
+.pm-body{
+  font-family:'Karla', sans-serif;
+  font-size:calc(3cqw * var(--promo-scale));
+  line-height:1.7; color:var(--c-soft);
+  margin-top:calc(1.5cqw * var(--promo-scale));
+}
+.pm-foot{
+  margin-top:auto; padding-top:calc(3cqw * var(--promo-scale));
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:calc(3cqw * var(--promo-scale));
+}
+.pm-cta{
+  font-family:'Karla', sans-serif; font-weight:700;
+  font-size:calc(3.2cqw * var(--promo-scale));
+  letter-spacing:.06em; color:var(--c-accent);
+}
+.pm-brand{
+  font-family:'Karla', sans-serif;
+  font-size:calc(2.7cqw * var(--promo-scale));
+  letter-spacing:.16em; text-transform:uppercase; color:var(--c-soft);
+}
+.pm-kicker:empty, .pm-sub:empty, .pm-body:empty,
+.pm-cta:empty, .pm-brand:empty{display:none;}
+.pm-foot:has(> .pm-cta:empty):has(> .pm-brand:empty){display:none;}
+
+/* the headline takes whichever face is chosen */
+.f-josefin .pm-title{font-family:'Josefin Sans', sans-serif; font-weight:300; letter-spacing:.02em; text-transform:uppercase; font-size:calc(9.5cqw * var(--promo-scale) * var(--name-scale));}
+.f-tenor .pm-title{font-family:'Tenor Sans', sans-serif;}
+.f-cormorant .pm-title{font-family:'Cormorant Garamond', serif; font-size:calc(13cqw * var(--promo-scale) * var(--name-scale));}
+.f-playfair .pm-title{font-family:'Playfair Display', serif; font-size:calc(10.5cqw * var(--promo-scale) * var(--name-scale));}
+.f-bodoni .pm-title{font-family:'Bodoni Moda', serif; font-size:calc(10.5cqw * var(--promo-scale) * var(--name-scale));}
+.f-italiana .pm-title{font-family:'Italiana', serif; font-size:calc(12.5cqw * var(--promo-scale) * var(--name-scale)); letter-spacing:.03em;}
+.f-libre .pm-title{font-family:'Libre Baskerville', serif; font-size:calc(8cqw * var(--promo-scale) * var(--name-scale));}
+.f-marcellus .pm-title{font-family:'Marcellus', serif; font-size:calc(10.5cqw * var(--promo-scale) * var(--name-scale));}
+.f-cinzel .pm-title{font-family:'Cinzel', serif; font-size:calc(8cqw * var(--promo-scale) * var(--name-scale)); letter-spacing:.04em;}
+.f-cinzel-dec .pm-title{font-family:'Cinzel Decorative', serif; font-size:calc(7.6cqw * var(--promo-scale) * var(--name-scale));}
+.f-script .pm-title{font-family:'Great Vibes', cursive; font-size:calc(14cqw * var(--promo-scale) * var(--name-scale)); line-height:1.2;}
+.f-parisienne .pm-title{font-family:'Parisienne', cursive; font-size:calc(13cqw * var(--promo-scale) * var(--name-scale)); line-height:1.25;}
+.f-sacramento .pm-title{font-family:'Sacramento', cursive; font-size:calc(14cqw * var(--promo-scale) * var(--name-scale)); line-height:1.2;}
+.f-urdu .pm-title{font-family:'Noto Nastaliq Urdu','Amiri',serif; font-size:calc(7.5cqw * var(--promo-scale) * var(--name-scale)); line-height:1.9;}
+.f-amiri .pm-title{font-family:'Amiri', serif; font-size:calc(11cqw * var(--promo-scale) * var(--name-scale));}
+.f-naskh .pm-title{font-family:'Noto Naskh Arabic','Amiri',serif; font-size:calc(9cqw * var(--promo-scale) * var(--name-scale)); line-height:1.7;}
+
+.f-urdu .pm-kicker, .f-urdu .pm-sub, .f-urdu .pm-body,
+.f-amiri .pm-kicker, .f-amiri .pm-sub, .f-amiri .pm-body,
+.f-naskh .pm-kicker, .f-naskh .pm-sub, .f-naskh .pm-body{
+  text-transform:none; letter-spacing:0; line-height:1.9;
+}
+
+/* ---------- the four directions ------------------------------------------ */
+
+/* Simple, but not bare: real hierarchy, one accent, and a rule doing the work
+   that a decoration would do elsewhere. */
+.p-clean .pm-title{margin-top:calc(1cqw * var(--promo-scale));}
+.p-clean .pm-kicker{
+  padding-bottom:calc(2cqw * var(--promo-scale));
+  border-bottom:2px solid var(--c-accent);
+  align-self:flex-start;
+}
+.p-clean .pm-foot{border-top:1px solid rgba(var(--c-ink-rgb), 0.15);}
+
+/* Modern: the headline sits against a block of colour running off one edge. */
+.p-modern .promo{position:relative;}
+.p-modern .promo::before{
+  content:""; position:absolute; top:0; left:0;
+  width:calc(16cqw * var(--promo-scale)); height:100%;
+  background:var(--c-accent); z-index:-1;
+}
+.p-modern .promo{padding-left:calc(13cqw * var(--promo-scale));}
+.p-modern .pm-kicker{color:var(--c-soft);}
+.p-modern .pm-title{margin-top:calc(1cqw * var(--promo-scale));}
+.p-modern .pm-cta{
+  background:var(--c-accent); color:var(--c-bg);
+  padding:calc(1.4cqw * var(--promo-scale)) calc(3cqw * var(--promo-scale));
+  border-radius:calc(1cqw * var(--promo-scale));
+}
+
+/* Lightly filled: the words sit in a tinted panel with a rule above. */
+.p-panel .promo{
+  margin:calc(5cqw * var(--promo-scale));
+  padding:calc(7cqw * var(--promo-scale)) calc(6cqw * var(--promo-scale));
+  background:rgba(var(--c-accent-rgb), 0.09);
+  border-top:3px solid var(--c-accent);
+}
+.p-panel .pm-foot{border-top:1px solid rgba(var(--c-accent-rgb), 0.3);}
+
+/* Filled: colour ground, display type, everything at full strength. */
+.p-bold .pm-kicker{
+  display:inline-block; align-self:flex-start;
+  background:var(--c-accent); color:var(--c-bg);
+  padding:calc(1.2cqw * var(--promo-scale)) calc(2.6cqw * var(--promo-scale));
+}
+.p-bold .pm-title{margin-top:calc(2cqw * var(--promo-scale));}
+.p-bold .pm-sub{color:var(--c-soft);}
+.p-bold .pm-foot{border-top:1px solid rgba(var(--c-ink-rgb), 0.25);}
+
+/* ---------- wide formats ------------------------------------------------- */
+/* A cover or banner is a strip: the layout centres, the details drop away, and
+   the padding stops scaling with the type or it would swallow the canvas. */
+
+.sz-fbcover .promo, .sz-linkedin .promo, .sz-leaderboard .promo{
+  padding:5cqw 7cqw;
+  justify-content:center;
+  gap:1.4cqw;
+}
+.sz-fbcover .pm-body, .sz-linkedin .pm-body, .sz-leaderboard .pm-body{display:none;}
+.sz-fbcover .pm-foot, .sz-linkedin .pm-foot, .sz-leaderboard .pm-foot{
+  margin-top:1.6cqw; padding-top:0; border:0;
+}
+.sz-fbcover .promo{align-items:center; text-align:center;}
+.sz-fbcover .pm-foot{justify-content:center;}
+/* LinkedIn puts the profile photo over the lower left, so keep clear of it */
+.sz-linkedin .promo{align-items:flex-end; text-align:right; padding-right:6cqw;}
+.sz-linkedin .p-modern .promo::before{display:none;}
+.sz-leaderboard .promo{
+  flex-direction:row; align-items:center; justify-content:space-between; gap:3cqw;
+}
+.sz-leaderboard .pm-foot{margin:0;}
+.sz-leaderboard .pm-sub{display:none;}
+
+/* the offset block reads as a stripe rather than a slab on a wide canvas */
+.sz-fbcover .p-modern .promo::before,
+.sz-leaderboard .p-modern .promo::before{width:2.5cqw;}
+.sz-fbcover .p-modern .promo{padding-left:7cqw;}
+
+/* ---------- logo layouts ------------------------------------------------- */
+
+.logo{
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  padding:calc(10cqw * var(--promo-scale));
+  gap:calc(2cqw * var(--promo-scale));
+}
+.logo p{margin:0;}
+.lg-mark-wrap{display:none;}
+.lg-name{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(13cqw * var(--promo-scale) * var(--name-scale));
+  line-height:1.05; letter-spacing:.06em; color:var(--c-ink);
+}
+.lg-tag{
+  font-family:'Karla', sans-serif;
+  font-size:calc(3.2cqw * var(--promo-scale));
+  letter-spacing:.3em; text-transform:uppercase; color:var(--c-accent);
+}
+.lg-est{
+  font-family:'Karla', sans-serif;
+  font-size:calc(2.6cqw * var(--promo-scale));
+  letter-spacing:.18em; text-transform:uppercase; color:var(--c-soft);
+}
+.lg-tag:empty, .lg-est:empty{display:none;}
+
+.f-cormorant .lg-name{font-family:'Cormorant Garamond', serif; font-size:calc(15cqw * var(--promo-scale) * var(--name-scale));}
+.f-josefin .lg-name{font-family:'Josefin Sans', sans-serif; font-weight:300; text-transform:uppercase; letter-spacing:.14em; font-size:calc(11cqw * var(--promo-scale) * var(--name-scale));}
+.f-cinzel .lg-name{font-family:'Cinzel', serif; font-size:calc(10cqw * var(--promo-scale) * var(--name-scale));}
+.f-italiana .lg-name{font-family:'Italiana', serif; font-size:calc(14cqw * var(--promo-scale) * var(--name-scale));}
+.f-playfair .lg-name{font-family:'Playfair Display', serif; font-size:calc(12cqw * var(--promo-scale) * var(--name-scale));}
+.f-marcellus .lg-name{font-family:'Marcellus', serif; font-size:calc(12cqw * var(--promo-scale) * var(--name-scale));}
+.f-script .lg-name{font-family:'Great Vibes', cursive; font-size:calc(17cqw * var(--promo-scale) * var(--name-scale));}
+
+/* wordmark: name, a rule, and the tagline under it */
+.l-wordmark .lg-name{padding-bottom:calc(2.4cqw * var(--promo-scale));
+  border-bottom:1px solid var(--c-accent);}
+
+/* monogram: the initial in a ring, name beneath */
+.l-monogram .lg-mark-wrap{
+  display:grid; place-items:center;
+  width:calc(22cqw * var(--promo-scale)); aspect-ratio:1;
+  border:2px solid var(--c-accent); border-radius:50%;
+  margin-bottom:calc(2cqw * var(--promo-scale));
+}
+.l-monogram .lg-mark{
+  font-family:'Tenor Sans', sans-serif;
+  font-size:calc(11cqw * var(--promo-scale)); color:var(--c-accent);
+  line-height:1;
+}
+.l-monogram .lg-name{font-size:calc(8cqw * var(--promo-scale) * var(--name-scale)); letter-spacing:.18em; text-transform:uppercase;}
+
+/* stacked: rules above and below the name */
+.l-stacked .lg-name{
+  padding:calc(2.4cqw * var(--promo-scale)) 0;
+  border-top:1px solid var(--c-accent);
+  border-bottom:1px solid var(--c-accent);
+}
+
+/* badge: a bordered plate, the initial small above the name */
+.l-badge .logo{
+  margin:calc(6cqw * var(--promo-scale));
+  border:1px solid var(--c-accent);
+  padding:calc(6cqw * var(--promo-scale));
+}
+.l-badge .lg-mark-wrap{display:block;}
+.l-badge .lg-mark{
+  font-family:'Cinzel', serif;
+  font-size:calc(5cqw * var(--promo-scale)); letter-spacing:.3em; color:var(--c-accent);
+}
+.l-badge .lg-name{font-size:calc(10cqw * var(--promo-scale) * var(--name-scale));}

@@ -199,7 +199,17 @@ $ArtKinds = @(
   @{ id='confetti';  label='Confetti' }
 )
 
+# Ornaments ab static hain - rang CSS se aata hai, is liye har SVG sirf ek baar
+# banti hai. Editor wale har page par 11 ornaments hote hain, to bina cache ke
+# ye build ka sabse mehnga hissa ban jata hai.
+$ArtCache = @{}
+
 function Get-Art($kind) {
+  if (-not $ArtCache.ContainsKey("$kind")) { $ArtCache["$kind"] = Build-Art $kind }
+  $ArtCache["$kind"]
+}
+
+function Build-Art($kind) {
   switch ($kind) {
     'wreath'    { Art-Wreath }
     'bouquet'   { Art-Bouquet }

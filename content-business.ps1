@@ -201,6 +201,7 @@ function New-Doc($slug, $name, $style, $design, $font, $art, $bg, $ink, $accent,
 $BizCategory = @{
   slug  = 'business-office'
   name  = 'Business &amp; Office'
+  short = 'Business'
   panel = 'Document types'
   blurb = 'CVs first, then the paperwork a small business actually sends out.'
   h1    = 'Business and Office Templates'

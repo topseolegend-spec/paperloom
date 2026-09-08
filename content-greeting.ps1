@@ -64,6 +64,7 @@ $GBody = @{
 $GCategory = @{
   slug  = 'greeting-cards'
   name  = 'Greeting Cards'
+  short = 'Greetings'
   panel = 'Occasions'
   blurb = 'Twelve occasions, four designs each - plain, modern, and two with more on them.'
   h1    = 'Greeting Card Templates'
