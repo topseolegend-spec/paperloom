@@ -136,6 +136,15 @@
   box-shadow:0 0 0 2px rgba(var(--c-accent-rgb), 0.45);
 }
 
+/* shown when the content had to be scaled down to fit one page */
+.ed-fit-note{
+  display:flex; align-items:center; gap:8px;
+  font-size:13.5px; color:var(--ink);
+  background:var(--gold-soft); border:1px solid #e8dcc2;
+  border-radius:var(--radius); padding:9px 13px; margin:0 0 14px;
+}
+.ed-fit-note[hidden]{display:none;}
+
 /* editing banner over the stage */
 .stage-hint{
   display:flex; align-items:center; gap:8px;

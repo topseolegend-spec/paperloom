@@ -181,7 +181,29 @@
     // ring ornaments need a narrower text column - cards.css keys off this
     card.setAttribute('data-art', state.art);
 
+    refit();
     syncControls();
+  }
+
+  // Re-measure whenever the content changes: adding a line can push the page
+  // over, and deleting one gives the room back. Typing is debounced because
+  // each measurement forces a reflow.
+  var refitTimer = null;
+
+  function refit() {
+    if (typeof window.paperloomFit !== 'function') return;
+    var fit = window.paperloomFit(card);
+    var warn = document.querySelector('.ed-fit-note');
+    if (!warn) return;
+    warn.hidden = fit > 0.94;
+    warn.textContent = fit <= 0.63
+      ? 'This is more than one page holds even at the smallest size - shorten a section.'
+      : 'Scaled to ' + Math.round(fit * 100) + '% to fit on one page. Shorten a section to get the size back.';
+  }
+
+  function scheduleRefit() {
+    clearTimeout(refitTimer);
+    refitTimer = setTimeout(refit, 120);
   }
 
   function toHex6(v) {
@@ -248,6 +270,7 @@
       state.texts[f] = textToHtml(input.value);
       if (target) target.innerHTML = state.texts[f];
       save();
+      scheduleRefit();
       flash('Saved in this browser');
     });
 
@@ -271,6 +294,7 @@
       var input = document.querySelector('[data-text="' + f + '"]');
       if (input) input.value = htmlToText(el.innerHTML);
       save();
+      scheduleRefit();
       flash('Saved in this browser');
     });
     el.addEventListener('paste', function (e) {

@@ -30,12 +30,18 @@
 .card-preview.sz-square{aspect-ratio:1/1;}
 .card-preview.sz-square .card-body{padding:9cqw 11cqw;}
 
+/* Fit-to-page - see the note in docs.css. A long venue address or an added
+   footer line would otherwise be clipped by the card's fixed proportions. */
 .card-body{
   position:absolute; inset:0;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center;
   padding:11cqw 9cqw;
   gap:2.4cqw;
+  width:calc(100% / var(--fit, 1));
+  height:calc(100% / var(--fit, 1));
+  transform:scale(var(--fit, 1));
+  transform-origin:top left;
 }
 
 /* ---------- text roles --------------------------------------------------- */

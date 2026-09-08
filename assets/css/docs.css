@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    Document templates - CVs, invoices, certificates, business cards, letters,
    menus and letterheads.
 
@@ -26,42 +26,61 @@
 .doc-preview.sz-bcard{aspect-ratio:3.5/2;}
 .doc-preview.sz-bcard-eu{aspect-ratio:85/55;}
 
-.doc-inner{position:absolute; inset:0; z-index:2; display:flex; flex-direction:column;}
+/* Fit-to-page.
+
+   The page has a fixed aspect ratio, so content taller than the sheet used to
+   be silently clipped - add a third job or a second degree and the Education
+   section simply vanished off the bottom. Instead the inner box is laid out
+   larger by 1/--fit and scaled back down to exactly the page, which is what
+   happens on paper when you have more to say: everything gets a little smaller.
+   main.js measures and sets --fit; at 1 this is a no-op. */
+.doc-inner{
+  position:absolute; inset:0; z-index:2;
+  display:flex; flex-direction:column;
+  width:calc(100% / var(--fit, 1));
+  height:calc(100% / var(--fit, 1));
+  transform:scale(var(--fit, 1));
+  transform-origin:top left;
+}
 
 /* ---------- shared text roles -------------------------------------------- */
 
 .doc-preview p{margin:0;}
 
+/* Type sizes are set against the real page. On A4, 1cqw is 2.1mm, so body text
+   at 1.75cqw lands near 10.4pt - which is where printed CVs and invoices
+   actually sit. The earlier 2.15cqw was close to 13pt, which looked fine on
+   screen but pushed a full CV off the bottom of the sheet. */
 .d-name{
   font-family:'Tenor Sans', sans-serif;
-  font-size:calc(6.4cqw * var(--name-scale));
-  line-height:1.1; letter-spacing:.01em; color:var(--c-ink);
+  font-size:calc(5.6cqw * var(--name-scale));
+  line-height:1.12; letter-spacing:.01em; color:var(--c-ink);
 }
 .d-role{
   font-family:'Karla', sans-serif;
-  font-size:2.5cqw; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--c-accent); margin-top:1.2cqw;
+  font-size:2cqw; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--c-accent); margin-top:1cqw;
 }
 .d-sec{
   font-family:'Karla', sans-serif;
-  font-size:2.1cqw; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--c-accent); margin-bottom:1.6cqw;
+  font-size:1.8cqw; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--c-accent); margin-bottom:1.4cqw;
 }
 .d-text, .d-lines, .d-item-d{
   font-family:'Karla', sans-serif;
-  font-size:2.15cqw; line-height:1.65; color:var(--c-soft);
+  font-size:1.75cqw; line-height:1.6; color:var(--c-soft);
 }
-.d-item{margin-bottom:2.6cqw;}
+.d-item{margin-bottom:2cqw;}
 .d-item:last-child{margin-bottom:0;}
 .d-item-t{
   font-family:'Karla', sans-serif;
-  font-size:2.5cqw; font-weight:600; color:var(--c-ink);
+  font-size:2.05cqw; font-weight:600; color:var(--c-ink);
 }
 .d-item-m{
   font-family:'Karla', sans-serif;
-  font-size:2.05cqw; color:var(--c-accent); margin:.3cqw 0 .8cqw;
+  font-size:1.7cqw; color:var(--c-accent); margin:.25cqw 0 .7cqw;
 }
-.d-block{margin-bottom:4cqw;}
+.d-block{margin-bottom:3.2cqw;}
 .d-block:last-child{margin-bottom:0;}
 
 /* a field left empty should collapse, not leave a hole */
@@ -142,13 +161,15 @@
    No colour blocks anywhere. Prints cheaply, copies cleanly into an
    application form, and survives being forwarded as a scan. */
 
-.r-clean .doc-inner{padding:8cqw 8cqw 7cqw; gap:5cqw;}
+.r-clean .doc-inner{padding:6.5cqw 7cqw 5.5cqw; gap:2.8cqw;}
+.r-clean .d-item{margin-bottom:1.5cqw;}
+.r-clean .d-item-d, .r-clean .d-text{line-height:1.5;}
 .r-clean .d-head{
   padding-bottom:4cqw;
   border-bottom:2px solid var(--c-accent);
 }
 .r-clean .d-head .d-lines{
-  margin-top:2cqw; font-size:2.05cqw; line-height:1.7;
+  margin-top:1.5cqw; font-size:1.7cqw; line-height:1.6;
 }
 .r-clean .d-block{margin-bottom:0;}
 .r-clean .d-sec{
@@ -163,17 +184,19 @@
    Centred masthead, hairline rules, nothing but type. The traditional CV,
    and the one that suits academic and government applications. */
 
-.r-plain .doc-inner{padding:9cqw 10cqw; gap:5.5cqw;}
-.r-plain .d-head{text-align:center; padding-bottom:4cqw; border-bottom:1px solid var(--c-accent);}
+.r-plain .doc-inner{padding:6cqw 7.5cqw; gap:2.6cqw;}
+.r-plain .d-item{margin-bottom:1.5cqw;}
+.r-plain .d-item-d, .r-plain .d-text{line-height:1.5;}
+.r-plain .d-head{text-align:center; padding-bottom:3cqw; border-bottom:1px solid var(--c-accent);}
 .r-plain .d-head .d-role{letter-spacing:.3em;}
-.r-plain .d-head .d-lines{margin-top:2cqw; font-size:2cqw;}
+.r-plain .d-head .d-lines{margin-top:1.5cqw; font-size:1.7cqw;}
 .r-plain .d-block{margin-bottom:0;}
 .r-plain .d-sec{
   text-align:center; font-weight:400; letter-spacing:.28em;
-  padding-bottom:1.4cqw; margin-bottom:2.6cqw;
+  padding-bottom:.9cqw; margin-bottom:1.5cqw;
   border-bottom:1px solid rgba(var(--c-accent-rgb), 0.3);
 }
-.r-plain .d-item-t{font-family:'Cormorant Garamond', serif; font-size:3.1cqw; font-weight:600;}
+.r-plain .d-item-t{font-family:'Cormorant Garamond', serif; font-size:2.6cqw; font-weight:600;}
 .r-plain .d-item-m{font-style:italic;}
 
 /* ---------- ADVANCED 1: Studio Sidebar -----------------------------------

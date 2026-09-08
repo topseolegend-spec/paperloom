@@ -720,6 +720,7 @@ $crumb
           <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Fill in the boxes and the $noun updates as you type - or click a line on the $noun itself.
         </p>
+        <p class="ed-fit-note" hidden></p>
         <div class="detail-stage" data-template="$($t.slug)">$preview</div>
       </div>
       <div class="detail-side">
