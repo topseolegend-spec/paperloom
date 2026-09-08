@@ -179,6 +179,7 @@ $PSubcats = @(
     h1='Calendar Templates'
     title='Calendar Template - Free Printable Monthly Calendars'
     desc='Free printable monthly calendar templates. Type the month and year and the dates fill themselves in, then print for the wall or a planner.'
+    guideNote='A month on the wall answers "when", and a <a href="../../personal-lifestyle/planner-templates/">daily planner</a> answers "in what order" - most people who keep one for long end up keeping both.'
     intro=@(
       'Type a month and a year and the dates work themselves out - the grid knows which weekday the first falls on and how many days the month has, including February in a leap year. You are not filling in thirty-one numbers by hand.',
       'Four looks, from a plain wall calendar to one with room for notes under each week. All print at A4, portrait or landscape.')
@@ -197,6 +198,7 @@ $PSubcats = @(
     h1='Daily Planner Templates'
     title='Daily Planner Template - Free Printable Planners'
     desc='Free printable daily planner templates with priorities, an hourly schedule and notes. Fill them in online or print blank.'
+    guideNote='Pair it with a <a href="../../personal-lifestyle/calendar-templates/">monthly calendar</a> for the fixed dates and a <a href="../../personal-lifestyle/to-do-list-templates/">to-do list</a> for everything not tied to a time.'
     intro=@(
       'A planner earns its place by making you choose. These four put three priorities at the top - not ten - and give the rest of the day an hourly column beside them, because a list without times is a wish list.',
       'Fill it in here and print it done, or print it blank and write by hand. The hours are yours to change; a day that starts at seven and one that starts at eleven are both just lines in a box.')
@@ -215,6 +217,7 @@ $PSubcats = @(
     h1='To-Do List Templates'
     title='To Do List Template - Free Printable Checklists You Can Edit'
     desc='Free printable to-do list and checklist templates with tick boxes. Type your tasks or print blank and write them in.'
+    guideNote='A list with more than about ten lines stops being a list and becomes a source of guilt - move the rest to a <a href="../../personal-lifestyle/planner-templates/">planner</a> with days attached to it.'
     intro=@(
       'The tick box is the whole point, so these give it room: a box big enough to tick with a real pen, and a line long enough to write a task that is not one word.',
       'Type your tasks one per line and each gets its own box, or leave the list empty and print a blank sheet of ruled boxes to fill in by hand.')
@@ -233,6 +236,7 @@ $PSubcats = @(
     h1='Monthly Budget Templates'
     title='Budget Template - Free Printable Monthly Budget Planner'
     desc='Free printable monthly budget templates with income, spending and what is left. Fill them in online, then print or save as PDF.'
+    guideNote='Two things sink most budgets: savings treated as whatever is left at the end, and the costs that only come twice a year. Both are dealt with in <a href="../../guides/how-to-make-a-monthly-budget/">how to make a monthly budget</a>.'
     intro=@(
       'A budget on paper works because it is slow. Writing each figure takes long enough to notice it, which is the part an app that categorises everything automatically quietly removes.',
       'Money in on the left, money out beneath it, and what is left set large at the foot. Type the amounts here or print it blank and fill it in with the bank app open beside you.')
@@ -252,6 +256,7 @@ $PSubcats = @(
     h1='Recipe Card Templates'
     title='Recipe Card Template - Free Printable 4x6 Recipe Cards'
     desc='Free printable recipe card templates at 4x6 and A5. Type the ingredients and method, then print for a recipe box or to pass on.'
+    guideNote='A written-out ingredient list is already half a shopping list, which is why these work best alongside a <a href="../../personal-lifestyle/meal-planner-templates/">weekly meal planner</a> rather than on their own.'
     intro=@(
       'A recipe card is read standing up with one hand busy, so the ingredients have to be scannable and the method numbered down the page rather than run together in a paragraph.',
       'These come at the standard 4&times;6 inch recipe box size and at A5 for longer recipes. Handing one to somebody is still the best way to pass a recipe on, and it survives being splashed better than a phone.')
@@ -271,6 +276,7 @@ $PSubcats = @(
     h1='Gift Voucher Templates'
     title='Gift Voucher Template - Free Printable Gift Certificates'
     desc='Free printable gift voucher and gift certificate templates for small businesses and personal gifts. Add the value and details, then print.'
+    guideNote='A voucher is often the first printed thing a small business hands out, so it should match the <a href="../../business-office/business-card-templates/">business card</a> it goes with - same typeface, same colours, same name.'
     intro=@(
       'A voucher has to make the value obvious and the conditions findable - in that order. These set the amount as the largest thing on the card and keep the expiry and terms legible without letting them compete.',
       'They work as a business voucher with a code and terms, or as a personal one with those cleared away. Four looks, from a plain card to a foiled one.')
@@ -289,6 +295,7 @@ $PSubcats = @(
     h1='Habit Tracker Templates'
     title='Habit Tracker Template - Free Printable Monthly Trackers'
     desc='Free printable monthly habit tracker templates with a box for every day. Type your habits, print, and fill the boxes in by hand.'
+    guideNote='A tracker records what you did; a <a href="../../personal-lifestyle/to-do-list-templates/">to-do list</a> decides what you will do today. Keeping them on separate sheets is what stops one turning into the other.'
     intro=@(
       'A habit tracker works because the row of filled boxes is visible and you would rather not break it. That only happens on paper on a wall - which is why these are built to be printed and ticked, not filled in on screen.',
       'Type your habits one per line and the grid draws a row of thirty-one boxes for each. Five or six habits is the useful maximum; a sheet of fifteen gets abandoned in the second week.')
@@ -307,6 +314,7 @@ $PSubcats = @(
     h1='Weekly Meal Planner Templates'
     title='Meal Planner Template - Free Printable Weekly Meal Plans'
     desc='Free printable weekly meal planner templates with a shopping list. Fill in the week, print, and stick it on the fridge.'
+    guideNote='Plan seven dinners rather than a fortnight of every meal, write leftovers in as a meal, and leave one night open - the version that survives past Wednesday is set out in <a href="../../guides/how-to-plan-meals-for-a-week/">how to plan meals for a week</a>.'
     intro=@(
       'The point of planning meals is the shopping list that falls out of it, so these keep the list on the same sheet rather than on a separate one you will leave at home.',
       'Seven day columns and a row for each meal. Type one meal per line in each column and keep the line counts equal - the rows line up on their own, and a day you are eating out is a dash rather than a gap.')
@@ -339,13 +347,13 @@ $PGuides = @(
       @('ol',@(
         '<strong>Fixed:</strong> rent, utilities, school fees, loan payments, insurance. These are the same every month and you cannot negotiate them this week.',
         '<strong>Savings:</strong> the amount you decided above.',
-        '<strong>Variable:</strong> groceries, transport, eating out, everything else. This is the part that flexes.')),
+        '<strong>Variable:</strong> groceries, transport, eating out, everything else. This is the part that flexes - and groceries is the line <a href="../how-to-plan-meals-for-a-week/">a week of planned meals</a> moves most.')),
       @('h2','The costs that come twice a year'),
-      @('p','Car servicing, a school uniform, Eid, a wedding, an insurance renewal. These are what break a budget that balanced perfectly on paper. Add up a year of them, divide by twelve, and put that figure in as a monthly line - even if the money just sits there most months. That line is the reason the budget survives March.'),
+      @('p','Car servicing, a school uniform, Eid, a wedding, an insurance renewal. These are what break a budget that balanced perfectly on paper. Marking them on a <a href="../../personal-lifestyle/calendar-templates/">year calendar</a> first is the quickest way to find the ones you have forgotten. Add up a year of them, divide by twelve, and put that figure in as a monthly line - even if the money just sits there most months. That line is the reason the budget survives March.'),
       @('h2','Track for two months before you judge it'),
       @('p','The first month tells you what you actually spend, which is rarely what you assumed. The second tells you whether the first was typical. Changing the numbers before you have two months of data is guessing with extra steps.'),
       @('h2','Why paper'),
-      @('p','An app that categorises everything automatically removes the only part that changes behaviour: noticing. Writing "42,000 - groceries" takes four seconds, and those four seconds are where the thinking happens.'),
+      @('p','An app that categorises everything automatically removes the only part that changes behaviour: noticing. Writing "42,000 - groceries" takes four seconds, and those four seconds are where the thinking happens. The <a href="../../personal-lifestyle/budget-templates/">budget sheets here</a> are built for that - one line per category, filled in by hand.'),
       @('cta','budget-templates')) },
 
  @{ slug='how-to-plan-meals-for-a-week'
@@ -356,7 +364,7 @@ $PGuides = @(
     body=@(
       @('p','Meal planning fails in a predictable way: an ambitious fortnight of new recipes, abandoned on the fourth evening when somebody comes home late. Here is the version that survives.'),
       @('h2','Plan a week, not a fortnight'),
-      @('p','A fortnight looks more efficient and is not. Plans made two weeks out do not survive one changed evening, and fresh food bought for day eleven is thrown away on day nine.'),
+      @('p','A fortnight looks more efficient and is not. Plans made two weeks out do not survive one changed evening, and fresh food bought for day eleven is thrown away on day nine. Food thrown away is the quietest line in a <a href="../how-to-make-a-monthly-budget/">monthly budget</a> - it never appears as its own category, which is why it goes unnoticed for years.'),
       @('h2','Only dinners need planning'),
       @('p','Breakfast is a habit and lunch is usually leftovers or whatever is nearby. Planning them adds work without removing a decision, because you were not really deciding them anyway. Plan seven dinners and the week is planned.'),
       @('h2','Write leftovers in as a meal'),
@@ -364,8 +372,8 @@ $PGuides = @(
       @('h2','Leave one night open'),
       @('p','Something will happen on one evening. Marking it as "out" or "whatever is in" ahead of time means the plan bends rather than breaks, and you do not spend Friday feeling you failed at cooking.'),
       @('h2','Build the list from the plan'),
-      @('p','Go through the seven dinners and write what each needs, then cross off what you already have. A shopping list written separately from the plan is a list of things you usually buy, which is how three bunches of coriander end up in the fridge.'),
+      @('p','Go through the seven dinners and write what each needs, then cross off what you already have. If a dish lives on a <a href="../../personal-lifestyle/recipe-card-templates/">recipe card</a>, its ingredient list is already half the shopping list. A list written separately from the plan is a list of things you usually buy, which is how three bunches of coriander end up in the fridge.'),
       @('h2','Put it where you will see it'),
-      @('p','On the fridge, not in a drawer. The plan''s job at six in the evening is to answer the question before you open the fridge and start improvising - and it can only do that if it is in front of you.'),
+      @('p','On the fridge, not in a drawer. The plan''s job at six in the evening is to answer the question before you open the fridge and start improvising - and it can only do that if it is in front of you. Every <a href="../../personal-lifestyle/meal-planner-templates/">meal planner here</a> prints at A4 for that reason rather than pocket size.'),
       @('cta','meal-planner-templates')) }
 )

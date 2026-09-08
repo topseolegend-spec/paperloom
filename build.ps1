@@ -996,6 +996,11 @@ function Build-Subcat($cat, $s) {
   }) -join ''
 
   $intro  = ($s.intro | ForEach-Object { "<p>$_</p>" }) -join ''
+  # A hand-written closing line linking to the guide that covers this document
+  # type. Written per subcategory rather than generated, because twenty pages
+  # carrying the same "read our guide" sentence reads as filler to a person and
+  # as a footprint to a search engine.
+  if ($s.guideNote) { $intro += "<p>$($s.guideNote)</p>" }
   $faqs   = ($s.faq | ForEach-Object { "<details><summary>$($_[0])</summary><p>$($_[1])</p></details>" }) -join ''
   $others = ($cat.subs | Where-Object { $_.slug -ne $s.slug } | ForEach-Object {
     "<li><a href=`"../$($_.slug)/`">$($_.name)</a></li>" }) -join ''
@@ -1112,9 +1117,15 @@ function Build-Template($cat, $s, $t) {
 
   # "CV &amp; Resume Templates" -> "CV &amp; Resume", "Wedding Invitations" -> "Wedding Invitation".
   # Without the first case the title reads "... Template Template".
-  $singular = $s.name
-  if ($singular -match '\s+Templates?$') { $singular = $singular -replace '\s+Templates?$', '' }
-  else { $singular = $singular -replace 's$', '' }
+  # A subcategory with a long name ("Farewell & Retirement Invitations") pushes
+  # every template title in it past the ~60 characters Google will show, so it
+  # can name a shorter word to be titled by without changing its own heading.
+  if ($s.singular) { $singular = $s.singular }
+  else {
+    $singular = $s.name
+    if ($singular -match '\s+Templates?$') { $singular = $singular -replace '\s+Templates?$', '' }
+    else { $singular = $singular -replace 's$', '' }
+  }
   $title = "$($t.name) - $singular Template"
   # Was "an editable {x} template in a {y} style. Fill it in online, then print or
   # download - free, no account." - on a subcategory with a long name (like

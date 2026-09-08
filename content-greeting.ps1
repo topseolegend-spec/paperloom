@@ -90,6 +90,7 @@ $GSubcats = @(
     h1='Birthday Card Templates'
     title='Birthday Card Template - Free Editable Designs to Print'
     desc='Free birthday card templates you can write in and print. Four styles from plain to decorated, editable in your browser with no account.'
+    guideNote='The design takes a minute; the message is where most people stall. There are openings for a friend, a parent, a colleague and someone you barely know in <a href="../../guides/what-to-write-in-a-birthday-card/">what to write in a birthday card</a>.'
     intro=@(
       'The hard part of a birthday card is never the design, it is the two lines inside. These four give that message room instead of burying it under artwork, and you can write it straight into the card rather than printing a blank and hoping your handwriting behaves.',
       'Confetti Bright and Garden Party carry the decoration; Quiet Wish and Bold Type keep out of the way, which suits a card going to a colleague or a boss. All four print at 5&times;7 inches and fold to A6 if you want an inside message.')
@@ -108,6 +109,7 @@ $GSubcats = @(
     h1='Thank You Card Templates'
     title='Thank You Card Template - Free Printable Designs'
     desc='Free thank you card templates for gifts, weddings, interviews and favours. Write the note in your browser, then print or save as PDF.'
+    guideNote='Wedding thank you cards are the largest batch most people ever write - naming the specific gift in each is what separates them, and the guest list from your <a href="../../wedding-events/wedding-invitations/">invitations</a> is the list to work from.'
     intro=@(
       'A thank you card works on timing more than wording - sent within a week it means something, sent after a month it reads as an apology. These four are quick to fill in for exactly that reason.',
       'Fine Line and Modern Note are quiet enough for a professional thank you after an interview or a client meeting. Blush Sprig and Gold Laurel suit gifts, weddings and anything where warmth is the point.')
@@ -126,6 +128,7 @@ $GSubcats = @(
     h1='Christmas Card Templates'
     title='Christmas Card Template - Free Printable Designs to Edit'
     desc='Free Christmas card templates in classic and modern styles. Add your own message and family name, then print or send as an image.'
+    guideNote='Most people post these in the same week as their <a href="../../greeting-cards/new-year-card-templates/">new year cards</a> - if you are sending both to the same list, one card carrying both wishes saves a stamp and reads as less of a duty.'
     intro=@(
       'Christmas cards go out in bulk, which is the whole design problem: the same card has to work for your aunt, your neighbour and the person who does your accounts. These four solve it by keeping the greeting general and giving the signature line enough room to be specific.',
       'Evergreen Wreath and Midnight Gold are the traditional ones. Winter Plain and Nordic Modern are quieter, and print cheaply in quantity - which matters when you are sending forty.')
@@ -144,6 +147,7 @@ $GSubcats = @(
     h1='Eid Card Templates'
     title='Eid Mubarak Card Template - Free Editable Designs to Print'
     desc='Free Eid Mubarak card templates with geometric and calligraphic designs. Write your own message, switch to Urdu or Arabic, then print or share.'
+    guideNote='A card for your grandmother and one for a client differ mostly in length - there is wording for family, friends, colleagues and clients in <a href="../../guides/eid-card-messages/">what to write in an Eid card</a>, including notes on setting it in Urdu or Arabic.'
     intro=@(
       'Eid cards are sent to a wide circle in a short window, so the design has to carry warmth without needing a personal note on every one. These four do that, and all of them switch to Nastaliq, Amiri or Naskh in the editor if you would rather write the greeting in Urdu or Arabic.',
       'Emerald Mandala and Gold Lattice use geometric line work drawn here rather than borrowed - a pattern family that sits comfortably beside Arabic lettering. Ivory Plain and Crescent Modern are simpler, and suit a card going to colleagues.')
@@ -162,6 +166,7 @@ $GSubcats = @(
     h1='Anniversary Card Templates'
     title='Anniversary Card Template - Free Printable Designs to Edit'
     desc='Free anniversary card templates for couples and parents. Add your own message and years, then print or save as PDF.'
+    guideNote='An anniversary card marks the day a <a href="../../wedding-events/wedding-invitations/">wedding invitation</a> once announced, which is why naming the year usually lands better than a general good wish.'
     intro=@(
       'An anniversary card is usually going to two people who have heard every general compliment already, so the useful thing a template can do is leave room for one specific line. These four keep the greeting short for that reason.',
       'Gold Vine and Rose Wreath are the celebratory ones and suit a milestone year. Simple Years and Modern Pair are quieter, and work as well for a first anniversary as a fortieth.')
@@ -180,6 +185,7 @@ $GSubcats = @(
     h1='Get Well Soon Card Templates'
     title='Get Well Soon Card Template - Free Printable Designs'
     desc='Free get well soon card templates for illness, surgery and recovery. Write a short message in your browser, then print or send.'
+    guideNote='Keep it light and short - recovery is tiring to talk about. Where the news is worse rather than temporary, a <a href="../../greeting-cards/sympathy-card-templates/">sympathy card</a> is a different register entirely and the wording changes with it.'
     intro=@(
       'A get well card is read by someone with little energy for reading, which is the one design constraint that matters: short message, large enough type, nothing that needs deciphering. These four are built to that.',
       'Soft Bloom and Sunlit are warm without being relentlessly cheerful, which is the tone most people actually want. Plain Wish and Calm Modern are quieter still, and suit a card from an office rather than a family.')
@@ -198,6 +204,7 @@ $GSubcats = @(
     h1='Congratulations Card Templates'
     title='Congratulations Card Template - Free Printable Designs'
     desc='Free congratulations card templates for new jobs, exams, promotions and new homes. Write your own message, then print or download.'
+    guideNote='For a graduation specifically, the family often sends a card and an invitation in the same envelope - the <a href="../../wedding-events/graduation-invitations/">graduation invitations</a> are the matching half of that.'
     intro=@(
       'Congratulations cards cover a wide range - a new job, an exam result, a promotion, a first house - so these keep the greeting broad and put the weight on the message, which is the part that has to fit the occasion.',
       'Bright Confetti and Gold Laurel read as celebration. Plain Congrats and Bold Modern are more restrained, which is usually the right call for a colleague or a client.')
@@ -216,6 +223,7 @@ $GSubcats = @(
     h1='Sympathy Card Templates'
     title='Sympathy Card Template - Free Printable Condolence Designs'
     desc='Free sympathy and condolence card templates in quiet, restrained designs. Write a short message in your browser, then print.'
+    guideNote='Most people put this card off out of fear of getting it wrong. Three or four sentences is the whole of it, and <a href="../../guides/what-to-write-in-a-sympathy-card/">what to write in a sympathy card</a> covers the few phrases that land badly however kindly they are meant.'
     intro=@(
       'A sympathy card should not be doing anything clever. These four are deliberately restrained - muted colour, generous space, no ornament that draws the eye away from the few words you have chosen.',
       'Quiet Grey and Still Modern carry no decoration at all. Olive Branch and Soft Laurel add a small amount, which some families prefer to a card that looks severe.')
@@ -234,6 +242,7 @@ $GSubcats = @(
     h1='Valentine''s Day Card Templates'
     title='Valentines Card Template - Free Printable Designs'
     desc='Free Valentine''s Day card templates from plain to romantic. Write your own message in the browser, then print or send as an image.'
+    guideNote='For a couple further along, an <a href="../../greeting-cards/anniversary-card-templates/">anniversary card</a> naming a specific year usually says more than a Valentine''s card can.'
     intro=@(
       'The best Valentine''s cards are specific and slightly understated, which is the opposite of what most templates offer. These four leave the decoration restrained and give the message the middle of the card.',
       'Rose Wreath and Wine Script are the romantic ones. Plain Heart and Bold Red are drier, which suits couples who would find anything softer faintly embarrassing.')
@@ -252,6 +261,7 @@ $GSubcats = @(
     h1='Mother''s Day Card Templates'
     title='Mothers Day Card Template - Free Printable Designs to Edit'
     desc='Free Mother''s Day card templates you can write in and print. Four styles from plain to floral, editable in your browser.'
+    guideNote='Say the thing you assume she already knows - that advice comes from <a href="../../guides/what-to-write-in-a-birthday-card/">writing for a parent</a>, and it is the one line most of these cards are missing.'
     intro=@(
       'Mother''s Day cards are kept, often for years, which is an argument for writing something specific rather than choosing the prettiest card. These four give the message the room to be worth keeping.',
       'Peony Bloom and Gold Wreath are the floral ones. Plain Thanks and Modern Mum are simpler, and print well if the card is coming from a child who wants to add their own drawing.')
@@ -270,6 +280,7 @@ $GSubcats = @(
     h1='Father''s Day Card Templates'
     title='Fathers Day Card Template - Free Printable Designs to Edit'
     desc='Free Father''s Day card templates in plain, modern and classic styles. Write your own message, then print or save as PDF.'
+    guideNote='The <a href="../../greeting-cards/mothers-day-card-templates/">Mother''s Day designs</a> use the same layouts and fields, so a household sending both can keep them consistent and only change the wording.'
     intro=@(
       'Most Father''s Day cards fail in the same way: they are jokes about golf sent to men who do not play golf. These four are plain enough to carry whatever you actually want to say.',
       'Slate Plain and Bold Lines are the driest of the four. Deep Green and Classic Deco add a little more, and suit a card that is also marking a birthday or a retirement.')
@@ -288,6 +299,7 @@ $GSubcats = @(
     h1='New Year Card Templates'
     title='New Year Card Template - Free Printable Designs to Edit'
     desc='Free Happy New Year card templates for family, friends and clients. Add your own message and year, then print or send as an image.'
+    guideNote='A client new year card works on the same restraint as a business <a href="../../greeting-cards/thank-you-card-templates/">thank you card</a>: one line of thanks, one good wish, and the company name.'
     intro=@(
       'New Year cards are the ones businesses send as well as families, which is why two of these four are deliberately restrained enough to go out on a company letterhead without looking out of place.',
       'Midnight Gold and Deco Nights are the celebratory pair. Plain Year and Modern Turn are quieter, and work as a client card where anything more would read as trying too hard.')
@@ -328,7 +340,7 @@ $GGuides = @(
       @('h2','A milestone birthday'),
       @('p','Mark the number, then get off it quickly. The person turning fifty has heard every joke about it by the time your card arrives, and what they will actually reread is the line about who they are now.'),
       @('h2','Endings'),
-      @('p','"With love" for family and close friends, "warmest wishes" for everyone else, and your name - not your full name, unless there are two of you. If you are stuck on the ending you are usually done; sign it and post it.'),
+      @('p','"With love" for family and close friends, "warmest wishes" for everyone else, and your name - not your full name, unless there are two of you. If you are stuck on the ending you are usually done; sign it and post it. Every <a href="../../greeting-cards/birthday-card-templates/">birthday card design here</a> takes the message as a field, so a long line and a short one both sit correctly on the card.'),
       @('cta','birthday-card-templates')) },
 
  @{ slug='what-to-write-in-a-sympathy-card'
@@ -337,7 +349,7 @@ $GGuides = @(
     desc='How to write a condolence message that helps, the phrases that land badly however well meant, and why a late card is still worth sending.'
     read='6 min read'
     body=@(
-      @('p','People put off sympathy cards because they are afraid of getting it wrong. The card that arrives clumsily is almost always better than the card that never arrives, and there are only a few things that genuinely land badly.'),
+      @('p','People put off sympathy cards because they are afraid of getting it wrong. The card that arrives clumsily is almost always better than the card that never arrives, and there are only a few things that genuinely land badly. For an illness rather than a bereavement, a <a href="../../greeting-cards/get-well-soon-card-templates/">get well card</a> carries a different register entirely and most of the advice below does not apply.'),
       @('h2','What to include'),
       @('ol',@(
         '<strong>Their name.</strong> Say the name of the person who died. Families notice when everyone avoids it, and hearing it is usually a relief rather than a wound.',
@@ -356,7 +368,7 @@ $GGuides = @(
       @('h2','On being late'),
       @('p','A card arriving three weeks after the funeral is often the most valued one, because it comes when the house has gone quiet and everyone else has moved on. If you missed the moment, send it anyway, and do not apologise for the delay at length.'),
       @('h2','Length'),
-      @('p','Three or four sentences. A sympathy card is not an essay, and the reader is exhausted. Say the name, say the true thing, make the offer, sign it.'),
+      @('p','Three or four sentences. A <a href="../../greeting-cards/sympathy-card-templates/">sympathy card</a> is not an essay, and the reader is exhausted. Say the name, say the true thing, make the offer, sign it.'),
       @('cta','sympathy-card-templates')) },
 
  @{ slug='eid-card-messages'
@@ -377,10 +389,10 @@ $GGuides = @(
       @('p','Short and warm. If you are sending to colleagues who do not celebrate Eid, a line explaining what the day is turns a greeting into a small act of hospitality rather than an assumption.'),
       @('h2','For clients'),
       @('blockquote','Eid Mubarak from all of us at Meridian.<br>Thank you for a good year of working together. We hope the holiday brings you rest.'),
-      @('p','One line of thanks, one good wish, and the company name. A client card that reads as marketing is worse than no card.'),
+      @('p','One line of thanks, one good wish, and the company name. A client card that reads as marketing is worse than no card. Outside Eid, the same restraint works on a <a href="../../greeting-cards/thank-you-card-templates/">thank you card</a> to a client at the end of a project.'),
       @('h2','Eid al-Fitr and Eid al-Adha'),
       @('p','The greeting is the same for both, and most cards are used for either. Where you want to distinguish them, a card for Eid al-Fitr can mention the end of the fast, and one for Eid al-Adha the spirit of sacrifice and sharing - but neither is expected.'),
       @('h2','Writing in Urdu or Arabic'),
-      @('p','Every card on this site switches to Nastaliq, Amiri or Naskh in the editor, and the layout flips to right-to-left with the line spacing those scripts need. Keep lines short: Nastaliq in particular needs vertical room, and a long line set in it becomes hard to read at card size.'),
+      @('p','Every <a href="../../greeting-cards/eid-card-templates/">Eid card here</a> switches to Nastaliq, Amiri or Naskh in the editor, and the layout flips to right-to-left with the line spacing those scripts need. Keep lines short: Nastaliq in particular needs vertical room, and a long line set in it becomes hard to read at card size.'),
       @('cta','eid-card-templates')) }
 )

@@ -242,6 +242,7 @@ $Subcats = @(
     h1='Wedding Invitation Templates'
     title='Wedding Invitation Templates - Free Printable 5x7 Designs'
     desc='Printable wedding invitation card templates in classic, floral and modern styles. Print at home on 5x7 card stock or save as PDF - free to use.'
+    guideNote='Three things usually need settling before the design does: <a href="../../guides/when-to-send-wedding-invitations/">how far ahead to post them</a>, <a href="../../guides/what-to-include-in-a-wedding-invitation/">which six lines the card has to carry</a>, and <a href="../../guides/wedding-invitation-wording/">how to word it</a> for the tone of your wedding.'
     intro=@(
       'Every wedding invitation on this page is designed as a 5&times;7 inch card, the size most printers and envelope suppliers stock, so a design that looks right on screen also looks right on paper. Each one is drawn as clean typography and line work rather than a photograph, which means it prints sharply on matte, textured or lightly coated card.',
       'The four designs below cover the styles couples ask for most often: a foiled vine border, a full floral wreath with script lettering, a dark art deco card, and a stripped-back modern layout. Open any design to change the wording, colours, lettering and ornament, then print it or save it as a PDF.')
@@ -260,6 +261,7 @@ $Subcats = @(
     h1='Nikah Invitation Card Templates'
     title='Nikah Invitation Card Template - Free Printable Designs'
     desc='Printable nikah invitation card templates with geometric, mandala and calligraphic layouts. 5x7 inch, editable in your browser, Urdu and Arabic supported.'
+    guideNote='If the phrasing is the part holding you up, there is a <a href="../../guides/wedding-invitation-wording/">nikah wording example</a> you can copy and adjust, alongside formal and modern ones for the reception card.'
     intro=@(
       'A nikah card carries less text than a full wedding invitation, so the typography has to do more work. These four designs give the names room to breathe and keep the ceremony details in a clear second line, which is what makes a small card readable at arm''s length.',
       'Two of the designs use geometric line work built from rotated squares and a radial mandala - pattern families that sit comfortably alongside Arabic and Urdu lettering. Switch the card to Nastaliq, Amiri or Naskh in the editor and the whole layout flips to right-to-left with the spacing those scripts need.')
@@ -277,6 +279,7 @@ $Subcats = @(
     h1='Engagement Party Invitation Templates'
     title='Engagement Invitation Template - Free Printable Party Cards'
     desc='Engagement party invitation templates in script, classic and modern layouts. Printable 5x7 cards, editable in your browser, free to use.'
+    guideNote='An engagement card carries the same six lines as a wedding one on a shorter runway - <a href="../../guides/what-to-include-in-a-wedding-invitation/">the list is here</a>, and four to six weeks of notice is usually enough rather than the <a href="../../guides/when-to-send-wedding-invitations/">eight a wedding needs</a>.'
     intro=@(
       'An engagement invitation is warmer in tone than a wedding invitation and usually shorter - the news itself is the headline. These designs put the couple''s names at the top of the visual hierarchy and keep the venue line quiet underneath.',
       'Pick the bouquet or wreath design for an evening party at home, or the ink band and taupe layouts if the celebration is more formal. Each one prints as a 5&times;7 card and works in black and white if you are printing at a local shop.')
@@ -294,6 +297,7 @@ $Subcats = @(
     h1='Bridal Shower Invitation Templates'
     title='Bridal Shower Invitation Template - Free Printable Cards'
     desc='Printable bridal shower and wedding shower invitation templates in floral, lilac and modern styles. 5x7 inch, editable in your browser.'
+    guideNote='A shower is normally held two to six weeks before the wedding, so these go out after the <a href="../../wedding-events/wedding-invitations/">wedding invitations</a> rather than with them - the <a href="../../guides/when-to-send-wedding-invitations/">full timeline</a> explains where it sits.'
     intro=@(
       'Bridal shower invitations carry practical information that the wedding invitation does not: the host''s home address, the start time, and often a note about gifts or a theme. These layouts keep that detail legible instead of squeezing it into a corner.',
       'The bouquet and wreath designs suit a garden or brunch setting; the mint and champagne layouts are cleaner and work well for an office or restaurant celebration. All four print as 5&times;7 cards.')
@@ -311,6 +315,7 @@ $Subcats = @(
     h1='Baby Shower Invitation Templates'
     title='Baby Shower Invitation Template - Free Printable Cards'
     desc='Printable baby shower invitation templates for boys, girls and gender-neutral showers. 5x7 inch cards, editable in your browser.'
+    guideNote='A shower invitation needs the same six lines as any other, minus the formality - host, guest of honour, date, venue, RSVP and any registry note, which <a href="../../guides/what-to-include-in-a-wedding-invitation/">belongs on a separate card</a> rather than the front.'
     intro=@(
       'These baby shower templates come in four colour directions - powder blue, blush, sage and warm yellow - so you can match a boy, girl or gender-neutral shower without redesigning anything. Every palette on the site can be swapped onto any of them in the editor.',
       'Each card leaves room for the two details guests actually need: the address, and whether food is being served. There is also a footer line you can use for an RSVP number or a note about gifts.')
@@ -328,6 +333,7 @@ $Subcats = @(
     h1='Graduation Invitation Templates'
     title='Graduation Invitation Template - Free Printable Cards'
     desc='Printable graduation invitation and announcement templates for ceremonies and parties. 5x7 inch cards in navy, black-gold and modern styles.'
+    guideNote='An announcement and an invitation are different cards: one shares news, the other asks people to come. If you are sending the first to relatives who cannot attend, a <a href="../../greeting-cards/congratulations-card-templates/">congratulations card</a> is usually the warmer version of it.'
     intro=@(
       'A graduation card does two different jobs depending on how you use it: announcing the achievement, or inviting people to the party afterwards. These templates handle both - the degree line sits directly under the name, and the venue block below it can be cleared entirely if you are only announcing.',
       'The navy laurel and black-gold designs read as formal ceremony cards, both with a metallic foil finish on the line work. The confetti and burgundy layouts are lighter and suit a party at home.')
@@ -345,6 +351,7 @@ $Subcats = @(
     h1='Housewarming Invitation Templates'
     title='Housewarming Invitation Template - Free Printable Designs'
     desc='Printable housewarming party invitation templates with the new address set clearly. 5x7 inch cards, editable in your browser.'
+    guideNote='The address is the line that matters most here, and it is the one guests most often ring about - the reasons are set out under <a href="../../guides/what-to-include-in-a-wedding-invitation/">the venue line</a>, which applies to any invitation people have to drive to.'
     intro=@(
       'The address is the most important line on a housewarming invitation, and it is the line most designs bury. Each of these templates gives the new address its own block with generous spacing around it, so guests can read it at a glance or photograph it for their maps app.',
       'The arch design borrows the shape of a doorway, which suits the occasion without resorting to clip art. The clay, sage and slate layouts are quieter alternatives if you are inviting colleagues as well as family.')
@@ -361,7 +368,9 @@ $Subcats = @(
  @{ slug='farewell-retirement-invitations'; name='Farewell &amp; Retirement Invitations'; nav='Farewell &amp; Retirement'
     h1='Farewell and Retirement Party Invitation Templates'
     title='Farewell &amp; Retirement Invitation Templates'
+    singular='Farewell Invitation'
     desc='Printable farewell and retirement party invitation templates for offices and colleagues. 5x7 inch cards in slate, teal and classic styles.'
+    guideNote='An office send-off is usually organised by one person for a room of colleagues, so the RSVP line matters more than the wording does - give a name and a date, for the reasons set out under <a href="../../guides/what-to-include-in-a-wedding-invitation/">how to reply</a>.'
     intro=@(
       'Farewell and retirement invitations are usually sent by colleagues rather than family, which changes the tone: the card should be warm but still appropriate to pin on an office notice board. These four designs stay on the right side of that line.',
       'Each layout has a line above the name for the sentiment - years of service, a thank you, or a short send-off phrase - so the card acknowledges the person rather than only announcing a party.')
@@ -385,12 +394,12 @@ $Guides = @(
     desc='How many weeks before the wedding to post invitations, when to send save-the-dates, and when to set the RSVP deadline.'
     read='6 min read'
     body=@(
-      @('p','The short answer is six to eight weeks before the wedding day. The longer answer depends on how far your guests are travelling, whether you have already sent a save-the-date, and how much notice your caterer needs for final numbers.'),
+      @('p','The short answer is six to eight weeks before the wedding day. The longer answer depends on how far your guests are travelling, whether you have already sent a save-the-date, and how much notice your caterer needs for final numbers. Once the timing is settled, <a href="../what-to-include-in-a-wedding-invitation/">what goes on the card</a> and <a href="../wedding-invitation-wording/">how to word it</a> are the next two decisions.'),
       @('h2','The standard timeline'),
       @('p','Most couples work backwards from the wedding date in four steps.'),
       @('ol',@(
         '<strong>Six to twelve months before:</strong> send save-the-dates, but only if you have a firm date and venue. A save-the-date you later change is worse than none at all.',
-        '<strong>Eight weeks before:</strong> post the invitations. This is the sweet spot - close enough that guests still have the date in their heads, far enough that they can book leave or travel.',
+        '<strong>Eight weeks before:</strong> post the <a href="../../wedding-events/wedding-invitations/">invitations</a>. This is the sweet spot - close enough that guests still have the date in their heads, far enough that they can book leave or travel.',
         '<strong>Three weeks before:</strong> set your RSVP deadline. Not two, and not one - you will spend the last fortnight chasing the guests who have not replied.',
         '<strong>One week before:</strong> confirm final numbers with the caterer and the venue, using the replies you actually received rather than the ones you expect.')),
       @('h2','When to send them earlier'),
@@ -419,13 +428,13 @@ $Guides = @(
       @('h2','2. The names of the couple'),
       @('p','The largest text on the card. On formal invitations the bride''s name traditionally comes first, and surnames are included when the host line does not already make the families clear.'),
       @('h2','3. The request line'),
-      @('p','"Request the pleasure of your company" is the standard formal phrasing. "Would love you to join them" is the warm equivalent. The phrase you choose sets the tone of the whole event, so it is worth reading a few aloud before deciding.'),
+      @('p','"Request the pleasure of your company" is the standard formal phrasing. "Would love you to join them" is the warm equivalent. The phrase you choose sets the tone of the whole event, so it is worth reading a few aloud before deciding - there are <a href="../wedding-invitation-wording/">full wordings for each tone</a> if you would rather copy one and adjust it.'),
       @('h2','4. The date and time, written out'),
       @('p','On a formal card, dates are written in words - "Saturday, the fourteenth of March, two thousand and twenty-six" - and times as "six in the evening" rather than 6:00 PM. On a modern card, numerals are perfectly acceptable. What matters is that you do not mix the two styles on one card.'),
       @('h2','5. The venue and full address'),
       @('p','Name the venue, then the street, then the city. Guests will type this into a maps app, so an incomplete address is the single most common reason a wedding invitation generates phone calls.'),
       @('h2','6. How to reply'),
-      @('p','Either an RSVP card with a stamped envelope, or a line with a phone number, or a link. Whichever you pick, give a deadline - an invitation without one produces replies that arrive the week of the wedding.'),
+      @('p','Either an RSVP card with a stamped envelope, or a line with a phone number, or a link. Whichever you pick, give a deadline - an invitation without one produces replies that arrive the week of the wedding. Three weeks before the day is the usual mark, for the reasons set out in the <a href="../when-to-send-wedding-invitations/">invitation timeline</a>.'),
       @('h2','What belongs on a separate card'),
       @('ul',@(
         'Directions, parking notes and hotel suggestions.',
@@ -445,7 +454,7 @@ $Guides = @(
     desc='Copy-and-paste wedding invitation wording for formal, casual, bride-hosted and nikah invitations, with notes on when each one fits.'
     read='8 min read'
     body=@(
-      @('p','Wording is where most couples get stuck, because the card has to sound like them while still being clear. Below are wordings you can copy directly and adjust - grouped by who is hosting and how formal the wedding is.'),
+      @('p','Wording is where most couples get stuck, because the card has to sound like them while still being clear. Below are wordings you can copy directly and adjust - grouped by who is hosting and how formal the wedding is. If you are still working out <a href="../what-to-include-in-a-wedding-invitation/">which lines the card needs at all</a>, start there and come back to the phrasing.'),
       @('h2','Formal - the bride''s parents hosting'),
       @('blockquote','Mr and Mrs Tariq Mahmood<br>request the pleasure of your company<br>at the marriage of their daughter<br><strong>Ayesha</strong><br>to<br><strong>Bilal Ahmed</strong><br>Saturday, the fourteenth of March<br>two thousand and twenty-six<br>at six in the evening<br>Rose Garden Hall, Lahore'),
       @('h2','Formal - both families hosting'),
@@ -454,6 +463,7 @@ $Guides = @(
       @('blockquote','We are getting married!<br><strong>Ayesha &amp; Bilal</strong><br>and we would love you there<br>Saturday, 14 March 2026<br>Six in the evening<br>Rose Garden Hall, Lahore<br>Dinner, dancing, and a late finish'),
       @('h2','Nikah ceremony'),
       @('blockquote','Bismillah ir-Rahman ir-Raheem<br>With the blessings of Allah<br>the families of<br><strong>Fatima</strong> and <strong>Usman</strong><br>invite you to their Nikah<br>Friday, 20 March 2026, following Jumu''ah prayers<br>Jamia Masjid Al-Noor, Karachi'),
+      @('p','A nikah card usually carries a Bismillah line at the top and less ornamentation than a reception invitation, which is how the <a href="../../wedding-events/nikah-invitations/">nikah invitation designs</a> are laid out. If the nikah and the reception are on different days, they need separate cards rather than one card listing both.'),
       @('h2','Small or intimate wedding'),
       @('blockquote','Two families, one small room, and everyone who matters<br><strong>Ayesha &amp; Bilal</strong><br>14 March 2026 &middot; 6 pm<br>Rose Garden Hall, Lahore<br>Please reply by 21 February'),
       @('h2','How to adjust any of these'),

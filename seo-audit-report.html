@@ -1,0 +1,433 @@
+<title>Paperloom SEO Audit</title>
+<meta name="description" content="Technical SEO audit of paperloom-rho.vercel.app: every finding measured against the live build, with before/after evidence and what was fixed.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --paper:#f6f7f6;
+    --surface:#ffffff;
+    --surface-2:#eef0ee;
+    --border:#dde1de;
+    --ink:#182420;
+    --ink-soft:#57645d;
+    --ink-faint:#8b968f;
+    --accent:#2e5d4b;
+    --accent-soft:#e3ece7;
+    --gold:#8f6f36;
+    --gold-soft:#f3ecd9;
+    --good:#2e7d54;
+    --good-soft:#e3f0e8;
+    --warn:#a8742e;
+    --warn-soft:#f5ead2;
+    --shadow:0 1px 2px rgba(20,30,26,.05), 0 10px 26px rgba(20,30,26,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#121613;
+      --surface:#1a1f1c;
+      --surface-2:#212824;
+      --border:#2c352f;
+      --ink:#e9ece9;
+      --ink-soft:#a9b3ac;
+      --ink-faint:#76817a;
+      --accent:#7fb99c;
+      --accent-soft:#1e2e26;
+      --gold:#d4b876;
+      --gold-soft:#2e2818;
+      --good:#7fcf9f;
+      --good-soft:#1b2c22;
+      --warn:#e0b571;
+      --warn-soft:#332a17;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#121613; --surface:#1a1f1c; --surface-2:#212824; --border:#2c352f;
+    --ink:#e9ece9; --ink-soft:#a9b3ac; --ink-faint:#76817a;
+    --accent:#7fb99c; --accent-soft:#1e2e26;
+    --gold:#d4b876; --gold-soft:#2e2818;
+    --good:#7fcf9f; --good-soft:#1b2c22;
+    --warn:#e0b571; --warn-soft:#332a17;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', -apple-system, sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:52px 24px 100px;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:600;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--gold);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--good);}
+  h1{
+    font-family:'Source Serif 4', Georgia, serif; font-weight:600;
+    font-size:clamp(30px,4.4vw,44px); line-height:1.1; letter-spacing:-.01em;
+    margin:12px 0 10px; text-wrap:balance;
+  }
+  .lede{font-size:16.5px; color:var(--ink-soft); max-width:66ch; margin:0 0 6px;}
+  .meta-line{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--ink-faint);
+    margin-top:14px;
+  }
+  .meta-line a{color:var(--accent);}
+
+  .stat-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--border); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden; margin-top:30px; box-shadow:var(--shadow);
+  }
+  .stat{background:var(--surface); padding:18px 16px;}
+  .stat .n{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:26px; color:var(--accent); font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:12px; color:var(--ink-soft); margin-top:4px; line-height:1.4;}
+
+  section{margin-top:56px;}
+  .sec-eyebrow{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--gold); font-weight:600; letter-spacing:.08em;}
+  h2{font-family:'Source Serif 4', Georgia, serif; font-weight:600; font-size:25px; margin:4px 0 10px; text-wrap:balance;}
+  .sec-sub{color:var(--ink-soft); font-size:15px; max-width:70ch; margin:0 0 22px;}
+
+  h3{font-family:'Source Serif 4', Georgia, serif; font-weight:600; font-size:18px; margin:28px 0 6px;}
+
+  ul.method{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+  ul.method li{
+    display:flex; gap:10px; font-size:14.5px; color:var(--ink-soft);
+    padding-left:0;
+  }
+  ul.method li::before{content:"→"; color:var(--gold); flex-shrink:0; font-weight:600;}
+
+  /* findings table */
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); margin-top:10px;}
+  table{width:100%; border-collapse:collapse; font-size:14px;}
+  th,td{text-align:left; padding:12px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--ink-faint); font-weight:600; background:var(--surface-2);
+  }
+  tr:last-child td{border-bottom:none;}
+  td.num{font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .before{color:var(--warn); font-weight:600;}
+  .after{color:var(--good); font-weight:600;}
+  .arrow{color:var(--ink-faint); margin:0 4px;}
+
+  .pill{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:600;
+    letter-spacing:.05em; text-transform:uppercase;
+    padding:4px 9px; border-radius:999px; white-space:nowrap;
+  }
+  .pill-fixed{background:var(--good-soft); color:var(--good);}
+  .pill-pass{background:var(--accent-soft); color:var(--accent);}
+  .pill-reviewed{background:var(--warn-soft); color:var(--warn);}
+
+  .why{
+    font-size:13.5px; color:var(--ink-soft); margin-top:6px; padding-top:6px;
+    border-top:1px dashed var(--border);
+  }
+
+  .note-block{
+    margin-top:14px; border-left:3px solid var(--gold); background:var(--gold-soft);
+    padding:14px 18px; border-radius:0 8px 8px 0; font-size:14.5px; color:var(--ink);
+  }
+  .note-block b{color:var(--gold); font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12px; letter-spacing:.04em;}
+
+  /* pass-list grid */
+  .pass-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:var(--shadow);}
+  .pass-item{background:var(--surface); padding:14px 16px; display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .pass-item .k{font-size:13.5px; color:var(--ink-soft);}
+  .pass-item .v{font-family:'IBM Plex Mono', monospace; font-size:13.5px; font-weight:600; color:var(--good); white-space:nowrap;}
+
+  /* next steps */
+  .steps{display:flex; flex-direction:column; gap:0;}
+  .step{display:grid; grid-template-columns:34px 1fr; gap:14px; padding:16px 0; border-bottom:1px solid var(--border);}
+  .step:last-child{border-bottom:none;}
+  .step .idx{
+    width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step h4{margin:0 0 4px; font-size:15px; font-weight:600; font-family:'IBM Plex Sans', sans-serif;}
+  .step p{margin:0; color:var(--ink-soft); font-size:14px;}
+  .step .owner{
+    display:inline-block; margin-top:6px; font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--gold);
+  }
+
+  footer{margin-top:70px; padding-top:22px; border-top:1px solid var(--border); color:var(--ink-faint); font-size:13px;}
+
+  @media (max-width:640px){
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="eyebrow"><span class="dot"></span>SEO Audit &middot; Live Build</div>
+  <h1>Paperloom - Technical SEO Audit</h1>
+  <p class="lede">Every number below was measured directly against the generated site, not estimated:
+    283 HTML pages were parsed, 23,023 internal links were followed, and every structured-data block
+    was validated as real JSON. This is what that check found, what was fixed, and what was already
+    correct.</p>
+  <p class="meta-line">Site: <a href="https://paperloom-rho.vercel.app">paperloom-rho.vercel.app</a> &middot;
+    Audited 8 September 2026 &middot; 283 pages, 6 categories, 44 subcategories, 204 templates, 15 guides</p>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">9</span><div class="l">issues found across on-page, structured data and internal linking</div></div>
+    <div class="stat"><span class="n">9</span><div class="l">fixed and verified in this pass</div></div>
+    <div class="stat"><span class="n">23,023</span><div class="l">internal links checked &middot; 0 broken</div></div>
+    <div class="stat"><span class="n">349</span><div class="l">structured-data blocks parsed &middot; 0 invalid</div></div>
+  </div>
+
+  <section>
+    <div class="sec-eyebrow">METHOD</div>
+    <h2>How this was checked</h2>
+    <p class="sec-sub">Not a checklist ticked from memory - each item below is a script that opened the
+      real generated HTML for all 283 pages and measured it.</p>
+    <ul class="method">
+      <li>Every &lt;title&gt; and &lt;meta name="description"&gt; extracted and checked for length (Google's practical display limits: roughly 15-60 characters for a title, 70-160 for a description) and for duplicates across the whole site.</li>
+      <li>Every &lt;h1&gt;-&lt;h6&gt; on every page collected in document order to check exactly one H1 per page, and that heading levels never jump (no H2 straight to H4).</li>
+      <li>Every internal &lt;a href&gt; resolved to a real file path and checked for a 200 - not sampled, all 23,023 of them.</li>
+      <li>Every &lt;script type="application/ld+json"&gt; block parsed with a real JSON parser, not eyeballed.</li>
+      <li>sitemap.xml parsed as XML and its URL count compared against the actual page count; robots.txt read directly.</li>
+      <li>canonical, viewport, lang, favicon and og:image tags checked for presence on all 283 pages.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-eyebrow">FINDINGS</div>
+    <h2>What was wrong, and what changed</h2>
+    <p class="sec-sub">Nine issues, grouped by what they affect. Each row shows the measured before and
+      after - not a description of intent.</p>
+
+    <h3>Accessibility &amp; structure</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Heading level skips (H2 straight to H4, no H3) - the footer's section labels were H4
+              while most page content only reaches H2. A screen reader jumping by heading level lands
+              nowhere between them.
+              <div class="why">Fix: footer labels changed to H3. Two pages (Guides index, Contact) had
+                no H2 at all and skipped H1&rarr;H3; both got a real section heading.</div>
+            </td>
+            <td class="num before">282 / 283 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">0 / 283</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Social sharing</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>No og:image on any page - a link shared to WhatsApp, Facebook or Slack showed no
+              preview image.
+              <div class="why">Fix: generated a branded 1200&times;630 share image and added og:image,
+                og:image dimensions and matching twitter:card tags sitewide.</div>
+            </td>
+            <td class="num before">0 / 283 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">283 / 283</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Titles &amp; descriptions</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Titles over ~60 characters, at risk of truncating in search results.</td>
+            <td class="num before">23 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">1 page (61 chars)</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>Descriptions over 160 characters. Most came from one auto-generated sentence that
+              overflowed on subcategories with long names (Farewell &amp; Retirement Invitations).
+              <div class="why">Fix: shortened the generating formula and hand-trimmed the rest.</div>
+            </td>
+            <td class="num before">10 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">0 pages</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>Duplicate titles or descriptions across different pages (a real duplicate-content
+              signal to search engines).</td>
+            <td class="num before">0</td><td class="arrow">&rarr;</td>
+            <td class="num after">0</td>
+            <td><span class="pill pill-pass">Already clean</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Structured data</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>No BreadcrumbList schema, despite every page already rendering a visible breadcrumb
+              trail - Google can show that trail under the search result, but only if it is marked up.
+              <div class="why">Fix: the breadcrumb function now emits the JSON-LD from the exact same
+                data as the visible trail, so the two can't drift apart.</div>
+            </td>
+            <td class="num before">0 / 283</td><td class="arrow">&rarr;</td>
+            <td class="num after">282 / 283 <span style="color:var(--ink-faint);font-weight:400;">(all but home)</span></td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>No Organization / WebSite schema declaring what the site is.
+              <div class="why">Fix: added to the homepage, including a SearchAction. Made that claim
+                real rather than decorative - the homepage now reads a <code>?q=</code> URL parameter
+                and runs the search, which is what a Google sitelinks search box actually calls.</div>
+            </td>
+            <td class="num before">Absent</td><td class="arrow">&rarr;</td>
+            <td class="num after">Present, functional</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>FAQPage schema (subcategory pages) and Article schema (guides) - checked for valid JSON
+              and correct placement.</td>
+            <td class="num before">52 + 15 pages</td><td class="arrow">&rarr;</td>
+            <td class="num after">Unchanged, valid</td>
+            <td><span class="pill pill-pass">Already correct</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Internal linking</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Before</th><th></th><th>After</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Guides could only link to one related template category each, even where the written
+              content named several - the sizes guide discusses seven platforms but linked to one.
+              <div class="why">Fix: guides can now cite multiple related categories, collapsed into one
+                sentence rather than a repeated banner.</div>
+            </td>
+            <td class="num before">1 link / guide</td><td class="arrow">&rarr;</td>
+            <td class="num after">Up to 5, where earned</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>Two pages named another category's templates in plain text without linking to them -
+              the diploma page mentioned certificates, the logo page mentioned letterheads.</td>
+            <td class="num before">2 plain-text mentions</td><td class="arrow">&rarr;</td>
+            <td class="num after">2 real links</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>No link between Business Cards and Logo Templates, despite being the most common
+              real-world pairing on the site (a new business needs both).</td>
+            <td class="num before">Unlinked</td><td class="arrow">&rarr;</td>
+            <td class="num after">Linked, both directions</td>
+            <td><span class="pill pill-fixed">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>Pages with no incoming internal link at all (unreachable except via sitemap).</td>
+            <td class="num before">0</td><td class="arrow">&rarr;</td>
+            <td class="num after">0</td>
+            <td><span class="pill pill-pass">Already clean</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-eyebrow">SITE HEALTH</div>
+    <h2>Everything else that was checked</h2>
+    <p class="sec-sub">No issue found - listed because "we checked and it's fine" is still evidence.</p>
+    <div class="pass-grid">
+      <div class="pass-item"><span class="k">Canonical tag present</span><span class="v">283 / 283</span></div>
+      <div class="pass-item"><span class="k">Viewport meta present</span><span class="v">283 / 283</span></div>
+      <div class="pass-item"><span class="k">lang="en" attribute</span><span class="v">283 / 283</span></div>
+      <div class="pass-item"><span class="k">Favicon linked</span><span class="v">283 / 283</span></div>
+      <div class="pass-item"><span class="k">Broken internal links</span><span class="v">0 / 23,023</span></div>
+      <div class="pass-item"><span class="k">Invalid JSON-LD</span><span class="v">0 / 349</span></div>
+      <div class="pass-item"><span class="k">Orphan pages</span><span class="v">0 / 283</span></div>
+      <div class="pass-item"><span class="k">sitemap.xml entries</span><span class="v">283, matches page count</span></div>
+      <div class="pass-item"><span class="k">robots.txt</span><span class="v">Allows all, points to sitemap</span></div>
+      <div class="pass-item"><span class="k">&lt;img&gt; without alt text</span><span class="v">0 (no raster content images)</span></div>
+      <div class="pass-item"><span class="k">Duplicate H1 (same URL)</span><span class="v">0</span></div>
+      <div class="pass-item"><span class="k">Avg. HTML page weight</span><span class="v">38.7 KB</span></div>
+    </div>
+
+    <div class="note-block">
+      <b>Reviewed, not changed</b> - every page loads all six category stylesheets (~108KB
+      uncompressed) rather than only the one it needs, because the homepage and category pages show
+      preview cards pulled from other categories and a safe per-page split would need careful testing
+      to avoid a page rendering without a style it turns out to need. Real-world cost is small - the
+      files are cached after a visitor's first page view, and Vercel compresses them in transit - so
+      this is flagged as a low-priority future optimisation rather than fixed under time pressure.
+      One title sits at 61 characters against a 60-character guideline; Google's actual cutoff is
+      pixel-width based, not a hard character count, so this is not expected to truncate in practice.
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-eyebrow">NEXT</div>
+    <h2>What actually moves rankings from here</h2>
+    <p class="sec-sub">On-page work is done. The site now has no data to prove any of it worked - these
+      four close that gap.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="idx">1</span>
+        <div>
+          <h4>Submit the sitemap to Google Search Console</h4>
+          <p>paperloom-rho.vercel.app/sitemap.xml. Nothing above matters to rankings until Google has
+            actually crawled and indexed the pages - this is what makes that happen on a predictable
+            schedule instead of by chance.</p>
+          <span class="owner">Needs the site owner's Google account</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="idx">2</span>
+        <div>
+          <h4>Add analytics</h4>
+          <p>There is currently no record of what pages get visited or what people do once they
+            arrive. A week of real data will say more than another round of guessing which category
+            to build next.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="idx">3</span>
+        <div>
+          <h4>Write more guides before adding more categories</h4>
+          <p>Guides are the site's only long-form original writing, and the part that gives thin
+            template-gallery pages the surrounding content search engines and AdSense both look for.
+            Each existing category has room for two or three more.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="idx">4</span>
+        <div>
+          <h4>Re-run this audit after Search Console has a few weeks of data</h4>
+          <p>Query and impression data will show which pages are already being found for the wrong
+            keyword, or found for a keyword this site didn't intend to target - both are worth acting
+            on and neither is visible without it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Every figure in this report was measured against the build deployed on 8 September 2026.
+    Re-running it against a later deploy may produce different numbers as new categories are added.
+  </footer>
+
+</div>

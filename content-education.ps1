@@ -186,6 +186,7 @@ $ESubcats = @(
     h1='Worksheet Templates'
     title='Worksheet Template - Free Editable Blank Worksheets to Print'
     desc='Free editable worksheet templates for any subject. Type your own questions, print in black and white, and use the same layout every week.'
+    guideNote='Answer space is the part most worksheets get wrong - roughly twice the height of the question for written answers, a full line per step for maths. That and how many questions to set are in <a href="../../guides/how-to-make-a-worksheet/">how to make a worksheet</a>.'
     intro=@(
       'A worksheet has one job that most designs get wrong: leaving enough room to answer in. These four give every question working space and keep the header to a single line, so a page of eight questions stays a page rather than becoming two.',
       'Type one question per line and each one gets a ruled answer space beneath it. All four print cleanly in black and white, which is what most school printers are set to.')
@@ -204,6 +205,7 @@ $ESubcats = @(
     h1='Lesson Plan Templates'
     title='Lesson Plan Template - Free Editable Weekly and Daily Plans'
     desc='Free editable lesson plan templates with objectives, materials, activities and assessment. Fill them in online and print for your file.'
+    guideNote='The plan names the activity; the <a href="../../education-school/worksheet-templates/">worksheet</a> is usually the activity itself, and the <a href="../../education-school/timetable-templates/">timetable</a> decides how much of it fits in the period you actually have.'
     intro=@(
       'A lesson plan is written for two readers: you at eight in the morning, and whoever inspects the file in six months. These four keep the objectives and the timings visible at a glance, which serves the first reader, and carry the sections a file check expects.',
       'Timings live in the activities block rather than in a separate column, because that is where they are read from. Any section you leave empty disappears instead of leaving a gap.')
@@ -222,6 +224,7 @@ $ESubcats = @(
     h1='Class Timetable Templates'
     title='Timetable Template - Free Editable Class Schedule to Print'
     desc='Free editable class timetable templates for schools and students. Type your periods and subjects, then print for the wall or the front of a file.'
+    guideNote='A timetable is the frame every <a href="../../education-school/lesson-plan-templates/">lesson plan</a> has to fit inside, which is why it is worth setting the period lengths here honestly before planning against them.'
     intro=@(
       'A timetable is read in a hurry by someone who is already late, so the useful ones are the ones you can scan down a column. These four keep the day columns even and the times in their own column at the left.',
       'Type one period per line in each column. Keep the number of lines the same in every day and the rows line up on their own - which is also how a timetable behaves when a day has a free period, so write a dash rather than leaving the line out.')
@@ -240,6 +243,7 @@ $ESubcats = @(
     h1='Report Card Templates'
     title='Report Card Template - Free Student Progress Reports'
     desc='Free editable report card and progress report templates for schools. Enter subjects, marks and remarks, then print or save as PDF.'
+    guideNote='Parents read the remark before the marks. One specific strength, one thing to work on described as an action, and one line looking forward is the shape that works - <a href="../../guides/what-to-write-in-a-report-card/">writing report card comments</a> has the phrasing, including what to avoid.'
     intro=@(
       'A report card is read by a parent in about a minute, and the part they remember is the remark rather than the marks. These four give the remark real space instead of a two-line box at the bottom.',
       'Subjects, marks and grades are three columns you fill separately - keep the same number of lines in each and the rows align. Any subject you leave out simply is not there.')
@@ -258,6 +262,7 @@ $ESubcats = @(
     h1='Attendance Sheet Templates'
     title='Attendance Sheet Template - Free Printable Class Register'
     desc='Free printable attendance register templates with a month of columns. Type your class list, print, and tick by hand.'
+    guideNote='This sheet is where an attendance remark on a <a href="../../education-school/report-card-templates/">report card</a> comes from - "late to four lessons this term" is a fact a family can act on, but only if it was recorded as it happened.'
     intro=@(
       'An attendance register is filled in by hand at nine in the morning, so what matters is the row height and whether the columns are wide enough to tick without hitting the neighbouring day. These four are set for a pen rather than a keyboard.',
       'Type your class list one name per line and the grid draws a row for each. Thirty-one day columns are ruled across, with the key at the foot.')
@@ -277,6 +282,7 @@ $ESubcats = @(
     h1='Flashcard Templates'
     title='Flashcard Template - Free Printable Study Cards You Can Edit'
     desc='Free editable flashcard templates for vocabulary, definitions and revision. Type the term and definition, then print and cut.'
+    guideNote='Flashcards carry recall; a <a href="../../education-school/worksheet-templates/">worksheet</a> carries the working. Most topics need both, and the two are usually printed in the same session.'
     intro=@(
       'A flashcard works by being answerable in about two seconds, which means one idea per card and a term large enough to read across a desk. These four keep the definition short and the term dominant.',
       'They print four to an A4 sheet at the standard size, or singly at the larger one. Cut along the outer edge and the margin is already allowed for.')
@@ -296,6 +302,7 @@ $ESubcats = @(
     h1='Student ID Card Templates'
     title='Student ID Card Template - Free Editable School ID Designs'
     desc='Free editable student ID card templates at standard card size. Add the school name, student details and print for lamination.'
+    guideNote='The details here should match the ones on your <a href="../../education-school/attendance-sheet-templates/">register</a> and reports - a name spelled two ways across school paperwork is a problem that surfaces years later at exam time.'
     intro=@(
       'A student card is checked at a gate by someone glancing at it for a second, so the name and the class have to be the two things that read first. These four put them there and keep the rest small.',
       'They are set at the standard 85 by 54mm card size, with a portrait option for lanyards. A space is left for a photograph to be attached after printing, which is how most schools do it.')
@@ -346,9 +353,9 @@ $EGuides = @(
       @('h2','Put the instruction where it is read'),
       @('p','At the top, in one sentence, in the same size as the questions. Instructions set small are not read; instructions set in a box at the bottom are read after the child has already done it their own way.'),
       @('h2','One layout, every week'),
-      @('p','Keep the header, the instruction position and the numbering identical from week to week. The first two minutes of every worksheet are spent working out what the page wants, and a familiar layout gives those two minutes back.'),
+      @('p','Keep the header, the instruction position and the numbering identical from week to week. The first two minutes of every worksheet are spent working out what the page wants, and a familiar layout gives those two minutes back. The same argument applies upstream to the <a href="../../education-school/lesson-plan-templates/">lesson plan</a> the worksheet belongs to - one shape, reused, is faster to write as well as to read.'),
       @('h2','Print in black and white'),
-      @('p','Assume it. If colour carries meaning - a key, a highlighted row - the worksheet fails the moment it goes through a mono printer, which in most schools it will. These templates use colour for decoration only, so nothing is lost.'),
+      @('p','Assume it. If colour carries meaning - a key, a highlighted row - the worksheet fails the moment it goes through a mono printer, which in most schools it will. These <a href="../../education-school/worksheet-templates/">worksheet templates</a> use colour for decoration only, so nothing is lost.'),
       @('h2','Leave a name line'),
       @('p','Obvious, and still the most common omission. Name and date on one line at the top, with enough room for a child''s handwriting rather than an adult''s.'),
       @('cta','worksheet-templates')) },
@@ -359,7 +366,7 @@ $EGuides = @(
     desc='How to write remarks parents can act on, phrases that say nothing, and how to raise a problem without damaging the child.'
     read='6 min read'
     body=@(
-      @('p','Parents read the comment before the marks, and remember it long after. It is also the part teachers write thirty of on a Sunday evening, which is how the phrases that say nothing come to exist.'),
+      @('p','Parents read the comment before the marks, and remember it long after. It is also the part teachers write thirty of on a Sunday evening, which is how the phrases that say nothing come to exist. The <a href="../../education-school/report-card-templates/">report card layouts here</a> leave a full comment box rather than a two-line strip, for exactly that reason.'),
       @('h2','The shape that works'),
       @('ol',@(
         '<strong>One specific strength.</strong> Not "a pleasure to teach" - something you actually saw. "Ayesha explained her method to the group without being asked."',
@@ -372,7 +379,7 @@ $EGuides = @(
         '<strong>"Lacks confidence."</strong> A description of a symptom, not something a parent can work with. Say what happens instead: "hesitates to answer aloud, though her written work is strong."',
         '<strong>"Chatty."</strong> A complaint about your lesson dressed as a comment about the child.')),
       @('h2','Raising a real problem'),
-      @('p','Name the behaviour, not the character. "Hamza has been late to four lessons this term" is a fact a family can address; "Hamza is lazy" is a judgement they will defend against, and the conversation ends there. Where the issue is serious, the report is the wrong place to break the news - it should already have been said in person.'),
+      @('p','Name the behaviour, not the character. "Hamza has been late to four lessons this term" is a fact a family can address - and a fact your <a href="../../education-school/attendance-sheet-templates/">attendance register</a> can support if it is questioned. "Hamza is lazy" is a judgement they will defend against, and the conversation ends there. Where the issue is serious, the report is the wrong place to break the news - it should already have been said in person.'),
       @('h2','Length'),
       @('p','Three or four sentences. A long comment is read as a warning sign regardless of what it says, and a short specific one is read twice.'),
       @('h2','Write them in one sitting, but not in one voice'),

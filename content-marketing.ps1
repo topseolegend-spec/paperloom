@@ -97,6 +97,7 @@ $MSubcats = @(
     h1='Poster Templates'
     title='Poster Template - Free Editable A3 Designs You Can Print'
     desc='Free editable poster templates for events, gigs and notices. Type your own headline and details, then print at A3 or download the image.'
+    guideNote='A poster is read from across a room and a <a href="../../marketing-social/flyer-templates/">flyer</a> from the hand, so the same wording rarely works on both - the <a href="../../guides/how-to-design-a-flyer/">three-second test</a> is the quickest way to check which one you have actually made.'
     intro=@(
       'A poster is read from across a room by someone walking past, which settles most of the design questions: one line has to be much larger than everything else, and the practical details go at the bottom where people look once they have stopped.',
       'These four keep that hierarchy and give you A3, A2 and US poster sizes in the editor. Open Air and Studio Grid are the restrained pair; Colour Field and Deco Night carry more, which is what an event poster usually needs to survive a noticeboard.')
@@ -115,6 +116,7 @@ $MSubcats = @(
     h1='Flyer Templates'
     title='Flyer Template - Free Editable Designs for Business'
     desc='Free editable flyer templates for shops, cafes, services and events. Add your own offer and contact details, then print at A5 or A4.'
+    guideNote='The commonest and most expensive mistake is leading with your business name instead of the offer - that, the three-second test and how many to print first are in <a href="../../guides/how-to-design-a-flyer/">how to design a flyer</a>.'
     intro=@(
       'A flyer is handed over or pushed through a door, and it gets about two seconds before someone decides whether to keep it. That makes the offer the headline - not the business name, which is what most flyers lead with and why most flyers get binned.',
       'All four put the offer where the eye lands and the contact details at the foot. Print at A5 for handing out, A4 for a noticeboard; both are in the editor.')
@@ -133,6 +135,7 @@ $MSubcats = @(
     h1='Instagram Post Templates'
     title='Instagram Post Template - Free Editable 1080x1080 Designs'
     desc='Free editable Instagram post templates at 1080x1080 and 1080x1350. Type your own words and download the image - no account, no watermark.'
+    guideNote='The same design switches to a <a href="../../marketing-social/instagram-story-templates/">story</a> without a redesign, and uploading a bigger file does not make either one sharper - the reasons are in <a href="../../guides/social-media-image-sizes/">social media image sizes</a>.'
     intro=@(
       'An Instagram post is seen at about the size of a matchbox before anyone decides to stop, so the headline has to survive being small. These four are set with that in mind: short lines, high contrast, and nothing fussy at the edges where the crop can bite.',
       'Square is the default and portrait at 1080 by 1350 is in the editor, which takes more room in the feed. Both download at full resolution.')
@@ -151,6 +154,7 @@ $MSubcats = @(
     h1='YouTube Thumbnail Templates'
     title='YouTube Thumbnail Template - Free Editable 1280x720 Designs'
     desc='Free editable YouTube thumbnail templates at 1280x720. Add your own title text and download the image ready to upload.'
+    guideNote='A duration badge sits over the bottom right of every thumbnail once it is uploaded, so nothing you need read belongs there - <a href="../../guides/social-media-image-sizes/">the interface sits on top of the design</a> on every platform, in a different place each time.'
     intro=@(
       'A thumbnail is judged at about 200 pixels wide on a phone, so the only thing that matters is whether the words are legible at that size. Three or four words is the working limit, and these four are built around that rather than around decoration.',
       'All four export at exactly 1280 by 720, which is what YouTube asks for. Keep the right-hand corner clear if you can - the duration badge sits there.')
@@ -169,6 +173,7 @@ $MSubcats = @(
     h1='Instagram Story Templates'
     title='Instagram Story Template - Free Editable 1080x1920 Designs'
     desc='Free editable Instagram story templates at 1080x1920 for sales, announcements and links. Type your words and download the image.'
+    guideNote='Your profile sits over the top of a story and the reply bar over the bottom, which leaves the middle as the only safe band - the same rule, with the numbers, is in <a href="../../guides/social-media-image-sizes/">social media image sizes</a>.'
     intro=@(
       'A story is full screen and gone in five seconds, which makes it the easiest format to over-fill. These four keep the message to one idea and hold it in the middle third, where the platform''s own buttons will not sit on top of it.',
       'All four export at 1080 by 1920. If you are adding a link sticker, leave the lower third clear when you write the details line.')
@@ -187,6 +192,7 @@ $MSubcats = @(
     h1='Facebook Cover Templates'
     title='Facebook Cover Template - Free Editable 820x312 Designs'
     desc='Free editable Facebook cover photo templates at 820x312 for pages and profiles. Add your business name and download the image.'
+    guideNote='A cover crops differently on a phone than on a desktop, so anything essential stays central - that, and the rest of the sizes worth knowing, are in <a href="../../guides/social-media-image-sizes/">social media image sizes</a>.'
     intro=@(
       'A Facebook cover is a wide strip that gets cropped differently on a phone than on a desktop, and the profile picture sits over the left of it. These four keep the wording centred and short so nothing important lands under the crop or the avatar.',
       'Say who you are and what you do. A cover carrying a full list of services is unreadable at the height Facebook gives it.')
@@ -205,6 +211,7 @@ $MSubcats = @(
     h1='LinkedIn Banner Templates'
     title='LinkedIn Banner Template - Free Editable 1584x396 Designs'
     desc='Free editable LinkedIn banner templates at 1584x396 for job seekers and professionals. Add your name and headline, then download.'
+    guideNote='Your profile photo covers the lower left of this banner, so the right half is the usable half - see <a href="../../guides/social-media-image-sizes/">social media image sizes</a>. If you are mid-application, the banner and the <a href="../../business-office/cv-resume-templates/">CV</a> should agree on the same job title.'
     intro=@(
       'A LinkedIn banner is four times as wide as it is tall, and your profile photo covers the lower left of it. That leaves a band across the middle and right - which is exactly where these four put the wording.',
       'For a job search, the useful banner says what you do and how to reach you, because a recruiter reading your profile has both in front of them at once. These are set up for that rather than for decoration.')
@@ -223,6 +230,7 @@ $MSubcats = @(
     h1='Web Banner Templates'
     title='Banner Ad Template - Free Editable Web Banner Designs'
     desc='Free editable web banner and display ad templates at standard sizes including 300x250 and 728x90. Add your offer and download.'
+    guideNote='These are the three display sizes worth making first; the rest of the platform dimensions, and the two rules that matter more than any of them, are in <a href="../../guides/social-media-image-sizes/">social media image sizes</a>.'
     intro=@(
       'Display banners are small, and the offer is the whole message. These four carry a headline, one supporting line and a call to action - which is all that fits at 300 by 250 and rather more than fits at 728 by 90.',
       'The editor holds the three sizes worth designing for: the medium rectangle, the leaderboard, and the half-page skyscraper. The same wording rarely works across all three, so shorten as you go narrower.')
@@ -273,7 +281,7 @@ $MGuides = @(
         '<strong>YouTube thumbnail:</strong> 1280 &times; 720, under 2MB.',
         '<strong>Facebook page cover:</strong> 820 &times; 312.',
         '<strong>LinkedIn banner:</strong> 1584 &times; 396.',
-        '<strong>Display ads:</strong> 300 &times; 250, 728 &times; 90, 300 &times; 600.')),
+        '<strong><a href="../../marketing-social/web-banner-templates/">Display ads</a>:</strong> 300 &times; 250, 728 &times; 90, 300 &times; 600.')),
       @('h2','Rule one: the interface sits on top of your design'),
       @('p','A story has your profile at the top and a reply bar at the bottom. A LinkedIn banner has your photo over the lower left. A YouTube thumbnail has a duration badge in the bottom right. None of this is optional, so anything that matters belongs in the middle - not because the middle looks better, but because it is the only part guaranteed to be visible.'),
       @('h2','Rule two: uploading bigger does not make it sharper'),
@@ -281,7 +289,8 @@ $MGuides = @(
       @('h2','Test at thumbnail scale, not full size'),
       @('p','The single most useful habit: shrink your design on screen until it is about the width of your thumb, then look at it. That is the size a feed shows it at. If the headline is not readable there, the answer is fewer words rather than bigger type - bigger type in a small space just wraps.'),
       @('h2','One design, several sizes'),
-      @('p','Every template on this site switches size in the editor and re-flows rather than cropping, so a post can become a story without a redesign. The wording almost always needs shortening as the canvas gets narrower, which is a content decision rather than a design one.'),
+      @('p','Every template on this site switches size in the editor and re-flows rather than cropping, so an <a href="../../marketing-social/instagram-post-templates/">Instagram post</a> can become a <a href="../../marketing-social/instagram-story-templates/">story</a> without a redesign. The wording almost always needs shortening as the canvas gets narrower, which is a content decision rather than a design one.'),
+      @('p','For print rather than a feed the trade-offs change completely - paper has no interface sitting on top of it, but it also gets two seconds in the hand. That is <a href="../how-to-design-a-flyer/">flyer territory</a>.'),
       @('cta','instagram-post-templates'),
       @('cta','instagram-story-templates'),
       @('cta','youtube-thumbnail-templates'),
@@ -294,7 +303,7 @@ $MGuides = @(
     desc='Why most flyers get binned in two seconds, what to lead with instead of your business name, and how much to print.'
     read='6 min read'
     body=@(
-      @('p','A flyer gets about two seconds between the hand and the bin. Almost everything that makes a flyer work happens in that window, and most flyers lose it in the first line.'),
+      @('p','A flyer gets about two seconds between the hand and the bin. Almost everything that makes a flyer work happens in that window, and most flyers lose it in the first line. The <a href="../../marketing-social/flyer-templates/">flyer designs here</a> are laid out around that window; what goes in them is the part below.'),
       @('h2','Do not lead with your business name'),
       @('p','This is the commonest mistake and the most expensive one. Nobody is looking for you yet - they do not know you exist. Lead with what they get: the offer, the event, the problem you solve. Your name belongs at the bottom with the phone number, where somebody who has already decided will look for it.'),
       @('h2','One message'),
@@ -305,11 +314,12 @@ $MGuides = @(
       @('p','Address, hours, phone, and one web address. Set them small but not tiny, and group them at the foot with room around them. This is the part someone photographs on their phone, so it has to survive being read at an angle in bad light.'),
       @('h2','Printing'),
       @('ul',@(
-        '<strong>A5</strong> for handouts and letterbox drops, <strong>A4</strong> for noticeboards and windows.',
+        '<strong>A5</strong> for handouts and letterbox drops, <strong>A4</strong> for noticeboards and windows - though for a board read at a distance, a <a href="../../marketing-social/poster-templates/">poster</a> carries further than a flyer.',
         '<strong>130-170gsm</strong> - light enough to carry a stack, heavy enough not to feel disposable.',
         'Matt rather than gloss unless there are photographs, and there are none in these designs.',
         'Print a proof of one before you order a thousand. Screens flatter, and typos survive every reading until they are on paper.')),
       @('h2','How many to print'),
       @('p','Fewer than you think, first. Response rates on letterbox drops are commonly well under one per cent, so five hundred is a test rather than a campaign. Print five hundred, see what happens, then change the offer rather than the design if nothing does.'),
+      @('p','The same flyer usually wants a second life in a feed, which is a different set of constraints and a different set of <a href="../social-media-image-sizes/">dimensions</a> - the interface sits on top of the design there, so the middle of the frame is the only safe place for anything that matters.'),
       @('cta','flyer-templates')) }
 )

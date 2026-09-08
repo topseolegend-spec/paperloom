@@ -220,6 +220,7 @@ $BizSubcats = @(
     h1='CV and Resume Templates'
     title='Resume Template - Free Editable CV Designs You Can Print'
     desc='Free professional resume and CV templates, modern and classic. Edit in your browser, download as PNG or print to PDF - no account, no watermark.'
+    guideNote='The layout is the easy half. <a href="../../guides/what-to-include-in-a-cv/">What belongs in each section</a> - and what to cut - is where most CVs are won or lost, and if the advert said resume rather than CV, <a href="../../guides/cv-vs-resume/">that word changes the expected length</a> in North America only.'
     intro=@(
       'A CV is read in about seven seconds before anyone decides to keep reading, and almost all of that time goes on the top third of the page. Each of these four layouts puts the name, the role and the profile line in that space, and keeps the rest of the page quiet enough to scan.',
       'All four are A4 by default and switch to US Letter in the editor. They hold three roles and two qualifications comfortably; any field you leave empty disappears rather than leaving a gap, so a shorter CV still looks deliberate rather than unfinished.')
@@ -241,6 +242,7 @@ $BizSubcats = @(
     h1='Invoice Templates'
     title='Invoice Template - Free Printable Invoices You Can Edit'
     desc='Free editable invoice templates for freelancers and small businesses. Fill in your details in the browser, then print or save as PDF. No account needed.'
+    guideNote='A correct invoice and one that gets paid on time are not quite the same document - numbering, a due date rather than a payment term, and reaching the person who actually approves it are covered in <a href="../../guides/how-to-write-an-invoice/">how to write an invoice</a>.'
     intro=@(
       'An invoice only has to do three things: say who is owed money, say how much, and say by when. These layouts put the total where the eye lands first and keep the line items readable, which is most of what gets an invoice paid on time.',
       'Four line items fit comfortably; leave any of them empty and the row disappears. The totals block, the due date and the payment note are all editable, so the same design works for a one-off job or a monthly retainer.')
@@ -258,6 +260,7 @@ $BizSubcats = @(
     h1='Certificate Templates'
     title='Certificate Template - Free Printable Award Designs'
     desc='Free printable certificate templates for achievement, completion, appreciation and training awards. Landscape A4, editable in your browser.'
+    guideNote='These are for awards, courses and recognition. For a school leaving certificate with the institutional detail that goes with it, the <a href="../../education-school/diploma-templates/">diploma designs</a> are the longer form of the same document.'
     intro=@(
       'Certificates are printed landscape and read from across a room, which changes what matters: the recipient''s name has to be the largest thing on the page, and the border has to frame it without crowding it. These four use the same ornament library as our invitation cards, drawn as vector line work so they stay crisp at any size.',
       'Two signature blocks are included; clear the second one and the first centres itself. Every design switches between award, completion, appreciation and participation wording by editing the title line.')
@@ -295,6 +298,7 @@ $BizSubcats = @(
     h1='Cover Letter Templates'
     title='Cover Letter Template - Free Editable Designs'
     desc='Free cover letter templates in matching styles to our CV designs. Edit the wording in your browser, then print or save as PDF.'
+    guideNote='A cover letter earns its place by saying what the <a href="../../business-office/cv-resume-templates/">CV</a> cannot - why this employer, and why now. It repeats nothing from the CV itself, which is easier to judge once you know <a href="../../guides/what-to-include-in-a-cv/">what the CV is already carrying</a>.'
     intro=@(
       'A cover letter is read after the CV, not before it, and its job is narrow: explain why this role and not another. Three short paragraphs do that better than a full page of prose, which is what these layouts are spaced for.',
       'Each design pairs with one of the CV templates, so a letter and CV sent together look like they came from the same person rather than two different downloads.')
@@ -312,6 +316,7 @@ $BizSubcats = @(
     h1='Restaurant Menu Templates'
     title='Restaurant Menu Template - Free Printable Designs'
     desc='Free editable restaurant and cafe menu templates. Type your dishes and prices in the browser, then print or save as PDF.'
+    guideNote='Most cafes print a menu and a <a href="../../marketing-social/flyer-templates/">flyer</a> in the same week - if you are doing both, set them in the same typeface and palette so the two read as one place.'
     intro=@(
       'A menu is a price list people read while hungry and slightly rushed, so the two things that matter are that dish names are easy to scan and that prices do not dominate them. These layouts set prices in the same weight as the dish rather than in bold, which is what stops a menu reading like a receipt.',
       'Type one dish per line as "Dish name - price" and the layout separates the two for you, with prices aligned down the right. Three sections are included; clear the third to run a two-section menu.')
@@ -329,6 +334,7 @@ $BizSubcats = @(
     h1='Letterhead Templates'
     title='Letterhead Template - Free Printable Company Designs'
     desc='Free editable company letterhead templates. Add your business name, address and contact details in the browser, then print or save as PDF.'
+    guideNote='Keep the details here identical to the ones on your <a href="../../business-office/invoice-templates/">invoices</a> and <a href="../../business-office/business-card-templates/">business cards</a> - a client filing all three should see one business, not three near-matches.'
     intro=@(
       'A letterhead is mostly empty space, and that is the point - whatever gets typed onto it has to stay the most important thing on the page. These three keep the header under a fifth of the sheet and leave the rest clear.',
       'Print a batch and write on them, or save the PDF and use it as the first page of a document. The footer line takes a registration number, a tagline, or nothing at all.')
@@ -367,9 +373,10 @@ $BizGuides = @(
         '<strong>Skill rating bars.</strong> A bar showing you at 80% of something communicates nothing measurable, and takes the room a real example would use.')),
       @('h2','The photograph question'),
       @('p','This one genuinely depends on where you are applying. In Pakistan, the Gulf, and much of Asia and continental Europe a photo on a CV is normal and its absence can look odd. In the UK, US, Canada, Australia and Ireland it is discouraged - employers there avoid documents that could later support a discrimination claim, and some recruiters strip photos before passing a CV on.'),
-      @('p','If you are applying in more than one of those markets, keep two versions. Our templates leave the photo off, which is the safer default of the two.'),
+      @('p','If you are applying in more than one of those markets, keep two versions. Our <a href="../../business-office/cv-resume-templates/">CV templates</a> leave the photo off, which is the safer default of the two.'),
       @('h2','Length'),
       @('p','One page under ten years of experience, two beyond it. If you are fighting the page, cut your oldest roles to a single line each before you shrink the type - a CV set in seven point tells a reader you had more to say than you could edit.'),
+      @('p','The one exception is an academic post, where the document is expected to run long and list every publication. That is a different document wearing the same name, which is the whole of <a href="../cv-vs-resume/">CV versus resume</a>.'),
       @('cta','cv-resume-templates'),
       @('cta','cover-letter-templates')) },
 
@@ -391,7 +398,7 @@ $BizGuides = @(
         'The sector. Universities, research institutes and some medical roles use the academic sense of CV everywhere.',
         'The length hint in the advert. "No more than two pages" tells you they mean a resume regardless of the word they used.')),
       @('h2','Which should you send?'),
-      @('p','Send the one to two page document unless you are applying for an academic post. If you genuinely cannot tell and the role is in North America, the short version is the safer choice: no employer has ever rejected a resume for being too readable.'),
+      @('p','Send the <a href="../../business-office/cv-resume-templates/">one to two page document</a> unless you are applying for an academic post. If you genuinely cannot tell and the role is in North America, the short version is the safer choice: no employer has ever rejected a resume for being too readable. What goes inside it does not change with the word used - the <a href="../what-to-include-in-a-cv/">same five sections</a> apply either way.'),
       @('h2','A note on file names'),
       @('p','Whatever the document is called, name the file after yourself rather than the document type - "Amara Sheikh CV.pdf" rather than "cv-final-v3.pdf". It is the name a recruiter sees in a folder of two hundred attachments.'),
       @('cta','cv-resume-templates'),
@@ -403,10 +410,10 @@ $BizGuides = @(
     desc='What has to appear on an invoice, how to number them, what payment terms to set, and how to chase late payment without damage.'
     read='6 min read'
     body=@(
-      @('p','Most late payments are not disputes. They are invoices that were unclear, went to the wrong person, or arrived without the one detail the client''s finance team needed. Getting those right is most of the work.'),
+      @('p','Most late payments are not disputes. They are invoices that were unclear, went to the wrong person, or arrived without the one detail the client''s finance team needed. Getting those right is most of the work. The <a href="../../business-office/invoice-templates/">invoice layouts here</a> put every required field in a fixed place; the wording and the terms are still yours to set.'),
       @('h2','What has to be on it'),
       @('ol',@(
-        'Your business name and contact details.',
+        'Your business name and contact details - the same ones on your <a href="../../business-office/letterhead-templates/">letterhead</a>, so a client filing both sees one business rather than two.',
         'The client''s name, and where it matters, the department or person who approves payment.',
         'A unique invoice number.',
         'The issue date and, separately, the due date.',
