@@ -169,6 +169,30 @@ function Art-Laurel {
   Svg $out
 }
 
+# --- scalloped edge -----------------------------------------------------------
+#  Scalloped and die-cut edges are one of the two shapes the 2026 stationery
+#  trend coverage keeps naming, alongside the arch, and the set had nothing like
+#  it - .d-scallop was a dashed rounded rectangle wearing the name.
+#
+#  Drawn as one closed path of half-circles so it prints as a clean line and
+#  exports through html2canvas like every other ornament here. Radius divides
+#  both edges exactly, otherwise the last scallop on a side comes out short.
+function Art-Scallop {
+  # Sits at the very edge of the card, not inside it: card bodies are padded to
+  # about 10 units, so a frame drawn any further in has the longest line of the
+  # invitation running straight through it. No inner rule for the same reason.
+  $r = 5; $d = $r * 2
+  $x1 = 5; $x2 = 95; $y1 = 5; $y2 = 135
+  $across = [int](($x2 - $x1) / $d)   # 9
+  $down   = [int](($y2 - $y1) / $d)   # 13
+  $p = "M$x1 $y1"
+  foreach ($i in 1..$across) { $p += " a$r,$r 0 0,1 $d,0" }
+  foreach ($i in 1..$down)   { $p += " a$r,$r 0 0,1 0,$d" }
+  foreach ($i in 1..$across) { $p += " a$r,$r 0 0,1 -$d,0" }
+  foreach ($i in 1..$down)   { $p += " a$r,$r 0 0,1 0,-$d" }
+  Svg "<g class=`"s`" stroke-width=`"0.7`" opacity=`"0.85`"><path d=`"$p Z`"/></g>"
+}
+
 # --- confetti and ribbons -----------------------------------------------------
 function Art-Confetti {
   $dots = ''
@@ -196,6 +220,7 @@ $ArtKinds = @(
   @{ id='geometric'; label='Geometric' },
   @{ id='arch';      label='Arch' },
   @{ id='laurel';    label='Laurel' },
+  @{ id='scallop';   label='Scalloped edge' },
   @{ id='confetti';  label='Confetti' }
 )
 
@@ -221,6 +246,7 @@ function Build-Art($kind) {
     'botanical' { Art-Botanical }
     'geometric' { Art-Geometric }
     'laurel'    { Art-Laurel }
+    'scallop'   { Art-Scallop }
     'confetti'  { Art-Confetti }
     default     { '' }
   }

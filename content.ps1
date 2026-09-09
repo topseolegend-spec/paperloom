@@ -38,6 +38,13 @@ $Palettes = @(
   @{ name='Burgundy';           bg='#faf6f4'; ink='#3b1f27'; accent='#7b2c3b'; foil=$false },
   @{ name='Plum';               bg='#faf4f7'; ink='#3d1f36'; accent='#8e4470'; foil=$false },
   @{ name='Clay';               bg='#fbf5f0'; ink='#45372f'; accent='#b06a4a'; foil=$false },
+  # The warm neutrals every 2026 colour forecast leads with - mocha, taupe,
+  # stone, chocolate. The set had plenty of deep jewel tones and cool greys but
+  # nothing in this family at all, which is the palette most invitation and
+  # stationery trend coverage now opens with.
+  @{ name='Mocha';              bg='#faf5f0'; ink='#3d2e25'; accent='#8a6a52'; foil=$false },
+  @{ name='Taupe &amp; stone';  bg='#f7f5f1'; ink='#3a352f'; accent='#8d8477'; foil=$false },
+  @{ name='Chocolate';          bg='#f8f3ee'; ink='#33261e'; accent='#5c4033'; foil=$false },
   @{ name='Slate blue';         bg='#f6f7f8'; ink='#232c33'; accent='#4c6377'; foil=$false },
   @{ name='Midnight gold';      bg='#1b2a41'; ink='#f3efe6'; accent='#c9a227'; foil=$true  },
   @{ name='Charcoal gold';      bg='#16161a'; ink='#f2eee4'; accent='#c9a227'; foil=$true  },
@@ -327,7 +334,7 @@ $Subcats = @(
       @('Whose name goes on a baby shower invitation?','The parent being celebrated, plus the host if someone else is organising it. The baby''s name only appears if it has already been chosen and shared.'))
     templates=@(
       (New-Tpl 'powder-blue' 'Powder Blue' 'Boy &middot; confetti' 'd-brackets' 'f-script' 'confetti' '#f2f7fb' '#27394d' '#7fa8c9' '#5a6b7d' $Body.baby 'bg-grad'),
-      (New-Tpl 'blush-bloom' 'Blush Bloom' 'Girl &middot; floral wreath' 'd-scallop' 'f-cormorant' 'wreath' '#fdf3f5' '#4e3038' '#db93a5' '#7d5f67' $Body.baby 'bg-wash'),
+      (New-Tpl 'blush-bloom' 'Blush Bloom' 'Girl &middot; scalloped edge' 'd-plain' 'f-cormorant' 'scallop' '#fdf3f5' '#4e3038' '#db93a5' '#7d5f67' $Body.baby 'bg-wash'),
       (New-Tpl 'sage-neutral' 'Sage Neutral' 'Neutral &middot; sprigs' 'd-frame' 'f-marcellus' 'botanical' '#f3f6f0' '#2e3b2c' '#7d9a6e' '#5c6a58' $Body.baby),
       (New-Tpl 'sunny-yellow' 'Sunny Yellow' 'Neutral &middot; confetti' 'd-band' 'f-josefin' 'confetti' '#fdfaf0' '#46402a' '#dfb63f' '#726b52' $Body.baby 'bg-grad')) },
 
@@ -362,7 +369,9 @@ $Subcats = @(
       @('Should I say that gifts are not expected?','If you mean it, say it plainly - a short line such as "Your company is gift enough" at the bottom of the card. The footer box in the editor is there for exactly this.'),
       @('Can these templates be used for a casual or funny invite?','Yes. The layout stays the same; only the wording changes. A light opening line above the family name is usually enough to set an informal tone without making the address harder to read.'))
     templates=@(
-      (New-Tpl 'ochre-arch' 'Ochre Arch' 'Warm &middot; doorway arch' 'd-arch' 'f-marcellus' 'arch' '#fdf8ef' '#3e3324' '#c08a2e' '#6d6250' $Body.house 'bg-grad'),
+      # No line ornament: the arched panel is the arch now, and the old arch
+      # ornament sits narrower than the panel, so the date line crossed it.
+      (New-Tpl 'ochre-arch' 'Ochre Arch' 'Warm &middot; doorway arch' 'd-arch' 'f-marcellus' '' '#fdf8ef' '#3e3324' '#c08a2e' '#6d6250' $Body.house 'bg-grad'),
       (New-Tpl 'clay-minimal' 'Clay Minimal' 'Minimal &middot; side rule' 'd-rule' 'f-josefin' '' '#f8f4f0' '#45372f' '#a4674c' '#6f625a' $Body.house),
       (New-Tpl 'sage-cottage' 'Sage Cottage' 'Classic &middot; vine border' 'd-frame' 'f-cormorant' 'vine' '#f2f5ef' '#2c3a2c' '#6e8b62' '#5a675a' $Body.house),
       (New-Tpl 'slate-modern' 'Slate Modern' 'Modern &middot; geometric' 'd-band' 'f-josefin' 'geometric' '#f4f6f7' '#253038' '#46626f' '#5c666d' $Body.house 'bg-edge')) },

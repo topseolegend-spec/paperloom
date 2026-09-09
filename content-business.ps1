@@ -225,7 +225,8 @@ $BizSubcats = @(
     guideNote='The layout is the easy half. <a href="../../guides/what-to-include-in-a-cv/">What belongs in each section</a> - and what to cut - is where most CVs are won or lost, and if the advert said resume rather than CV, <a href="../../guides/cv-vs-resume/">that word changes the expected length</a> in North America only.'
     intro=@(
       'A CV is read in about seven seconds before anyone decides to keep reading, and almost all of that time goes on the top third of the page. Each of these four layouts puts the name, the role and the profile line in that space, and keeps the rest of the page quiet enough to scan.',
-      'All four are A4 by default and switch to US Letter in the editor. They hold three roles and two qualifications comfortably; any field you leave empty disappears rather than leaving a gap, so a shorter CV still looks deliberate rather than unfinished.')
+      'All four are A4 by default and switch to US Letter in the editor. They hold three roles and two qualifications comfortably; any field you leave empty disappears rather than leaving a gap, so a shorter CV still looks deliberate rather than unfinished.',
+      '<strong>Applying through an online form?</strong> Most large employers run CVs through applicant tracking software before a person sees them, and that software reads a single column far more reliably than two. Clean Classic and Plain Serif are single-column for that reason; Studio Sidebar and Split Header put a column beside the main one, which looks better on a desk than it parses on a server. Whichever you pick, use Print to PDF rather than the PNG download when you upload: the PDF keeps your words as text that can be read and searched, and the PNG is a picture of them.')
     faq=@(
       @('What should a CV include?','Your name and the role you are applying for, contact details, a short profile, work experience with dates and what you actually achieved, education, and skills. Everything else - photographs, marital status, date of birth, a full address - is either unnecessary or actively unhelpful in most markets.'),
       @('How long should a CV be?','One page for under ten years of experience, two at most beyond that. If you are struggling to fit one page, cut the oldest roles down to a single line each rather than shrinking the type.'),
@@ -373,6 +374,14 @@ $BizGuides = @(
         '<strong>A photograph</strong> - unless you are applying in a market where it is expected. More on this below.',
         '<strong>References available on request.</strong> Everyone assumes this. It is a line of space you could spend on an achievement.',
         '<strong>Skill rating bars.</strong> A bar showing you at 80% of something communicates nothing measurable, and takes the room a real example would use.')),
+      @('h2','The software reads it before a person does'),
+      @('p','Most large employers put every CV through applicant tracking software first, and it is worth knowing what that software is and is not good at. It reads a single column of text reliably. It reads two columns less reliably, because it cannot always tell which column comes first. It cannot read a photograph of a CV at all.'),
+      @('ul',@(
+        '<strong>One column beats two</strong> for anything submitted through an online form. Keep the sidebar layouts for a CV you are handing over in person or attaching to a direct email.',
+        '<strong>Send text, not a picture.</strong> Print to PDF rather than downloading a PNG - the PDF keeps your words as words. This is the single most common way a good CV disappears without a reply.',
+        '<strong>Use the ordinary section headings.</strong> "Work Experience", "Education", "Skills". A heading like "Where I have made a difference" is invisible to software looking for the standard ones.',
+        '<strong>Put dates in a consistent format</strong> and keep them beside the role rather than in a margin.')),
+      @('p','None of this means a plain CV. It means the structure stays simple while the typography does the work - which is what the layouts here are built around.'),
       @('h2','The photograph question'),
       @('p','This one genuinely depends on where you are applying. In Pakistan, the Gulf, and much of Asia and continental Europe a photo on a CV is normal and its absence can look odd. In the UK, US, Canada, Australia and Ireland it is discouraged - employers there avoid documents that could later support a discrimination claim, and some recruiters strip photos before passing a CV on.'),
       @('p','If you are applying in more than one of those markets, keep two versions. Our <a href="../../business-office/cv-resume-templates/">CV templates</a> leave the photo off, which is the safer default of the two.'),

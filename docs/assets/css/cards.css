@@ -232,7 +232,32 @@
 }
 .d-panel .card-body{padding:15cqw 12cqw;}
 
-.d-arch .card-body{padding-top:19cqw; padding-bottom:15cqw;}
+/* A real arch, not just padding. The arched panel is the single most cited
+   invitation shape of 2026 - the trade press has it replacing the plain
+   rectangle - and this template was named for it while drawing nothing at all:
+   it set some padding and left the arch to whichever line ornament happened to
+   be switched on. Built from border-radius rather than clip-path or a mask on
+   purpose: html2canvas renders border-radius, and the PNG export has to match
+   what the reader sees on screen. */
+.d-arch::before{
+  content:""; position:absolute; z-index:0;
+  left:8cqw; right:8cqw; top:6cqw; bottom:6cqw;
+  background:rgba(var(--c-accent-rgb), 0.07);
+  border:1px solid rgba(var(--c-accent-rgb), 0.38);
+  border-radius:50% 50% 2.5cqw 2.5cqw / 32% 32% 2.5cqw 2.5cqw;
+}
+.d-arch .card-body{padding:23cqw 14cqw 15cqw;}
+
+/* The soft, organic silhouette that runs alongside the arch this year. Same
+   construction, ends rounded top and bottom instead of only the top. */
+.d-pebble::before{
+  content:""; position:absolute; z-index:0;
+  left:7cqw; right:7cqw; top:5cqw; bottom:5cqw;
+  background:rgba(var(--c-accent-rgb), 0.07);
+  border:1px solid rgba(var(--c-accent-rgb), 0.38);
+  border-radius:50%/22%;
+}
+.d-pebble .card-body{padding:20cqw 14cqw;}
 
 /* ==========================================================================
    GREETING CARDS
