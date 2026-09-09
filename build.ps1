@@ -1,4 +1,4 @@
-# =============================================================================
+﻿# =============================================================================
 #  Paperloom - static site generator
 #  Chalane ka tareeqa:   powershell -ExecutionPolicy Bypass -File build.ps1
 #  Output "docs" folder mein banta hai - GitHub Pages isi ko serve karta hai.
@@ -190,9 +190,44 @@ function Get-Chrome($kind, $depth, $current) {
   $ChromeCache[$key]
 }
 
-function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $extraScripts) {
+# Which preview stylesheets a template kind needs. promo, school and personal
+# all extend .doc-preview, so they carry docs.css with them.
+$SheetsFor = @{
+  card='cards'; greeting='cards'
+  resume='docs'; letter='docs'; cert='docs'; bcard='docs'; invoice='docs'; menu='docs'; letterhead='docs'
+  promo='docs,promo'; logo='docs,promo'
+  worksheet='docs,school'; lesson='docs,school'; timetable='docs,school'; report='docs,school'
+  attendance='docs,school'; flashcard='docs,school'; idcard='docs,school'; diploma='docs,school'
+  calendar='docs,personal'; todo='docs,personal'; budget='docs,personal'
+  recipe='docs,personal'; voucher='docs,personal'
+  # These three borrow grids from the school sheet rather than repeating them:
+  # the habit tracker is the attendance register's row-per-item, box-per-day
+  # grid, the meal planner is the timetable's, and the day planner uses the
+  # worksheet's section block. Caught by the check that every page linking a
+  # class also links the sheet defining it - not by reading the CSS.
+  planner='docs,personal,school'; habit='docs,personal,school'; meal='docs,personal,school'
+}
+
+function Get-Sheets($kinds) {
+  $set = New-Object System.Collections.ArrayList
+  foreach ($k in $kinds) {
+    if (-not $SheetsFor.ContainsKey("$k")) { continue }
+    foreach ($s in ($SheetsFor["$k"] -split ',')) { if (-not $set.Contains($s)) { [void]$set.Add($s) } }
+  }
+  $set
+}
+
+function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $extraScripts, $sheets) {
   $r = Get-Rel $depth
   $canonical = if ($path) { "$($Site.Url)/$path/" } else { "$($Site.Url)/" }
+  # Every page used to load all five preview stylesheets - about 84KB of
+  # render-blocking CSS - whether or not it drew a single preview. A guide draws
+  # none; a wedding page draws cards and nothing else. $sheets is the list the
+  # page actually needs; $null means "everything", which is the safe default for
+  # any call that has not been told.
+  $sheetLinks = ''
+  $wanted = if ($null -eq $sheets) { @('cards','docs','promo','school','personal') } else { @($sheets) }
+  foreach ($s in $wanted) { $sheetLinks += "`n<link rel=`"stylesheet`" href=`"${r}assets/css/$s.css`">" }
   $header = Get-Chrome 'header' $depth $current
   $footer = Get-Chrome 'footer' $depth ''
   if (-not $extraHead) { $extraHead = '' }
@@ -221,12 +256,7 @@ function Save-Page($depth, $path, $title, $desc, $body, $current, $extraHead, $e
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="$Fonts">
-<link rel="stylesheet" href="${r}assets/css/style.css">
-<link rel="stylesheet" href="${r}assets/css/cards.css">
-<link rel="stylesheet" href="${r}assets/css/docs.css">
-<link rel="stylesheet" href="${r}assets/css/promo.css">
-<link rel="stylesheet" href="${r}assets/css/school.css">
-<link rel="stylesheet" href="${r}assets/css/personal.css">
+<link rel="stylesheet" href="${r}assets/css/style.css">$sheetLinks
 <link rel="icon" href="${r}assets/favicon.svg" type="image/svg+xml">
 $extraHead
 </head>
@@ -1056,7 +1086,7 @@ $crumb
     </div>
   </section>
 "@
-  Save-Page 1 $m.slug $m.title $m.desc $body '' '' ''
+  Save-Page 1 $m.slug $m.title $m.desc $body '' '' '' (Get-Sheets ($cat.subs | ForEach-Object { $_.kind }))
 }
 
 function Build-Subcat($cat, $s) {
@@ -1102,7 +1132,7 @@ $crumb
     </div>
   </section>
 "@
-  Save-Page 2 "$($m.slug)/$($s.slug)" $s.title $s.desc $body '' (Get-FaqSchema $s.faq) ''
+  Save-Page 2 "$($m.slug)/$($s.slug)" $s.title $s.desc $body '' (Get-FaqSchema $s.faq) '' (Get-Sheets @($s.kind))
 }
 
 # Editor ka form subcategory ke fields se banta hai, groups ke hisaab se.
@@ -1298,7 +1328,7 @@ $crumb
 "@
   $head = "<link rel=`"stylesheet`" href=`"../../../assets/css/editor.css`">`n<link rel=`"stylesheet`" href=`"$FontsExtra`">"
   $scripts = "<script src=`"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js`" defer></script>`n<script src=`"../../../assets/js/editor.js`" defer></script>"
-  Save-Page 3 "$($m.slug)/$($s.slug)/$($t.slug)" $title $desc $body '' $head $scripts
+  Save-Page 3 "$($m.slug)/$($s.slug)/$($t.slug)" $title $desc $body '' $head $scripts (Get-Sheets @($s.kind))
 }
 
 function Build-GuidesIndex {
@@ -1327,7 +1357,7 @@ $crumb
 "@
   Save-Page 1 'guides' 'Template Guides - CVs, Invoices and Invitations' `
     'Practical guides on what to include in a CV, how to write an invoice that gets paid, when to send wedding invitations and how to word them.' `
-    $body 'guides' '' ''
+    $body 'guides' '' '' @()
 }
 
 function Build-Guide($g) {
@@ -1377,7 +1407,7 @@ $crumb
     </div>
   </article>
 "@
-  Save-Page 2 "guides/$($g.slug)" $g.title $g.desc $body 'guides' $schema ''
+  Save-Page 2 "guides/$($g.slug)" $g.title $g.desc $body 'guides' $schema '' @()
 }
 
 function Build-About {
@@ -1425,7 +1455,7 @@ $crumb
 "@
   Save-Page 1 'about' "About $($Site.Name) - Printable Invitation Templates" `
     "About $($Site.Name): how our printable invitation templates are designed, why every card is 5x7 inches, and what we are adding next." `
-    $body 'about' ''
+    $body 'about' '' '' @()
 }
 
 function Build-Contact {
@@ -1466,7 +1496,7 @@ $crumb
 "@
   Save-Page 1 'contact' "Contact $($Site.Name)" `
     "Get in touch with $($Site.Name) about a template, a printing question, or an occasion you would like us to add." `
-    $body 'contact' ''
+    $body 'contact' '' '' @()
 }
 
 function Build-Privacy {
@@ -1531,7 +1561,7 @@ $crumb
 "@
   Save-Page 1 'privacy-policy' "Privacy Policy - $($Site.Name)" `
     "How $($Site.Name) handles personal information, cookies and advertising, and the choices available to visitors." `
-    $body '' ''
+    $body '' '' '' @()
 }
 
 function Build-Terms {
@@ -1580,7 +1610,7 @@ $crumb
 "@
   Save-Page 1 'terms' "Terms of Use - $($Site.Name)" `
     "Terms for using $($Site.Name) templates: what you may print and adapt, and what may not be redistributed." `
-    $body '' ''
+    $body '' '' '' @()
 }
 
 function Build-404 {

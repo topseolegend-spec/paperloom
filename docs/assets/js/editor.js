@@ -471,8 +471,18 @@
     });
     stage.appendChild(peek);
 
+    // The observer's first callback fires before the page has settled, and it
+    // reported the sentinel as already out of view - so the stage went mini at
+    // the top of the page, with nothing scrolled. The reader saw the preview
+    // paint full size and then jump to a third of it, and the page below it
+    // moved up by about 230px: a layout shift of 0.128 on every template page,
+    // where Google counts anything above 0.1 as failing.
+    //
+    // Nothing is scrolled past until something is scrolled, so the scroll
+    // position is the honest test, and the observer only decides from there on.
     new IntersectionObserver(function (entries) {
-      stage.classList.toggle('is-mini', !entries[0].isIntersecting);
+      var scrolled = (window.pageYOffset || document.documentElement.scrollTop || 0) > 4;
+      stage.classList.toggle('is-mini', scrolled && !entries[0].isIntersecting);
     }, { rootMargin: '-70px 0px 0px 0px' }).observe(sentinel);
   })();
 
