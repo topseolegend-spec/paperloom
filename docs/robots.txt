@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://paperloom-rho.vercel.app/sitemap.xml
+Sitemap: https://designstemplat.com/sitemap.xml

@@ -1,4 +1,4 @@
-# Paperloom — printable invitation template site
+# Designs Templat — printable invitation template site
 
 Static website. Har page `build.ps1` se generate hota hai, content `content.ps1` mein hai.
 
@@ -66,7 +66,7 @@ Header ka dropdown, footer, sitemap aur internal links khud update ho jayenge.
 ## Abhi set karna baqi hai
 
 - `content.ps1` ke `$Site` block mein asal domain aur contact email
-- Brand ka naam (`Paperloom` filhal placeholder hai)
+- Brand ka naam (`Designs Templat`)
 
 ## Design ke bare mein
 

@@ -1,5 +1,5 @@
 ﻿# =============================================================================
-#  Paperloom - static site generator
+#  Designs Templat - static site generator
 #  Chalane ka tareeqa:   powershell -ExecutionPolicy Bypass -File build.ps1
 #  Output "docs" folder mein banta hai - GitHub Pages isi ko serve karta hai.
 # =============================================================================

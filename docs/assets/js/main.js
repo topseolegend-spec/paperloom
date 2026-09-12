@@ -10,7 +10,7 @@
    Sizes are in container query units, so this behaves identically on a
    thumbnail and on the full-size editor preview.
    ------------------------------------------------------------------------- */
-window.paperloomFit = (function () {
+window.designsTemplatFit = (function () {
   var MIN = 0.62;   // below this the type stops being readable
 
   function fitOne(page) {

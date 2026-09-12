@@ -1,5 +1,5 @@
 # =============================================================================
-#  Paperloom - site content
+#  Designs Templat - site content
 #  Naya occasion ya category add karni ho to sirf yehi file edit karein,
 #  phir build.ps1 dobara chalayein.
 #
@@ -8,12 +8,12 @@
 # =============================================================================
 
 $Site = [ordered]@{
-  Name    = 'Paperloom'
+  Name    = 'Designs Templat'
   Tagline = 'Printable invitation and card templates'
   # Apna domain lene ke baad sirf ye do lines badalni hain (build dobara chala dein).
   # Root par serve ho rahi hai, is liye $BasePath khali hota hai - GitHub Pages
   # wali copy "/paperloom" subfolder par thi aur usay base path chahiye tha.
-  Url     = 'https://paperloom-rho.vercel.app'
+  Url     = 'https://designstemplat.com'
   Email   = 'topseo.legend@gmail.com'
 }
 

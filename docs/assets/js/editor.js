@@ -27,7 +27,7 @@
   var SIZES = Array.prototype.map.call(
     document.querySelectorAll('[data-size]'),
     function (b) { return b.getAttribute('data-size'); });
-  var STORE_KEY = 'paperloom:' + slug;
+  var STORE_KEY = 'designstemplat:' + slug;
 
   // ---- html <-> plain text ------------------------------------------------
 
@@ -191,8 +191,8 @@
   var refitTimer = null;
 
   function refit() {
-    if (typeof window.paperloomFit !== 'function') return;
-    var fit = window.paperloomFit(card);
+    if (typeof window.designsTemplatFit !== 'function') return;
+    var fit = window.designsTemplatFit(card);
     var warn = document.querySelector('.ed-fit-note');
     if (!warn) return;
     warn.hidden = fit > 0.94;
